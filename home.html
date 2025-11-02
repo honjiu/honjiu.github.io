@@ -3,133 +3,51 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Clock</title>
+    <title>运行时间</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
         body {
-            background-color: #000;
-            color: #fff;
-            font-family: 'Segoe UI', 'Arial', sans-serif;
+            background-color: #ffffff;
+            color: #000000;
+            font-family: Arial, sans-serif;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
             margin: 0;
-            overflow: hidden;
         }
         
-        .clock-container {
-            text-align: center;
-            padding: 20px;
-            border-radius: 10px;
-            background-color: rgba(20, 20, 20, 0.8);
-            box-shadow: 0 0 30px rgba(0, 150, 255, 0.3);
-            width: 90%;
-            max-width: 600px;
-        }
-        
-        .time {
-            font-size: 5rem;
-            font-weight: 700;
-            letter-spacing: 3px;
-            margin-bottom: 1rem;
-            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
-            color: #fff;
-        }
-        
-        .date {
-            font-size: 1.8rem;
-            letter-spacing: 1px;
-            color: #e0e0e0;
-            margin-bottom: 0.5rem;
-        }
-        
-        .weekday {
-            font-size: 1.5rem;
-            color: #b0b0b0;
-            font-weight: 300;
-        }
-        
-        .timezone {
-            font-size: 1rem;
-            color: #888;
-            margin-top: 1rem;
-        }
-        
-        /* 响应式调整 */
-        @media (max-width: 600px) {
-            .time {
-                font-size: 3.5rem;
-            }
-            .date {
-                font-size: 1.4rem;
-            }
-            .weekday {
-                font-size: 1.2rem;
-            }
-        }
-        
-        @media (max-width: 400px) {
-            .time {
-                font-size: 2.8rem;
-            }
-            .date {
-                font-size: 1.2rem;
-            }
-            .weekday {
-                font-size: 1rem;
-            }
+        #runtime {
+            font-size: 24px;
+            font-weight: bold;
         }
     </style>
 </head>
 <body>
-    <div class="clock-container">
-        <div class="time" id="time">--:--:--</div>
-        <div class="date" id="date">----年--月--日</div>
-        <div class="weekday" id="weekday">星期-</div>
-        <div class="timezone">UTC+8 北京时间</div>
-    </div>
+    <div id="runtime">本站已运行 0小时 0分钟 0秒</div>
 
     <script>
-        function updateClock() {
+        // 设置开始时间：2025年10月19日16点40分
+        const startTime = new Date(2025, 9, 19, 16, 40, 0); // 注意：月份从0开始，所以10月是9
+        
+        function updateRuntime() {
             const now = new Date();
+            const diff = now - startTime;
             
-            // 转换为UTC+8时区
-            const utc8Offset = 8 * 60; // UTC+8的分钟偏移量
-            const localOffset = now.getTimezoneOffset(); // 本地时区偏移量
-            const beijingTime = new Date(now.getTime() + (utc8Offset + localOffset) * 60000);
+            // 计算小时、分钟和秒
+            const hours = Math.floor(diff / (1000 * 60 * 60));
+            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
             
-            // 获取时间元素
-            const hours = beijingTime.getHours().toString().padStart(2, '0');
-            const minutes = beijingTime.getMinutes().toString().padStart(2, '0');
-            const seconds = beijingTime.getSeconds().toString().padStart(2, '0');
-            
-            // 更新时间显示
-            document.getElementById('time').textContent = `${hours}:${minutes}:${seconds}`;
-            
-            // 更新日期显示
-            const year = beijingTime.getFullYear();
-            const month = (beijingTime.getMonth() + 1).toString().padStart(2, '0');
-            const day = beijingTime.getDate().toString().padStart(2, '0');
-            
-            // 星期转换
-            const weekdays = ['日', '一', '二', '三', '四', '五', '六'];
-            const weekday = weekdays[beijingTime.getDay()];
-            
-            document.getElementById('date').textContent = `${year}年${month}月${day}日`;
-            document.getElementById('weekday').textContent = `星期${weekday}`;
+            // 更新显示
+            document.getElementById('runtime').textContent = 
+                `本站已运行 ${hours}小时 ${minutes}分钟 ${seconds}秒`;
         }
         
-        // 初始加载
-        updateClock();
+        // 初始更新
+        updateRuntime();
         
         // 每秒更新一次
-        setInterval(updateClock, 1000);
+        setInterval(updateRuntime, 1000);
     </script>
 </body>
 </html>
