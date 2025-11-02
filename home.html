@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>导航</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+        }
+        
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 800px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            padding: 40px;
+            text-align: center;
+        }
+        
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+        
+        .subtitle {
+            color: #666;
+            margin-bottom: 40px;
+            font-size: 18px;
+        }
+        
+        .links-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .link-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            border-left: 4px solid transparent;
+        }
+        
+        .link-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+            border-left: 4px solid #2575fc;
+        }
+        
+        .link-card a {
+            text-decoration: none;
+            color: #333;
+            font-size: 20px;
+            font-weight: 500;
+            display: block;
+            transition: color 0.3s;
+        }
+        
+        .link-card:hover a {
+            color: #2575fc;
+        }
+        
+        .link-description {
+            color: #777;
+            margin-top: 8px;
+            font-size: 15px;
+        }
+        
+        .footer {
+            margin-top: 40px;
+            color: #888;
+            font-size: 14px;
+        }
+        
+        @media (max-width: 600px) {
+            .container {
+                padding: 25px;
+            }
+            
+            .link-card a {
+                font-size: 18px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>网页导航</h1>
+        <p class="subtitle">点击以下链接访问弘九honjiu的所有网站</p>
+        
+        <div class="links-container">
+            <div class="link-card">
+                <a href="https://honjiu.github.io/index.html" target="_blank">弘九honjiu的个人网站</a>
+                <p class="link-description">弘九honjiu的个人网站主界面，推荐点击</p>
+            </div>
+            
+            <div class="link-card">
+                <a href="https://honjiu.github.io/test.html" target="_blank">弘九honjiu的个人网站（测试）</a>
+                <p class="link-description">弘九honjiu的测试网站，界面均为实验性内容</p>
+            </div>
+            
+            <div class="link-card">
+                <a href="https://honjiu.github.io/home.html" target="_blank">导航</a>
+                <p class="link-description">弘九honjiu的网页导航（本界面）</p>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>© honjiu.github.io</p>
+        </div>
+    </div>
+</body>
+</html>
