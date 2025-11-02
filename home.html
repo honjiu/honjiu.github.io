@@ -5,10 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Clock</title>
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
         body {
             background-color: #000;
             color: #fff;
-            font-family: 'Arial', sans-serif;
+            font-family: 'Segoe UI', 'Arial', sans-serif;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -19,25 +25,74 @@
         
         .clock-container {
             text-align: center;
+            padding: 20px;
+            border-radius: 10px;
+            background-color: rgba(20, 20, 20, 0.8);
+            box-shadow: 0 0 30px rgba(0, 150, 255, 0.3);
+            width: 90%;
+            max-width: 600px;
         }
         
         .time {
             font-size: 5rem;
-            font-weight: bold;
-            letter-spacing: 2px;
+            font-weight: 700;
+            letter-spacing: 3px;
             margin-bottom: 1rem;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+            color: #fff;
         }
         
         .date {
-            font-size: 1.5rem;
+            font-size: 1.8rem;
             letter-spacing: 1px;
+            color: #e0e0e0;
+            margin-bottom: 0.5rem;
+        }
+        
+        .weekday {
+            font-size: 1.5rem;
+            color: #b0b0b0;
+            font-weight: 300;
+        }
+        
+        .timezone {
+            font-size: 1rem;
+            color: #888;
+            margin-top: 1rem;
+        }
+        
+        /* 响应式调整 */
+        @media (max-width: 600px) {
+            .time {
+                font-size: 3.5rem;
+            }
+            .date {
+                font-size: 1.4rem;
+            }
+            .weekday {
+                font-size: 1.2rem;
+            }
+        }
+        
+        @media (max-width: 400px) {
+            .time {
+                font-size: 2.8rem;
+            }
+            .date {
+                font-size: 1.2rem;
+            }
+            .weekday {
+                font-size: 1rem;
+            }
         }
     </style>
 </head>
 <body>
     <div class="clock-container">
         <div class="time" id="time">--:--:--</div>
-        <div class="date" id="date">----年--月--日 星期-</div>
+        <div class="date" id="date">----年--月--日</div>
+        <div class="weekday" id="weekday">星期-</div>
+        <div class="timezone">UTC+8 北京时间</div>
     </div>
 
     <script>
@@ -50,16 +105,12 @@
             const beijingTime = new Date(now.getTime() + (utc8Offset + localOffset) * 60000);
             
             // 获取时间元素
-            let hours = beijingTime.getHours();
+            const hours = beijingTime.getHours().toString().padStart(2, '0');
             const minutes = beijingTime.getMinutes().toString().padStart(2, '0');
             const seconds = beijingTime.getSeconds().toString().padStart(2, '0');
             
-            // 转换为12小时制
-            const ampm = hours >= 12 ? 'PM' : 'AM';
-            hours = hours % 12 || 12; // 0点转换为12
-            
             // 更新时间显示
-            document.getElementById('time').textContent = `${hours}:${minutes}:${seconds} ${ampm}`;
+            document.getElementById('time').textContent = `${hours}:${minutes}:${seconds}`;
             
             // 更新日期显示
             const year = beijingTime.getFullYear();
@@ -70,7 +121,8 @@
             const weekdays = ['日', '一', '二', '三', '四', '五', '六'];
             const weekday = weekdays[beijingTime.getDay()];
             
-            document.getElementById('date').textContent = `${year}年${month}月${day}日 星期${weekday}`;
+            document.getElementById('date').textContent = `${year}年${month}月${day}日`;
+            document.getElementById('weekday').textContent = `星期${weekday}`;
         }
         
         // 初始加载
