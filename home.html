@@ -3,321 +3,178 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>俄罗斯方块</title>
+    <title>时钟</title>
     <style>
-        body {
+        * {
             margin: 0;
-            padding: 10px;
-            background: #222;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+        }
+        
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+            overflow: hidden;
             color: white;
-            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        
+        .clock-container {
             display: flex;
             flex-direction: column;
             align-items: center;
-            touch-action: manipulation;
+            justify-content: center;
+            width: 100%;
+            max-width: 1200px;
+            padding: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
-        h1 {
-            margin: 10px 0;
-            font-size: 1.5rem;
-        }
-        .game-container {
+        
+        .time-display {
+            font-size: 8vw;
+            font-weight: 700;
+            text-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            letter-spacing: 2px;
+            margin-bottom: 20px;
             display: flex;
-            flex-direction: column;
-            align-items: center;
+            justify-content: center;
+            align-items: baseline;
         }
-        #gameCanvas {
-            border: 2px solid #555;
-            background: #111;
-        }
-        .controls {
-            margin-top: 10px;
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            grid-template-rows: 1fr 1fr;
-            gap: 5px;
-            width: 200px;
-        }
-        button {
-            padding: 12px;
-            font-size: 1.2rem;
-            background: #444;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            touch-action: manipulation;
-        }
-        button:active {
-            background: #666;
-        }
-        #rotate {
-            grid-column: 2;
-            grid-row: 1;
-        }
-        #left {
-            grid-column: 1;
-            grid-row: 2;
-        }
-        #down {
-            grid-column: 2;
-            grid-row: 2;
-        }
-        #right {
-            grid-column: 3;
-            grid-row: 2;
-        }
-        .info {
-            margin-top: 10px;
+        
+        .time-segment {
+            display: inline-block;
+            min-width: 1.2em;
             text-align: center;
+        }
+        
+        .colon {
+            margin: 0 10px;
+            animation: blink 2s infinite;
+        }
+        
+        .date-display {
+            font-size: 2.5vw;
+            margin-bottom: 10px;
+            font-weight: 400;
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+        
+        .weekday-display {
+            font-size: 2.5vw;
+            font-weight: 500;
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+        
+        .timezone {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            font-size: 1.5vw;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 8px 15px;
+            border-radius: 10px;
+            backdrop-filter: blur(5px);
+        }
+        
+        .decoration {
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.05);
+            z-index: -1;
+        }
+        
+        .decoration:nth-child(1) {
+            top: -150px;
+            left: -150px;
+        }
+        
+        .decoration:nth-child(2) {
+            bottom: -150px;
+            right: -150px;
+        }
+        
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        @media (max-width: 768px) {
+            .time-display {
+                font-size: 12vw;
+            }
+            
+            .date-display, .weekday-display {
+                font-size: 4vw;
+            }
+            
+            .timezone {
+                font-size: 3vw;
+            }
         }
     </style>
 </head>
 <body>
-    <h1>俄罗斯方块</h1>
-    <div class="game-container">
-        <canvas id="gameCanvas" width="200" height="400"></canvas>
-        <div class="controls">
-            <button id="rotate">↻</button>
-            <button id="left">←</button>
-            <button id="down">↓</button>
-            <button id="right">→</button>
+    <div class="decoration"></div>
+    <div class="decoration"></div>
+    
+    <div class="clock-container">
+        <div class="time-display">
+            <span class="time-segment" id="hours">00</span>
+            <span class="colon">:</span>
+            <span class="time-segment" id="minutes">00</span>
+            <span class="colon">:</span>
+            <span class="time-segment" id="seconds">00</span>
         </div>
-        <div class="info">
-            <p>得分: <span id="score">0</span></p>
-            <button id="startBtn">开始游戏</button>
-        </div>
+        <div class="date-display" id="date">2023年10月1日</div>
+        <div class="weekday-display" id="weekday">星期日</div>
     </div>
+    
+    <div class="timezone">北京时间 UTC+8</div>
 
     <script>
-        // 获取Canvas和上下文
-        const canvas = document.getElementById('gameCanvas');
-        const ctx = canvas.getContext('2d');
-        
-        // 游戏常量
-        const BLOCK_SIZE = 20;
-        const BOARD_WIDTH = canvas.width / BLOCK_SIZE;
-        const BOARD_HEIGHT = canvas.height / BLOCK_SIZE;
-        
-        // 游戏状态
-        let board = Array(BOARD_HEIGHT).fill().map(() => Array(BOARD_WIDTH).fill(0));
-        let score = 0;
-        let gameOver = false;
-        let gameInterval;
-        
-        // 方块形状定义
-        const SHAPES = [
-            [[1, 1, 1, 1]], // I
-            [[1, 1], [1, 1]], // O
-            [[1, 1, 1], [0, 1, 0]], // T
-            [[1, 1, 1], [1, 0, 0]], // L
-            [[1, 1, 1], [0, 0, 1]], // J
-            [[0, 1, 1], [1, 1, 0]], // S
-            [[1, 1, 0], [0, 1, 1]]  // Z
-        ];
-        
-        // 当前方块
-        let currentPiece = {
-            shape: [],
-            x: 0,
-            y: 0
-        };
-        
-        // 初始化游戏
-        function initGame() {
-            board = Array(BOARD_HEIGHT).fill().map(() => Array(BOARD_WIDTH).fill(0));
-            score = 0;
-            gameOver = false;
-            document.getElementById('score').textContent = score;
-            spawnPiece();
-            draw();
+        function updateClock() {
+            const now = new Date();
+            
+            // 转换为UTC+8时间
+            const utc = now.getTime() + (now.getTimezoneOffset() * 60000);
+            const beijingTime = new Date(utc + (3600000 * 8));
+            
+            // 更新时间
+            document.getElementById('hours').textContent = 
+                beijingTime.getHours().toString().padStart(2, '0');
+            document.getElementById('minutes').textContent = 
+                beijingTime.getMinutes().toString().padStart(2, '0');
+            document.getElementById('seconds').textContent = 
+                beijingTime.getSeconds().toString().padStart(2, '0');
+            
+            // 更新日期
+            const year = beijingTime.getFullYear();
+            const month = beijingTime.getMonth() + 1;
+            const day = beijingTime.getDate();
+            document.getElementById('date').textContent = 
+                `${year}年${month}月${day}日`;
+            
+            // 更新星期
+            const weekdays = ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'];
+            document.getElementById('weekday').textContent = 
+                weekdays[beijingTime.getDay()];
         }
         
-        // 生成新方块
-        function spawnPiece() {
-            const shapeIndex = Math.floor(Math.random() * SHAPES.length);
-            currentPiece.shape = SHAPES[shapeIndex];
-            currentPiece.x = Math.floor(BOARD_WIDTH / 2) - Math.floor(currentPiece.shape[0].length / 2);
-            currentPiece.y = 0;
-            
-            // 检查游戏是否结束
-            if (checkCollision()) {
-                gameOver = true;
-                clearInterval(gameInterval);
-                alert('游戏结束! 得分: ' + score);
-            }
-        }
+        // 初始更新
+        updateClock();
         
-        // 绘制游戏
-        function draw() {
-            // 清空画布
-            ctx.fillStyle = '#111';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-            
-            // 绘制已固定的方块
-            for (let y = 0; y < BOARD_HEIGHT; y++) {
-                for (let x = 0; x < BOARD_WIDTH; x++) {
-                    if (board[y][x]) {
-                        drawBlock(x, y, '#0f0');
-                    }
-                }
-            }
-            
-            // 绘制当前方块
-            if (!gameOver) {
-                for (let y = 0; y < currentPiece.shape.length; y++) {
-                    for (let x = 0; x < currentPiece.shape[y].length; x++) {
-                        if (currentPiece.shape[y][x]) {
-                            drawBlock(currentPiece.x + x, currentPiece.y + y, '#f00');
-                        }
-                    }
-                }
-            }
-        }
-        
-        // 绘制单个方块
-        function drawBlock(x, y, color) {
-            ctx.fillStyle = color;
-            ctx.fillRect(x * BLOCK_SIZE, y * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE);
-            ctx.strokeStyle = '#333';
-            ctx.strokeRect(x * BLOCK_SIZE, y * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE);
-        }
-        
-        // 碰撞检测
-        function checkCollision() {
-            for (let y = 0; y < currentPiece.shape.length; y++) {
-                for (let x = 0; x < currentPiece.shape[y].length; x++) {
-                    if (currentPiece.shape[y][x]) {
-                        const newX = currentPiece.x + x;
-                        const newY = currentPiece.y + y;
-                        
-                        if (
-                            newX < 0 || 
-                            newX >= BOARD_WIDTH || 
-                            newY >= BOARD_HEIGHT ||
-                            (newY >= 0 && board[newY][newX])
-                        ) {
-                            return true;
-                        }
-                    }
-                }
-            }
-            return false;
-        }
-        
-        // 固定方块到游戏板
-        function mergePiece() {
-            for (let y = 0; y < currentPiece.shape.length; y++) {
-                for (let x = 0; x < currentPiece.shape[y].length; x++) {
-                    if (currentPiece.shape[y][x]) {
-                        const boardY = currentPiece.y + y;
-                        if (boardY >= 0) {
-                            board[boardY][currentPiece.x + x] = 1;
-                        }
-                    }
-                }
-            }
-        }
-        
-        // 消除完整的行
-        function clearLines() {
-            let linesCleared = 0;
-            
-            for (let y = BOARD_HEIGHT - 1; y >= 0; y--) {
-                if (board[y].every(cell => cell === 1)) {
-                    // 移除该行
-                    board.splice(y, 1);
-                    // 在顶部添加新行
-                    board.unshift(Array(BOARD_WIDTH).fill(0));
-                    linesCleared++;
-                    y++; // 重新检查当前位置
-                }
-            }
-            
-            // 更新分数
-            if (linesCleared > 0) {
-                score += linesCleared * 100;
-                document.getElementById('score').textContent = score;
-            }
-        }
-        
-        // 移动方块
-        function movePiece(dx, dy) {
-            if (gameOver) return;
-            
-            currentPiece.x += dx;
-            currentPiece.y += dy;
-            
-            if (checkCollision()) {
-                currentPiece.x -= dx;
-                currentPiece.y -= dy;
-                
-                // 如果是向下移动发生碰撞，则固定方块
-                if (dy > 0) {
-                    mergePiece();
-                    clearLines();
-                    spawnPiece();
-                }
-                
-                return false;
-            }
-            
-            draw();
-            return true;
-        }
-        
-        // 旋转方块
-        function rotatePiece() {
-            if (gameOver) return;
-            
-            const originalShape = currentPiece.shape;
-            // 转置矩阵并反转行以实现顺时针旋转
-            const rotated = currentPiece.shape[0].map((_, i) => 
-                currentPiece.shape.map(row => row[i]).reverse()
-            );
-            
-            currentPiece.shape = rotated;
-            
-            if (checkCollision()) {
-                currentPiece.shape = originalShape;
-            }
-            
-            draw();
-        }
-        
-        // 游戏循环
-        function gameLoop() {
-            movePiece(0, 1);
-        }
-        
-        // 开始游戏
-        function startGame() {
-            if (gameInterval) {
-                clearInterval(gameInterval);
-            }
-            initGame();
-            gameInterval = setInterval(gameLoop, 500);
-        }
-        
-        // 事件监听
-        document.getElementById('startBtn').addEventListener('click', startGame);
-        document.getElementById('left').addEventListener('click', () => movePiece(-1, 0));
-        document.getElementById('right').addEventListener('click', () => movePiece(1, 0));
-        document.getElementById('down').addEventListener('click', () => movePiece(0, 1));
-        document.getElementById('rotate').addEventListener('click', rotatePiece);
-        
-        // 键盘控制
-        document.addEventListener('keydown', (e) => {
-            if (gameOver) return;
-            
-            switch(e.key) {
-                case 'ArrowLeft': movePiece(-1, 0); break;
-                case 'ArrowRight': movePiece(1, 0); break;
-                case 'ArrowDown': movePiece(0, 1); break;
-                case 'ArrowUp': rotatePiece(); break;
-            }
-        });
-        
-        // 初始化绘制
-        draw();
+        // 每秒更新一次
+        setInterval(updateClock, 1000);
     </script>
 </body>
 </html>
