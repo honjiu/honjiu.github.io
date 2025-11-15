@@ -3,198 +3,306 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MDUI V1 经典示例</title>
-  <!-- 引入 MDUI 样式 -->
-  <link rel="stylesheet" href="https://unpkg.com/mdui@1.0.2/dist/css/mdui.min.css">
-  <!-- 引入图标库（MDUI 依赖 Material Icons） -->
+  <title>我的MD2风格个人网站</title>
+  <!-- 引入MD2核心CSS（Material Design 2） -->
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+  <!-- 自定义样式（贴合MD2设计规范：阴影层级、圆角、色彩系统） -->
+  <style>
+    /* MD2强调阴影层级，卡片默认2dp，hover时4dp */
+    .card {
+      box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 3px 1px -2px rgba(0,0,0,0.12), 0 1px 5px 0 rgba(0,0,0,0.2);
+      transition: box-shadow 0.3s ease;
+      border-radius: 4px; /* MD2标准圆角 */
+    }
+    .card:hover {
+      box-shadow: 0 4px 5px 0 rgba(0,0,0,0.14), 0 1px 10px 0 rgba(0,0,0,0.12), 0 2px 4px -1px rgba(0,0,0,0.2);
+    }
+    /* 导航栏滚动效果（MD2动态交互） */
+    .navbar-fixed {
+      transition: background-color 0.3s ease;
+    }
+    /* 按钮MD2样式强化 */
+    .btn {
+      border-radius: 2px; /* MD2按钮圆角 */
+      text-transform: uppercase; /* MD2按钮文字大写规范 */
+      font-weight: 500;
+    }
+    /* 页脚样式 */
+    footer {
+      background-color: #f5f5f5; /* MD2浅灰背景 */
+      padding: 20px 0;
+    }
+  </style>
 </head>
-<body class="mdui-theme-primary-blue mdui-theme-accent-pink mdui-appbar-with-toolbar">
-  <!-- 顶部导航栏 -->
-  <header class="mdui-appbar mdui-appbar-fixed">
-    <div class="mdui-toolbar mdui-color-white mdui-shadow-1">
-      <!-- 移动端菜单按钮 -->
-      <button class="mdui-btn mdui-btn-icon mdui-ripple" mdui-drawer="{target: '#sidebar', overlay: true}">
-        <<i class="material-icons">menu</</i>
-      </button>
-      <!--  Logo -->
-      <div class="mdui-toolbar-title mdui-text-color-blue">MDUI Demo</div>
-      <!-- 桌面端导航链接 -->
-      <div class="mdui-toolbar-spacer"></div>
-      <nav class="mdui-hidden-xs">
-        <a href="#home" class="mdui-btn mdui-btn-flat mdui-text-color-gray-700 mdui-ripple">首页</a>
-        <a href="#features" class="mdui-btn mdui-btn-flat mdui-text-color-gray-700 mdui-ripple">功能</a>
-        <a href="#contact" class="mdui-btn mdui-btn-flat mdui-text-color-gray-700 mdui-ripple">联系我们</a>
-      </nav>
-      <!-- 搜索按钮 -->
-      <button class="mdui-btn mdui-btn-icon mdui-ripple">
-        <<i class="material-icons">search</</i>
-      </button>
+<body>
+  <!-- 导航栏（MD2固定导航栏组件） -->
+  <nav class="navbar-fixed blue darken-1">
+    <div class="container">
+      <div class="nav-wrapper">
+        <a href="#" class="brand-logo">我的个人网站</a>
+        <!-- 移动端菜单按钮 -->
+        <a href="#" data-target="mobile-nav" class="sidenav-trigger">
+          <<i class="material-icons">menu</</i>
+        </a>
+        <!-- 桌面端导航菜单 -->
+        <ul class="right hide-on-med-and-down">
+          <li><a href="#about">关于我</a></li>
+          <li><a href="#skills">技能</a></li>
+          <li><a href="#projects">项目</a></li>
+          <li><a href="#contact">联系我</a></li>
+          <li><a href="#" class="btn white-text blue accent-3">下载简历</a></li>
+        </ul>
+      </div>
     </div>
-  </header>
+  </nav>
 
-  <!-- 侧边栏（移动端） -->
-  <div class="mdui-drawer" id="sidebar">
-    <div class="mdui-list">
-      <a href="#home" class="mdui-list-item mdui-ripple">
-        <<i class="material-icons mdui-list-item-icon">home</</i>
-        <span class="mdui-list-item-content">首页</span>
-      </a>
-      <a href="#features" class="mdui-list-item mdui-ripple">
-        <<i class="material-icons mdui-list-item-icon">stars</</i>
-        <span class="mdui-list-item-content">功能</span>
-      </a>
-      <a href="#contact" class="mdui-list-item mdui-ripple">
-        <<i class="material-icons mdui-list-item-icon">contact_mail</</i>
-        <span class="mdui-list-item-content">联系我们</span>
-      </a>
-      <div class="mdui-divider"></div>
-      <a href="#settings" class="mdui-list-item mdui-ripple">
-        <<i class="material-icons mdui-list-item-icon">settings</</i>
-        <span class="mdui-list-item-content">设置</span>
-      </a>
-    </div>
-  </div>
+  <!-- 移动端侧边栏（MD2侧边导航组件） -->
+  <ul id="mobile-nav" class="sidenav">
+    <li><a href="#about" class="waves-effect"><<i class="material-icons left">person</</i>关于我</a></li>
+    <li><a href="#skills" class="waves-effect"><<i class="material-icons left">code</</i>技能</a></li>
+    <li><a href="#projects" class="waves-effect"><<i class="material-icons left">work</</i>项目</a></li>
+    <li><a href="#contact" class="waves-effect"><<i class="material-icons left">contact_mail</</i>联系我</a></li>
+    <li><a href="#" class="btn waves-effect waves-light blue accent-3">下载简历</a></li>
+  </ul>
 
-  <!-- 轮播图区域 -->
-  <section id="home" class="mdui-m-t-24">
-    <div class="mdui-carousel" mdui-carousel="{interval: 5000, autoplay: true}">
-      <div class="mdui-carousel-item">
-        <img src="https://picsum.photos/1920/500?random=1" class="mdui-img-fluid" alt="轮播图1">
-      </div>
-      <div class="mdui-carousel-item">
-        <img src="https://picsum.photos/1920/500?random=2" class="mdui-img-fluid" alt="轮播图2">
-      </div>
-      <div class="mdui-carousel-item">
-        <img src="https://picsum.photos/1920/500?random=3" class="mdui-img-fluid" alt="轮播图3">
-      </div>
+  <!-- 英雄区（MD2全屏展示组件） -->
+  <section class="blue darken-1 white-text center-align" style="padding: 120px 0;">
+    <div class="container">
+      <h1 class="flow-text" style="font-size: 2.5rem; font-weight: 300;">你好，我是 <span class="blue accent-3">开发者</span></h1>
+      <p class="flow-text" style="margin: 20px 0;">专注于Web前端开发，热爱创造优雅、高效的用户体验</p>
+      <a href="#projects" class="btn waves-effect waves-light white blue-text darken-1">
+        查看我的项目 <<i class="material-icons right">arrow_forward</</i>
+      </a>
     </div>
   </section>
 
-  <!-- 功能卡片区域 -->
-  <section id="features" class="mdui-container mdui-m-t-8 mdui-m-b-8">
-    <h2 class="mdui-text-center mdui-text-color-gray-800 mdui-m-b-6">核心功能</h2>
-    <div class="mdui-row">
-      <!-- 卡片1 -->
-      <div class="mdui-col-xs-12 mdui-col-sm-6 mdui-col-md-4">
-        <div class="mdui-card mdui-shadow-2 mdui-hoverable">
-          <div class="mdui-card-media">
-            <img src="https://picsum.photos/400/200?random=4" class="mdui-img-fluid" alt="功能1">
-            <div class="mdui-card-media-covered">
-              <div class="mdui-card-title mdui-text-color-white">响应式设计</div>
-            </div>
+  <!-- 关于我（MD2卡片布局） -->
+  <section id="about" class="container section" style="padding: 60px 0;">
+    <div class="row">
+      <div class="col s12 m6">
+        <div class="card">
+          <div class="card-image">
+            <img src="https://picsum.photos/800/500" alt="个人照片">
+            <span class="card-title blue darken-1">关于我</span>
           </div>
-          <div class="mdui-card-content">
-            <p class="mdui-text-color-gray-600">适配手机、平板、桌面端，自动调整布局，提供一致的用户体验。</p>
-          </div>
-          <div class="mdui-card-actions">
-            <button class="mdui-btn mdui-btn-primary mdui-ripple">了解更多</button>
+          <div class="card-content">
+            <p>我是一名资深Web前端开发者，拥有5年+开发经验，擅长使用HTML、CSS、JavaScript及现代前端框架（Vue/React）构建响应式网站和Web应用。</p>
+            <p>热爱技术创新，注重代码质量和用户体验，始终保持对新技术的学习热情。</p>
           </div>
         </div>
       </div>
-      <!-- 卡片2 -->
-      <div class="mdui-col-xs-12 mdui-col-sm-6 mdui-col-md-4">
-        <div class="mdui-card mdui-shadow-2 mdui-hoverable">
-          <div class="mdui-card-media">
-            <img src="https://picsum.photos/400/200?random=5" class="mdui-img-fluid" alt="功能2">
-            <div class="mdui-card-media-covered">
-              <div class="mdui-card-title mdui-text-color-white">Material Design</div>
-            </div>
+      <div class="col s12 m6">
+        <div class="card">
+          <div class="card-content">
+            <h5 class="blue-text darken-1"><<i class="material-icons left">info</</i>基本信息</h5>
+            <ul class="collection">
+              <li class="collection-item">
+                <span class="title">姓名：</span> 张三
+              </li>
+              <li class="collection-item">
+                <span class="title">职业：</span> Web前端开发者
+              </li>
+              <li class="collection-item">
+                <span class="title">邮箱：</span> zhangsan@example.com
+              </li>
+              <li class="collection-item">
+                <span class="title">所在地：</span> 北京
+              </li>
+            </ul>
           </div>
-          <div class="mdui-card-content">
-            <p class="mdui-text-color-gray-600">遵循 Material Design 设计规范，拥有精美的动画和交互效果。</p>
-          </div>
-          <div class="mdui-card-actions">
-            <button class="mdui-btn mdui-btn-primary mdui-ripple">了解更多</button>
-          </div>
-        </div>
-      </div>
-      <!-- 卡片3 -->
-      <div class="mdui-col-xs-12 mdui-col-sm-6 mdui-col-md-4 mdui-col-sm-offset-3 mdui-col-md-offset-0">
-        <div class="mdui-card mdui-shadow-2 mdui-hoverable">
-          <div class="mdui-card-media">
-            <img src="https://picsum.photos/400/200?random=6" class="mdui-img-fluid" alt="功能3">
-            <div class="mdui-card-media-covered">
-              <div class="mdui-card-title mdui-text-color-white">轻量高效</div>
-            </div>
-          </div>
-          <div class="mdui-card-content">
-            <p class="mdui-text-color-gray-600">体积小、加载快，无依赖，轻松集成到任何项目中。</p>
-          </div>
-          <div class="mdui-card-actions">
-            <button class="mdui-btn mdui-btn-primary mdui-ripple">了解更多</button>
+          <div class="card-action">
+            <a href="#contact" class="blue-text darken-1">联系我</a>
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- 联系表单区域 -->
-  <section id="contact" class="mdui-container mdui-m-b-8">
-    <div class="mdui-card mdui-shadow-3">
-      <div class="mdui-card-header">
-        <div class="mdui-card-title">联系我们</div>
-        <div class="mdui-card-subtitle">填写表单，我们会尽快回复你</div>
-      </div>
-      <div class="mdui-card-content">
-        <form class="mdui-form">
-          <div class="mdui-textfield mdui-textfield-floating-label">
-            <label class="mdui-textfield-label">姓名</label>
-            <input type="text" class="mdui-textfield-input" required>
+  <!-- 技能（MD2网格+图标组件） -->
+  <section id="skills" class="grey lighten-1" style="padding: 60px 0;">
+    <div class="container">
+      <h3 class="center-align blue-text darken-1">我的技能</h3>
+      <div class="row" style="margin-top: 40px;">
+        <!-- 技能卡片1 -->
+        <div class="col s12 m3">
+          <div class="card center-align">
+            <div class="card-content">
+              <<i class="material-icons blue-text darken-1" style="font-size: 4rem;">code</</i>
+              <h5>HTML/CSS</h5>
+              <p>熟练掌握HTML5、CSS3、Flexbox、Grid布局，能构建语义化、响应式页面</p>
+            </div>
           </div>
-          <div class="mdui-textfield mdui-textfield-floating-label mdui-m-t-4">
-            <label class="mdui-textfield-label">邮箱</label>
-            <input type="email" class="mdui-textfield-input" required>
+        </div>
+        <!-- 技能卡片2 -->
+        <div class="col s12 m3">
+          <div class="card center-align">
+            <div class="card-content">
+              <<i class="material-icons blue-text darken-1" style="font-size: 4rem;">javascript</</i>
+              <h5>JavaScript</h5>
+              <p>精通ES6+、DOM操作、AJAX，熟悉Vue/React框架及生态系统</p>
+            </div>
           </div>
-          <div class="mdui-textfield mdui-textfield-floating-label mdui-m-t-4">
-            <label class="mdui-textfield-label">留言内容</label>
-            <textarea class="mdui-textfield-input" rows="4" required></textarea>
+        </div>
+        <!-- 技能卡片3 -->
+        <div class="col s12 m3">
+          <div class="card center-align">
+            <div class="card-content">
+              <<i class="material-icons blue-text darken-1" style="font-size: 4rem;">design_services</</i>
+              <h5>UI/UX设计</h5>
+              <p>了解Material Design、Figma工具，能配合设计师实现高还原度界面</p>
+            </div>
           </div>
-          <div class="mdui-checkbox mdui-m-t-4">
-            <input type="checkbox" id="agreement" required>
-            <label for="agreement">同意隐私政策</label>
+        </div>
+        <!-- 技能卡片4 -->
+        <div class="col s12 m3">
+          <div class="card center-align">
+            <div class="card-content">
+              <<i class="material-icons blue-text darken-1" style="font-size: 4rem;">cloud</</i>
+              <h5>工程化</h5>
+              <p>熟悉Webpack、Git、CI/CD流程，具备前端工程化项目经验</p>
+            </div>
           </div>
-        </form>
-      </div>
-      <div class="mdui-card-actions mdui-justify-end">
-        <button class="mdui-btn mdui-btn-accent mdui-ripple">提交</button>
+        </div>
       </div>
     </div>
   </section>
 
-  <!-- 页脚 -->
-  <footer class="mdui-color-gray-800 mdui-text-color-white">
-    <div class="mdui-container mdui-p-6">
-      <div class="mdui-row">
-        <div class="mdui-col-xs-12 mdui-col-md-4">
-          <h3 class="mdui-m-b-4">关于我们</h3>
-          <p class="mdui-text-color-gray-300">MDUI 是一套轻量级的 Material Design 前端框架，帮助开发者快速构建美观、响应式的网页。</p>
+  <!-- 项目（MD2卡片+图片组件） -->
+  <section id="projects" class="container section" style="padding: 60px 0;">
+    <h3 class="center-align blue-text darken-1">我的项目</h3>
+    <div class="row" style="margin-top: 40px;">
+      <!-- 项目卡片1 -->
+      <div class="col s12 m4">
+        <div class="card">
+          <div class="card-image">
+            <img src="https://picsum.photos/600/400?1" alt="项目1">
+            <span class="card-title blue darken-1">电商网站</span>
+          </div>
+          <div class="card-content">
+            <p>使用Vue3+Vite+Element Plus构建的响应式电商平台，包含商品列表、购物车、结算等核心功能。</p>
+          </div>
+          <div class="card-action">
+            <a href="#" class="blue-text darken-1">查看演示</a>
+            <a href="#" class="blue-text darken-1">GitHub</a>
+          </div>
         </div>
-        <div class="mdui-col-xs-12 mdui-col-md-4">
-          <h3 class="mdui-m-b-4">快速链接</h3>
-          <ul class="mdui-list mdui-list-dense">
-            <li class="mdui-list-item"><a href="#" class="mdui-text-color-gray-300 mdui-ripple">文档</a></li>
-            <li class="mdui-list-item"><a href="#" class="mdui-text-color-gray-300 mdui-ripple">示例</a></li>
-            <li class="mdui-list-item"><a href="#" class="mdui-text-color-gray-300 mdui-ripple">GitHub</a></li>
+      </div>
+      <!-- 项目卡片2 -->
+      <div class="col s12 m4">
+        <div class="card">
+          <div class="card-image">
+            <img src="https://picsum.photos/600/400?2" alt="项目2">
+            <span class="card-title blue darken-1">个人博客</span>
+          </div>
+          <div class="card-content">
+            <p>基于React+Next.js开发的静态博客，支持Markdown解析、分类标签、搜索等功能，部署于Vercel。</p>
+          </div>
+          <div class="card-action">
+            <a href="#" class="blue-text darken-1">查看演示</a>
+            <a href="#" class="blue-text darken-1">GitHub</a>
+          </div>
+        </div>
+      </div>
+      <!-- 项目卡片3 -->
+      <div class="col s12 m4">
+        <div class="card">
+          <div class="card-image">
+            <img src="https://picsum.photos/600/400?3" alt="项目3">
+            <span class="card-title blue darken-1">天气应用</span>
+          </div>
+          <div class="card-content">
+            <p>使用JavaScript+Tailwind CSS构建的天气查询工具，调用第三方API获取实时天气数据，支持多城市查询。</p>
+          </div>
+          <div class="card-action">
+            <a href="#" class="blue-text darken-1">查看演示</a>
+            <a href="#" class="blue-text darken-1">GitHub</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 联系我（MD2表单组件） -->
+  <section id="contact" class="blue darken-1 white-text" style="padding: 60px 0;">
+    <div class="container">
+      <h3 class="center-align">联系我</h3>
+      <div class="row" style="margin-top: 40px;">
+        <div class="col s12 m6 offset-m3">
+          <form class="card" style="background-color: white; padding: 20px; border-radius: 4px;">
+            <div class="input-field">
+              <<i class="material-icons prefix blue-text darken-1">person</</i>
+              <input type="text" id="name" class="validate" required>
+              <label for="name" class="blue-text darken-1">姓名</label>
+            </div>
+            <div class="input-field">
+              <<i class="material-icons prefix blue-text darken-1">email</</i>
+              <input type="email" id="email" class="validate" required>
+              <label for="email" class="blue-text darken-1">邮箱</label>
+            </div>
+            <div class="input-field">
+              <<i class="material-icons prefix blue-text darken-1">message</</i>
+              <textarea id="message" class="materialize-textarea" required></textarea>
+              <label for="message" class="blue-text darken-1">留言</label>
+            </div>
+            <button type="submit" class="btn waves-effect waves-light blue darken-1 right">
+              发送 <<i class="material-icons right">send</</i>
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 页脚（MD2底部组件） -->
+  <footer>
+    <div class="container">
+      <div class="row">
+        <div class="col s12 m6">
+          <h5 class="blue-text darken-1">我的个人网站</h5>
+          <p>专注Web前端开发，创造更优用户体验</p>
+        </div>
+        <div class="col s12 m6">
+          <h5 class="blue-text darken-1">关注我</h5>
+          <ul class="inline">
+            <li><a href="#" class="blue-text darken-1"><<i class="material-icons">github</</i> GitHub</a></li>
+            <li><a href="#" class="blue-text darken-1"><<i class="material-icons">linkedin</</i> LinkedIn</a></li>
+            <li><a href="#" class="blue-text darken-1"><<i class="material-icons">weibo</</i> 微博</a></li>
           </ul>
         </div>
-        <div class="mdui-col-xs-12 mdui-col-md-4">
-          <h3 class="mdui-m-b-4">联系方式</h3>
-          <p class="mdui-text-color-gray-300"><<i class="material-icons mdui-icon-size-18 mdui-m-r-2">email</</i> contact@mdui.com</p>
-          <p class="mdui-text-color-gray-300"><<i class="material-icons mdui-icon-size-18 mdui-m-r-2">phone</</i> +86 123 4567 8910</p>
-        </div>
       </div>
-      <div class="mdui-divider mdui-color-gray-600 mdui-m-t-4 mdui-m-b-4"></div>
-      <p class="mdui-text-center mdui-text-color-gray-400">© 2025 MDUI Demo. 保留所有权利。</p>
+      <div class="center-align" style="margin-top: 20px; color: #666;">
+        © 2025 我的个人网站 - 基于Material Design 2构建
+      </div>
     </div>
   </footer>
 
-  <!-- 引入 MDUI 脚本 -->
-  <script src="https://unpkg.com/mdui@1.0.2/dist/js/mdui.min.js"></script>
-  <!-- 初始化组件（可选，MDUI 会自动初始化带 mdui-* 属性的组件） -->
+  <!-- 引入MD2核心JS（Materialize.js） -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+  <!-- 初始化MD2组件 -->
   <script>
-    // 手动初始化示例（如需自定义配置）
-    mdui.mutation();
+    // 初始化侧边栏
+    document.addEventListener('DOMContentLoaded', function() {
+      M.Sidenav.init(document.querySelectorAll('.sidenav'));
+      // 初始化滚动监听（导航栏效果）
+      window.addEventListener('scroll', function() {
+        const nav = document.querySelector('.navbar-fixed');
+        if (window.scrollY > 100) {
+          nav.classList.add('blue-darken-2');
+        } else {
+          nav.classList.remove('blue-darken-2');
+        }
+      });
+      // 平滑滚动
+      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+          e.preventDefault();
+          document.querySelector(this.getAttribute('href')).scrollIntoView({
+            behavior: 'smooth'
+          });
+        });
+      });
+    });
   </script>
 </body>
 </html>
