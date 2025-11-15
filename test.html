@@ -1,18 +1,200 @@
 <!DOCTYPE html>
- <html lang="zh-CN">
- <head>
-   <meta charset="UTF-8">
-   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   <title>弘九honjiu的个人网站</title>
-   <!-- 引入 MDUI 样式文件 -->
-   <link rel="stylesheet" href="https://unpkg.com/mdui@1.0.2/dist/css/mdui.min.css">
- </head>
- <body class="mdui-theme-primary-indigo mdui-theme-accent-pink">
-   <div class="mdui-container mdui-center mdui-m-t-5">
-     <h1 class="mdui-text-center">弘九honjiu</h1>
-     <button class="mdui-btn mdui-btn-raised mdui-color-primary mdui-m-t-3">按钮</button>
-   </div>
-   <!-- 引入 MDUI 脚本文件 -->
-   <script src="https://unpkg.com/mdui@1.0.2/dist/js/mdui.min.js"></script>
- </body>
- </html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MDUI V1 经典示例</title>
+  <!-- 引入 MDUI 样式 -->
+  <link rel="stylesheet" href="https://unpkg.com/mdui@1.0.2/dist/css/mdui.min.css">
+  <!-- 引入图标库（MDUI 依赖 Material Icons） -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+</head>
+<body class="mdui-theme-primary-blue mdui-theme-accent-pink mdui-appbar-with-toolbar">
+  <!-- 顶部导航栏 -->
+  <header class="mdui-appbar mdui-appbar-fixed">
+    <div class="mdui-toolbar mdui-color-white mdui-shadow-1">
+      <!-- 移动端菜单按钮 -->
+      <button class="mdui-btn mdui-btn-icon mdui-ripple" mdui-drawer="{target: '#sidebar', overlay: true}">
+        <<i class="material-icons">menu</</i>
+      </button>
+      <!--  Logo -->
+      <div class="mdui-toolbar-title mdui-text-color-blue">MDUI Demo</div>
+      <!-- 桌面端导航链接 -->
+      <div class="mdui-toolbar-spacer"></div>
+      <nav class="mdui-hidden-xs">
+        <a href="#home" class="mdui-btn mdui-btn-flat mdui-text-color-gray-700 mdui-ripple">首页</a>
+        <a href="#features" class="mdui-btn mdui-btn-flat mdui-text-color-gray-700 mdui-ripple">功能</a>
+        <a href="#contact" class="mdui-btn mdui-btn-flat mdui-text-color-gray-700 mdui-ripple">联系我们</a>
+      </nav>
+      <!-- 搜索按钮 -->
+      <button class="mdui-btn mdui-btn-icon mdui-ripple">
+        <<i class="material-icons">search</</i>
+      </button>
+    </div>
+  </header>
+
+  <!-- 侧边栏（移动端） -->
+  <div class="mdui-drawer" id="sidebar">
+    <div class="mdui-list">
+      <a href="#home" class="mdui-list-item mdui-ripple">
+        <<i class="material-icons mdui-list-item-icon">home</</i>
+        <span class="mdui-list-item-content">首页</span>
+      </a>
+      <a href="#features" class="mdui-list-item mdui-ripple">
+        <<i class="material-icons mdui-list-item-icon">stars</</i>
+        <span class="mdui-list-item-content">功能</span>
+      </a>
+      <a href="#contact" class="mdui-list-item mdui-ripple">
+        <<i class="material-icons mdui-list-item-icon">contact_mail</</i>
+        <span class="mdui-list-item-content">联系我们</span>
+      </a>
+      <div class="mdui-divider"></div>
+      <a href="#settings" class="mdui-list-item mdui-ripple">
+        <<i class="material-icons mdui-list-item-icon">settings</</i>
+        <span class="mdui-list-item-content">设置</span>
+      </a>
+    </div>
+  </div>
+
+  <!-- 轮播图区域 -->
+  <section id="home" class="mdui-m-t-24">
+    <div class="mdui-carousel" mdui-carousel="{interval: 5000, autoplay: true}">
+      <div class="mdui-carousel-item">
+        <img src="https://picsum.photos/1920/500?random=1" class="mdui-img-fluid" alt="轮播图1">
+      </div>
+      <div class="mdui-carousel-item">
+        <img src="https://picsum.photos/1920/500?random=2" class="mdui-img-fluid" alt="轮播图2">
+      </div>
+      <div class="mdui-carousel-item">
+        <img src="https://picsum.photos/1920/500?random=3" class="mdui-img-fluid" alt="轮播图3">
+      </div>
+    </div>
+  </section>
+
+  <!-- 功能卡片区域 -->
+  <section id="features" class="mdui-container mdui-m-t-8 mdui-m-b-8">
+    <h2 class="mdui-text-center mdui-text-color-gray-800 mdui-m-b-6">核心功能</h2>
+    <div class="mdui-row">
+      <!-- 卡片1 -->
+      <div class="mdui-col-xs-12 mdui-col-sm-6 mdui-col-md-4">
+        <div class="mdui-card mdui-shadow-2 mdui-hoverable">
+          <div class="mdui-card-media">
+            <img src="https://picsum.photos/400/200?random=4" class="mdui-img-fluid" alt="功能1">
+            <div class="mdui-card-media-covered">
+              <div class="mdui-card-title mdui-text-color-white">响应式设计</div>
+            </div>
+          </div>
+          <div class="mdui-card-content">
+            <p class="mdui-text-color-gray-600">适配手机、平板、桌面端，自动调整布局，提供一致的用户体验。</p>
+          </div>
+          <div class="mdui-card-actions">
+            <button class="mdui-btn mdui-btn-primary mdui-ripple">了解更多</button>
+          </div>
+        </div>
+      </div>
+      <!-- 卡片2 -->
+      <div class="mdui-col-xs-12 mdui-col-sm-6 mdui-col-md-4">
+        <div class="mdui-card mdui-shadow-2 mdui-hoverable">
+          <div class="mdui-card-media">
+            <img src="https://picsum.photos/400/200?random=5" class="mdui-img-fluid" alt="功能2">
+            <div class="mdui-card-media-covered">
+              <div class="mdui-card-title mdui-text-color-white">Material Design</div>
+            </div>
+          </div>
+          <div class="mdui-card-content">
+            <p class="mdui-text-color-gray-600">遵循 Material Design 设计规范，拥有精美的动画和交互效果。</p>
+          </div>
+          <div class="mdui-card-actions">
+            <button class="mdui-btn mdui-btn-primary mdui-ripple">了解更多</button>
+          </div>
+        </div>
+      </div>
+      <!-- 卡片3 -->
+      <div class="mdui-col-xs-12 mdui-col-sm-6 mdui-col-md-4 mdui-col-sm-offset-3 mdui-col-md-offset-0">
+        <div class="mdui-card mdui-shadow-2 mdui-hoverable">
+          <div class="mdui-card-media">
+            <img src="https://picsum.photos/400/200?random=6" class="mdui-img-fluid" alt="功能3">
+            <div class="mdui-card-media-covered">
+              <div class="mdui-card-title mdui-text-color-white">轻量高效</div>
+            </div>
+          </div>
+          <div class="mdui-card-content">
+            <p class="mdui-text-color-gray-600">体积小、加载快，无依赖，轻松集成到任何项目中。</p>
+          </div>
+          <div class="mdui-card-actions">
+            <button class="mdui-btn mdui-btn-primary mdui-ripple">了解更多</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 联系表单区域 -->
+  <section id="contact" class="mdui-container mdui-m-b-8">
+    <div class="mdui-card mdui-shadow-3">
+      <div class="mdui-card-header">
+        <div class="mdui-card-title">联系我们</div>
+        <div class="mdui-card-subtitle">填写表单，我们会尽快回复你</div>
+      </div>
+      <div class="mdui-card-content">
+        <form class="mdui-form">
+          <div class="mdui-textfield mdui-textfield-floating-label">
+            <label class="mdui-textfield-label">姓名</label>
+            <input type="text" class="mdui-textfield-input" required>
+          </div>
+          <div class="mdui-textfield mdui-textfield-floating-label mdui-m-t-4">
+            <label class="mdui-textfield-label">邮箱</label>
+            <input type="email" class="mdui-textfield-input" required>
+          </div>
+          <div class="mdui-textfield mdui-textfield-floating-label mdui-m-t-4">
+            <label class="mdui-textfield-label">留言内容</label>
+            <textarea class="mdui-textfield-input" rows="4" required></textarea>
+          </div>
+          <div class="mdui-checkbox mdui-m-t-4">
+            <input type="checkbox" id="agreement" required>
+            <label for="agreement">同意隐私政策</label>
+          </div>
+        </form>
+      </div>
+      <div class="mdui-card-actions mdui-justify-end">
+        <button class="mdui-btn mdui-btn-accent mdui-ripple">提交</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- 页脚 -->
+  <footer class="mdui-color-gray-800 mdui-text-color-white">
+    <div class="mdui-container mdui-p-6">
+      <div class="mdui-row">
+        <div class="mdui-col-xs-12 mdui-col-md-4">
+          <h3 class="mdui-m-b-4">关于我们</h3>
+          <p class="mdui-text-color-gray-300">MDUI 是一套轻量级的 Material Design 前端框架，帮助开发者快速构建美观、响应式的网页。</p>
+        </div>
+        <div class="mdui-col-xs-12 mdui-col-md-4">
+          <h3 class="mdui-m-b-4">快速链接</h3>
+          <ul class="mdui-list mdui-list-dense">
+            <li class="mdui-list-item"><a href="#" class="mdui-text-color-gray-300 mdui-ripple">文档</a></li>
+            <li class="mdui-list-item"><a href="#" class="mdui-text-color-gray-300 mdui-ripple">示例</a></li>
+            <li class="mdui-list-item"><a href="#" class="mdui-text-color-gray-300 mdui-ripple">GitHub</a></li>
+          </ul>
+        </div>
+        <div class="mdui-col-xs-12 mdui-col-md-4">
+          <h3 class="mdui-m-b-4">联系方式</h3>
+          <p class="mdui-text-color-gray-300"><<i class="material-icons mdui-icon-size-18 mdui-m-r-2">email</</i> contact@mdui.com</p>
+          <p class="mdui-text-color-gray-300"><<i class="material-icons mdui-icon-size-18 mdui-m-r-2">phone</</i> +86 123 4567 8910</p>
+        </div>
+      </div>
+      <div class="mdui-divider mdui-color-gray-600 mdui-m-t-4 mdui-m-b-4"></div>
+      <p class="mdui-text-center mdui-text-color-gray-400">© 2025 MDUI Demo. 保留所有权利。</p>
+    </div>
+  </footer>
+
+  <!-- 引入 MDUI 脚本 -->
+  <script src="https://unpkg.com/mdui@1.0.2/dist/js/mdui.min.js"></script>
+  <!-- 初始化组件（可选，MDUI 会自动初始化带 mdui-* 属性的组件） -->
+  <script>
+    // 手动初始化示例（如需自定义配置）
+    mdui.mutation();
+  </script>
+</body>
+</html>
