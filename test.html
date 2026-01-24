@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>弘九honjiu的个人网站</title>
+    <title>弘九honjiu的个人网站|新春快乐！</title>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     <style>
@@ -15,7 +15,7 @@
         }
 
         body {
-            background: linear-gradient(135deg, #f5f7fa 0%, #e4edf5 100%);
+            background: linear-gradient(135deg, #fef8f5 0%, #ffe9e0 100%);
             color: #333;
             line-height: 1.6;
             min-height: 100vh;
@@ -23,6 +23,40 @@
             flex-direction: column;
             align-items: center;
             padding: 20px;
+            position: relative;
+        }
+        /* 新年装饰小元素 */
+        body::before, body::after {
+            content: "";
+            font-size: 24px;
+            position: fixed;
+            z-index: 99;
+            opacity: 0.8;
+        }
+        body::before {
+            top: 20px;
+            left: 20px;
+        }
+        body::after {
+            top: 20px;
+            right: 20px;
+        }
+        /* 新年横幅 */
+        .newyear-banner {
+            width: 100%;
+            max-width: 800px;
+            background: linear-gradient(90deg, #d42929, #ff9500);
+            color: white;
+            text-align: center;
+            padding: 12px 0;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 8px rgba(212, 41, 41, 0.3);
+        }
+        .newyear-banner p {
+            font-size: 1.1rem;
+            font-weight: 500;
+            letter-spacing: 2px;
         }
 
         .container {
@@ -41,46 +75,55 @@
             font-size: 2.5rem;
             font-weight: 500;
             margin-bottom: 5px;
-            color: #333;
-            letter-spacing: 1px;
+            color: #d42929;
+            letter-spacing: 2px;
         }
 
         .username {
             font-size: 1.4rem;
-            color: #2196F3;
+            color: #d42929;
             font-weight: 400;
             margin-bottom: 10px;
-            background: #E3F2FD;
+            background: #fff1e8;
             padding: 6px 16px;
             border-radius: 20px;
             display: inline-block;
+            border: 1px solid #ff9500;
         }
 
         .subtitle {
             font-size: 1.1rem;
             color: #666;
             font-weight: 300;
+            margin-top: 10px;
+        }
+        /* 新春祝福点缀 */
+        .subtitle::before {
+            content: "新春快乐 | ";
+            color: #d42929;
+            font-weight: 500;
         }
 
         .card {
             background: white;
             border-radius: 16px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            box-shadow: 0 4px 12px rgba(212, 41, 41, 0.08);
             padding: 24px;
             margin-bottom: 24px;
             transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border-top: 4px solid #ff9500;
         }
 
         .card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+            box-shadow: 0 8px 25px rgba(212, 41, 41, 0.15);
         }
 
         .card-title {
             display: flex;
             align-items: center;
             margin-bottom: 16px;
-            color: #2196F3;
+            color: #d42929;
             font-size: 1.2rem;
         }
 
@@ -103,9 +146,10 @@
         .social-title {
             text-align: center;
             margin-bottom: 24px;
-            color: #555;
+            color: #d42929;
             font-size: 1.3rem;
             font-weight: 500;
+            letter-spacing: 1px;
         }
 
         .social-buttons {
@@ -127,7 +171,7 @@
 
         .social-button:hover {
             transform: scale(1.05);
-            color: #2196F3;
+            color: #d42929;
         }
 
         .social-icon {
@@ -144,7 +188,7 @@
         }
 
         .social-button:hover .social-icon {
-            box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+            box-shadow: 0 6px 15px rgba(212, 41, 41, 0.15);
         }
 
         .social-icon i {
@@ -166,15 +210,24 @@
             background: linear-gradient(135deg, #333, #555);
             color: white;
         }
+        .github:hover .social-icon {
+            box-shadow: 0 0 10px rgba(255,149,0,0.5);
+        }
 
         .bilibili .social-icon {
             background: linear-gradient(135deg, #FB7299, #FF85A5);
             color: white;
         }
+        .bilibili:hover .social-icon {
+            box-shadow: 0 0 10px rgba(255,149,0,0.5);
+        }
 
         .douyin .social-icon {
             background: linear-gradient(135deg, #000, #333);
             color: white;
+        }
+        .douyin:hover .social-icon {
+            box-shadow: 0 0 10px rgba(255,149,0,0.5);
         }
 
         footer {
@@ -184,7 +237,7 @@
             color: #888;
             font-size: 0.85rem;
             width: 100%;
-            border-top: 1px solid #eee;
+            border-top: 1px solid #ffd8bf;
         }
 
         .footer-content {
@@ -192,8 +245,24 @@
             margin: 0 auto;
             line-height: 1.8;
         }
+        /* 页脚新年祝福 */
+        .footer-content::after {
+            content: "🧨 马年行大运，万事皆顺意！ 🧨";
+            display: block;
+            margin-top: 10px;
+            color: #d42929;
+            font-size: 0.95rem;
+            letter-spacing: 1px;
+        }
 
         @media (max-width: 600px) {
+            body::before, body::after {
+                font-size: 20px;
+            }
+            .newyear-banner p {
+                font-size: 1rem;
+                letter-spacing: 1px;
+            }
             .social-buttons {
                 flex-direction: column;
                 align-items: center;
@@ -215,7 +284,7 @@
                 padding: 12px 20px;
                 border-radius: 12px;
                 background: white;
-                box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+                box-shadow: 0 2px 8px rgba(212, 41, 41, 0.08);
             }
 
             .social-icon {
@@ -232,10 +301,18 @@
             .social-text {
                 text-align: left;
             }
+            .footer-content::after {
+                font-size: 0.85rem;
+            }
         }
     </style>
 </head>
 <body>
+    <!-- 新年横幅 -->
+    <div class="newyear-banner">
+        <p>丙午马年 新春快乐 阖家幸福</p>
+    </div>
+
     <div class="container">
         <header>
             <h1>弘九honjiu</h1>
@@ -312,7 +389,7 @@
 
         <footer>
             <div class="footer-content">
-                <p>最后更新：2025年10月 | 版本号：25w24a</p>
+                <p>最后更新：2026年1月24日 | 版本号：HPNY</p>
                 <p>本网站采用MD2设计语言制作</p>
                 <p>© honjiu.github.io</p>
             </div>
