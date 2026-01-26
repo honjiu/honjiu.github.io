@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Explore 起始页</title>
+    <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* 引入得意黑字体 */
+        @font-face {
+            font-family: 'Deyi Hei';
+            src: url('https://cdn.jsdelivr.net/gh/maoken/DeyiHeiFont@latest/DeyiHei-Regular.woff2') format('woff2'),
+                 url('https://cdn.jsdelivr.net/gh/maoken/DeyiHeiFont@latest/DeyiHei-Regular.woff') format('woff');
+            font-weight: normal;
+            font-style: normal;
+            font-display: swap;
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+        /* 基础样式 + 浅色模式（默认） */
+        body {
+            min-height: 100vh;
+            background: #f5f7fa;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            gap: 20px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow-x: hidden;
+        }
+        /* 手动深色/浅色模式类 */
+        body.dark {
+            background: #1a1a1d;
+        }
+        body.light {
+            background: #f5f7fa;
+        }
+        /* 左上角三横线菜单按钮 */
+        .menu-btn {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            background: #fff;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #333;
+            font-size: 20px;
+            cursor: pointer;
+            border: none;
+            transition: all 0.3s ease;
+            z-index: 100;
+        }
+        .menu-btn:hover {
+            background: #f0f0f0;
+        }
+        /* 菜单弹窗：默认隐藏 */
+        .menu-popup {
+            position: absolute;
+            top: 70px;
+            left: 20px;
+            width: 140px;
+            background: #fff;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            padding: 8px 0;
+            display: none;
+            flex-direction: column;
+            z-index: 99;
+            transition: all 0.3s ease;
+        }
+        /* 菜单显示状态 */
+        .menu-popup.show {
+            display: flex;
+        }
+        /* 菜单主选项（设置/关于） */
+        .menu-main {
+            padding: 8px 20px;
+            color: #333;
+            text-decoration: none;
+            font-size: 16px;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+        .menu-main:hover {
+            background: #f5f7fa;
+        }
+        /* 设置子菜单 */
+        .menu-sub {
+            display: none;
+            flex-direction: column;
+            padding: 4px 0;
+            background: #f8f9fa;
+        }
+        .menu-sub.show {
+            display: flex;
+        }
+        /* 子菜单选项 */
+        .sub-item {
+            padding: 6px 30px;
+            color: #333;
+            text-decoration: none;
+            font-size: 14px;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+        .sub-item:hover {
+            background: #e9ecef;
+        }
+        /* Explore得意黑文字 */
+        .explore-title {
+            font-family: 'Deyi Hei', sans-serif;
+            font-size: 48px;
+            font-weight: 500;
+            color: #333;
+            transition: all 0.3s ease;
+            letter-spacing: 2px;
+        }
+        /* 搜索框 */
+        .search-box {
+            width: 100%;
+            max-width: 600px;
+            position: relative;
+            margin-top: 10px;
+        }
+        .search-input {
+            width: 100%;
+            height: 50px;
+            padding: 0 20px;
+            border: none;
+            border-radius: 25px;
+            font-size: 16px;
+            background: #fff;
+            color: #333;
+            box-shadow: 0 3px 15px rgba(0, 0, 0, 0.08);
+            outline: none;
+            transition: all 0.3s ease;
+        }
+        .search-input::placeholder {
+            color: #999;
+        }
+        .search-input:focus {
+            box-shadow: 0 5px 20px rgba(99, 102, 241, 0.15);
+        }
+        /* 快捷入口容器 */
+        .shortcut-box {
+            display: flex;
+            gap: 30px;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            margin-top: 20px;
+        }
+        /* 圆形立体图标 */
+        .shortcut-item {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: #fff;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            position: relative;
+            top: 0;
+            transition: all 0.2s ease;
+        }
+        .shortcut-item:hover {
+            top: -3px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+            transform: scale(1.05);
+        }
+        /* 图标样式 */
+        .icon-bilibili { color: #fb7299; font-size: 32px; }
+        .icon-douyin { color: #000; font-size: 32px; }
+        .icon-baidu { color: #2980ef; font-size: 32px; }
+        .icon-ai { color: #165DFF; font-size: 28px; font-weight: 700; letter-spacing: 2px; }
+
+        /* 关于弹窗：遮罩+内容框 */
+        .about-mask {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.3);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 999;
+            transition: all 0.3s ease;
+        }
+        .about-mask.show {
+            display: flex;
+        }
+        .about-box {
+            width: 300px;
+            padding: 30px 20px;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        .about-text {
+            font-size: 16px;
+            color: #333;
+            line-height: 1.8;
+            margin-bottom: 15px;
+        }
+        .about-copyright {
+            font-size: 14px;
+            color: #666;
+        }
+        .about-close {
+            margin-top: 20px;
+            padding: 6px 20px;
+            background: #f5f7fa;
+            border: none;
+            border-radius: 6px;
+            color: #333;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .about-close:hover {
+            background: #e9ecef;
+        }
+
+        /* ########## 深色模式样式 ########## */
+        /* 手动深色 */
+        body.dark .explore-title,
+        body.dark .menu-btn,
+        body.dark .menu-main,
+        body.dark .sub-item {
+            color: #f5f5f5;
+        }
+        body.dark .menu-btn {
+            background: #2d2d3f;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+        body.dark .menu-btn:hover {
+            background: #383850;
+        }
+        body.dark .menu-popup {
+            background: #2d2d3f;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+        body.dark .menu-main:hover {
+            background: #383850;
+        }
+        body.dark .menu-sub {
+            background: #383850;
+        }
+        body.dark .sub-item:hover {
+            background: #454560;
+        }
+        body.dark .search-input {
+            background: #2d2d3f;
+            color: #f5f5f5;
+            box-shadow: 0 3px 15px rgba(0, 0, 0, 0.3);
+        }
+        body.dark .search-input::placeholder {
+            color: #b0b0b8;
+        }
+        body.dark .search-input:focus {
+            box-shadow: 0 5px 20px rgba(22, 93, 255, 0.2);
+        }
+        body.dark .shortcut-item {
+            background: #2d2d3f;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        }
+        body.dark .shortcut-item:hover {
+            box-shadow: 0 6px 15px rgba(22, 93, 255, 0.25);
+        }
+        body.dark .icon-douyin { color: #f5f5f5; }
+        body.dark .icon-ai { color: #4080ff; }
+        /* 深色模式-关于弹窗 */
+        body.dark .about-mask {
+            background: rgba(0, 0, 0, 0.5);
+        }
+        body.dark .about-box {
+            background: #2d2d3f;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+        }
+        body.dark .about-text {
+            color: #f5f5f5;
+        }
+        body.dark .about-copyright {
+            color: #b0b0b8;
+        }
+        body.dark .about-close {
+            background: #383850;
+            color: #f5f5f5;
+        }
+        body.dark .about-close:hover {
+            background: #454560;
+        }
+
+        /* 系统深色（兼容） */
+        @media (prefers-color-scheme: dark) {
+            body:not(.light):not(.dark) {
+                background: #1a1a1d;
+            }
+            body:not(.light):not(.dark) .explore-title,
+            body:not(.light):not(.dark) .menu-btn,
+            body:not(.light):not(.dark) .menu-main,
+            body:not(.light):not(.dark) .sub-item {
+                color: #f5f5f5;
+            }
+            body:not(.light):not(.dark) .menu-btn {
+                background: #2d2d3f;
+                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            }
+            body:not(.light):not(.dark) .menu-btn:hover {
+                background: #383850;
+            }
+            body:not(.light):not(.dark) .menu-popup {
+                background: #2d2d3f;
+                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            }
+            body:not(.light):not(.dark) .menu-main:hover {
+                background: #383850;
+            }
+            body:not(.light):not(.dark) .menu-sub {
+                background: #383850;
+            }
+            body:not(.light):not(.dark) .sub-item:hover {
+                background: #454560;
+            }
+            body:not(.light):not(.dark) .search-input {
+                background: #2d2d3f;
+                color: #f5f5f5;
+                box-shadow: 0 3px 15px rgba(0, 0, 0, 0.3);
+            }
+            body:not(.light):not(.dark) .search-input::placeholder {
+                color: #b0b0b8;
+            }
+            body:not(.light):not(.dark) .search-input:focus {
+                box-shadow: 0 5px 20px rgba(22, 93, 255, 0.2);
+            }
+            body:not(.light):not(.dark) .shortcut-item {
+                background: #2d2d3f;
+                box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            }
+            body:not(.light):not(.dark) .shortcut-item:hover {
+                box-shadow: 0 6px 15px rgba(22, 93, 255, 0.25);
+            }
+            body:not(.light):not(.dark) .icon-douyin { color: #f5f5f5; }
+            body:not(.light):not(.dark) .icon-ai { color: #4080ff; }
+            /* 系统深色-关于弹窗 */
+            body:not(.light):not(.dark) .about-mask {
+                background: rgba(0, 0, 0, 0.5);
+            }
+            body:not(.light):not(.dark) .about-box {
+                background: #2d2d3f;
+                box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+            }
+            body:not(.light):not(.dark) .about-text {
+                color: #f5f5f5;
+            }
+            body:not(.light):not(.dark) .about-copyright {
+                color: #b0b0b8;
+            }
+            body:not(.light):not(.dark) .about-close {
+                background: #383850;
+                color: #f5f5f5;
+            }
+            body:not(.light):not(.dark) .about-close:hover {
+                background: #454560;
+            }
+        }
+
+        /* 移动端适配 */
+        @media (max-width: 400px) {
+            .explore-title {
+                font-size: 36px;
+            }
+            .menu-btn {
+                width: 36px;
+                height: 36px;
+                font-size: 18px;
+            }
+            .menu-popup {
+                width: 120px;
+                top: 65px;
+            }
+            .about-box {
+                width: 260px;
+                padding: 25px 15px;
+            }
+            .shortcut-item {
+                width: 70px;
+                height: 70px;
+            }
+            .shortcut-box {
+                gap: 20px;
+            }
+            .icon-bilibili, .icon-douyin, .icon-baidu { font-size: 28px; }
+            .icon-ai { font-size: 24px; }
+        }
+    </style>
+</head>
+<body>
+    <!-- 左上角菜单按钮 -->
+    <button class="menu-btn" id="menuBtn">
+        <i class="fas fa-bars"></i>
+    </button>
+    <!-- 菜单弹窗 -->
+    <div class="menu-popup" id="menuPopup">
+        <!-- 设置主选项 + 子菜单（黑夜模式开关） -->
+        <div class="menu-main" id="settingBtn">设置</div>
+        <div class="menu-sub" id="settingSub">
+            <div class="sub-item" id="followSys">跟随系统</div>
+            <div class="sub-item" id="darkMode">开启深色模式</div>
+            <div class="sub-item" id="lightMode">开启浅色模式</div>
+        </div>
+        <!-- 关于选项 -->
+        <div class="menu-main" id="aboutBtn">关于</div>
+    </div>
+
+    <!-- 关于弹窗 -->
+    <div class="about-mask" id="aboutMask">
+        <div class="about-box">
+            <p class="about-text">由弘九honjiu设计与制作</p>
+            <p class="about-copyright">© honjiu.github.io</p>
+            <button class="about-close" id="aboutClose">关闭</button>
+        </div>
+    </div>
+
+    <!-- Explore标题 -->
+    <h1 class="explore-title">Explore</h1>
+
+    <!-- 搜索框 -->
+    <div class="search-box">
+        <input type="text" class="search-input" placeholder="搜索或输入网址...">
+    </div>
+
+    <!-- 快捷入口 -->
+    <div class="shortcut-box">
+        <a href="https://www.bilibili.com" class="shortcut-item" target="_blank">
+            <i class="fab fa-bilibili icon-bilibili"></i>
+        </a>
+        <a href="https://www.douyin.com" class="shortcut-item" target="_blank">
+            <i class="fab fa-tiktok icon-douyin"></i>
+        </a>
+        <a href="https://www.baidu.com" class="shortcut-item" target="_blank">
+            <i class="fas fa-search icon-baidu"></i>
+        </a>
+        <a href="https://www.doubao.com" class="shortcut-item" target="_blank">
+            <span class="icon-ai">AI</span>
+        </a>
+    </div>
+
+    <script>
+        // ********** 菜单展开/收起逻辑 **********
+        const menuBtn = document.getElementById('menuBtn');
+        const menuPopup = document.getElementById('menuPopup');
+        const settingBtn = document.getElementById('settingBtn');
+        const settingSub = document.getElementById('settingSub');
+        const aboutBtn = document.getElementById('aboutBtn');
+
+        // 主菜单开关
+        menuBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            menuPopup.classList.toggle('show');
+        });
+        // 设置子菜单开关
+        settingBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            settingSub.classList.toggle('show');
+        });
+        // 点击外部关闭所有菜单
+        document.addEventListener('click', () => {
+            menuPopup.classList.remove('show');
+            settingSub.classList.remove('show');
+        });
+        // 菜单内部点击不关闭
+        menuPopup.addEventListener('click', (e) => {
+            e.stopPropagation();
+        });
+
+        // ********** 关于弹窗逻辑 **********
+        const aboutMask = document.getElementById('aboutMask');
+        const aboutClose = document.getElementById('aboutClose');
+        // 打开关于弹窗
+        aboutBtn.addEventListener('click', () => {
+            aboutMask.classList.add('show');
+            menuPopup.classList.remove('show'); // 打开弹窗时关闭菜单
+            settingSub.classList.remove('show');
+        });
+        // 关闭关于弹窗（按钮）
+        aboutClose.addEventListener('click', () => {
+            aboutMask.classList.remove('show');
+        });
+        // 点击遮罩关闭弹窗
+        aboutMask.addEventListener('click', (e) => {
+            if (e.target === aboutMask) {
+                aboutMask.classList.remove('show');
+            }
+        });
+
+        // ********** 黑夜模式切换逻辑 **********
+        const followSys = document.getElementById('followSys');
+        const darkMode = document.getElementById('darkMode');
+        const lightMode = document.getElementById('lightMode');
+        const body = document.body;
+
+        // 从本地存储读取模式（刷新页面保留设置）
+        const savedMode = localStorage.getItem('colorMode');
+        if (savedMode) {
+            body.classList.add(savedMode);
+        }
+
+        // 跟随系统
+        followSys.addEventListener('click', () => {
+            body.classList.remove('dark', 'light');
+            localStorage.removeItem('colorMode');
+        });
+        // 手动深色
+        darkMode.addEventListener('click', () => {
+            body.classList.remove('light');
+            body.classList.add('dark');
+            localStorage.setItem('colorMode', 'dark');
+        });
+        // 手动浅色
+        lightMode.addEventListener('click', () => {
+            body.classList.remove('dark');
+            body.classList.add('light');
+            localStorage.setItem('colorMode', 'light');
+        });
+
+        // ********** 搜索/网址跳转功能 **********
+        const searchInput = document.querySelector('.search-input');
+        searchInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && searchInput.value.trim()) {
+                const content = searchInput.value.trim();
+                const isUrl = /^(https?:\/\/)|(\.\w{2,})$/.test(content);
+                let jumpUrl = isUrl ? (content.startsWith('http') ? content : `https://${content}`) : `https://www.baidu.com/s?wd=${encodeURIComponent(content)}`;
+                window.open(jumpUrl, '_blank');
+                searchInput.value = '';
+            }
+        });
+    </script>
+</body>
+</html>
