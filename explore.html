@@ -6,472 +6,87 @@
     <title>Explore</title>
     <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* 引入得意黑字体 */
-        @font-face {
-            font-family: 'Deyi Hei';
-            src: url('https://cdn.jsdelivr.net/gh/maoken/DeyiHeiFont@latest/DeyiHei-Regular.woff2') format('woff2'),
-                 url('https://cdn.jsdelivr.net/gh/maoken/DeyiHeiFont@latest/DeyiHei-Regular.woff') format('woff');
-            font-weight: normal;
-            font-style: normal;
-            font-display: swap;
-        }
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-        }
-        /* 基础样式 + 浅色模式（默认） */
-        body {
-            min-height: 100vh;
-            background: #f5f7fa;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-            gap: 20px;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow-x: hidden;
-        }
-        /* 手动深色/浅色模式类 */
-        body.dark {
-            background: #1a1a1d;
-        }
-        body.light {
-            background: #f5f7fa;
-        }
-        /* 左上角三横线菜单按钮 */
-        .menu-btn {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            width: 40px;
-            height: 40px;
-            border-radius: 8px;
-            background: #fff;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #333;
-            font-size: 20px;
-            cursor: pointer;
-            border: none;
-            transition: all 0.3s ease;
-            z-index: 100;
-        }
-        .menu-btn:hover {
-            background: #f0f0f0;
-        }
-        /* 菜单弹窗：默认隐藏 + 动画 */
-        .menu-popup {
-            position: absolute;
-            top: 70px;
-            left: 20px;
-            width: 140px;
-            background: #fff;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-            border-radius: 8px;
-            padding: 8px 0;
-            display: flex;
-            flex-direction: column;
-            z-index: 99;
-            opacity: 0;
-            transform: translateY(-10px);
-            pointer-events: none;
-            transition: all 0.3s ease;
-        }
-        /* 菜单显示状态 */
-        .menu-popup.show {
-            opacity: 1;
-            transform: translateY(0);
-            pointer-events: auto;
-        }
-        /* 菜单主选项（设置/关于） */
-        .menu-main {
-            padding: 8px 20px;
-            color: #333;
-            text-decoration: none;
-            font-size: 16px;
-            transition: all 0.2s ease;
-            cursor: pointer;
-        }
-        .menu-main:hover {
-            background: #f5f7fa;
-        }
-        /* 设置子菜单 + 动画 */
-        .menu-sub {
-            display: flex;
-            flex-direction: column;
-            padding: 4px 0;
-            background: #f8f9fa;
-            opacity: 0;
-            height: 0;
-            overflow: hidden;
-            transition: all 0.2s ease;
-        }
-        .menu-sub.show {
-            opacity: 1;
-            height: 80px;
-        }
-        /* 子菜单选项 */
-        .sub-item {
-            padding: 6px 30px;
-            color: #333;
-            text-decoration: none;
-            font-size: 14px;
-            transition: all 0.2s ease;
-            cursor: pointer;
-        }
-        .sub-item:hover {
-            background: #e9ecef;
-        }
-        /* Explore得意黑文字 + 渐入动画 */
-        .explore-title {
-            font-family: 'Deyi Hei', sans-serif;
-            font-size: 48px;
-            font-weight: 500;
-            color: #333;
-            transition: all 0.3s ease;
-            letter-spacing: 2px;
-            opacity: 0;
-            transform: translateY(20px);
-            animation: titleFade 0.8s ease 0.2s forwards;
-        }
-        /* 搜索框 + 淡入动画 */
-        .search-box {
-            width: 100%;
-            max-width: 600px;
-            position: relative;
-            margin-top: 10px;
-            opacity: 0;
-            transform: translateY(20px);
-            animation: searchFade 0.8s ease 0.5s forwards;
-        }
-        .search-input {
-            width: 100%;
-            height: 50px;
-            padding: 0 20px;
-            border: none;
-            border-radius: 25px;
-            font-size: 16px;
-            background: #fff;
-            color: #333;
-            box-shadow: 0 3px 15px rgba(0, 0, 0, 0.08);
-            outline: none;
-            transition: all 0.3s ease;
-        }
-        .search-input::placeholder {
-            color: #999;
-        }
-        .search-input:focus {
-            box-shadow: 0 5px 20px rgba(99, 102, 241, 0.15);
-        }
-        /* 快捷入口容器 */
-        .shortcut-box {
-            display: flex;
-            gap: 30px;
-            flex-wrap: wrap;
-            justify-content: center;
-            align-items: center;
-            margin-top: 20px;
-        }
-        /* 圆形立体图标 + 逐个弹入动画 + hover旋转上浮 */
-        .shortcut-item {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            background: #fff;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-decoration: none;
-            position: relative;
-            opacity: 0;
-            transform: scale(0.8) translateY(30px);
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-        /* 四个图标分别设置动画延迟 */
-        .shortcut-item:nth-child(1) { animation: itemPop 0.6s ease 0.7s forwards; }
-        .shortcut-item:nth-child(2) { animation: itemPop 0.6s ease 0.9s forwards; }
-        .shortcut-item:nth-child(3) { animation: itemPop 0.6s ease 1.1s forwards; }
-        .shortcut-item:nth-child(4) { animation: itemPop 0.6s ease 1.3s forwards; }
-        /* 图标hover效果：上浮+旋转+阴影加深 */
-        .shortcut-item:hover {
-            transform: scale(1.08) translateY(-5px) rotate(5deg);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-        }
-        /* 图标样式 */
-        .icon-bilibili { color: #fb7299; font-size: 32px; }
-        .icon-douyin { color: #000; font-size: 32px; }
-        .icon-baidu { color: #2980ef; font-size: 32px; }
-        .icon-ai { color: #165DFF; font-size: 28px; font-weight: 700; letter-spacing: 2px; }
-
-        /* 关于弹窗：遮罩+内容框 + 淡入动画 */
-        .about-mask {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            background: rgba(0, 0, 0, 0.3);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 999;
-            opacity: 0;
-            pointer-events: none;
-            transition: all 0.3s ease;
-        }
-        .about-mask.show {
-            opacity: 1;
-            pointer-events: auto;
-        }
-        .about-box {
-            width: 300px;
-            padding: 30px 20px;
-            background: #fff;
-            border-radius: 12px;
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
-            text-align: center;
-            transition: all 0.3s ease;
-            transform: scale(0.9) translateY(20px);
-        }
-        .about-mask.show .about-box {
-            transform: scale(1) translateY(0);
-        }
-        /* 版本号样式 */
-        .about-version {
-            font-size: 18px;
-            font-weight: 600;
-            color: #165DFF;
-            margin-bottom: 20px;
-            transition: all 0.3s ease;
-        }
-        .about-text {
-            font-size: 16px;
-            color: #333;
-            line-height: 1.8;
-            margin-bottom: 15px;
-        }
-        .about-copyright {
-            font-size: 14px;
-            color: #666;
-        }
-        .about-close {
-            margin-top: 20px;
-            padding: 6px 20px;
-            background: #f5f7fa;
-            border: none;
-            border-radius: 6px;
-            color: #333;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-        .about-close:hover {
-            background: #e9ecef;
-        }
-
-        /* 动画关键帧定义 */
-        @keyframes titleFade {
-            to { opacity: 1; transform: translateY(0); }
-        }
-        @keyframes searchFade {
-            to { opacity: 1; transform: translateY(0); }
-        }
-        @keyframes itemPop {
-            to { opacity: 1; transform: scale(1) translateY(0); }
-        }
-
-        /* ########## 深色模式样式 ########## */
-        /* 手动深色 */
-        body.dark .explore-title,
-        body.dark .menu-btn,
-        body.dark .menu-main,
-        body.dark .sub-item {
-            color: #f5f5f5;
-        }
-        body.dark .menu-btn {
-            background: #2d2d3f;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-        }
-        body.dark .menu-btn:hover {
-            background: #383850;
-        }
-        body.dark .menu-popup {
-            background: #2d2d3f;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-        }
-        body.dark .menu-main:hover {
-            background: #383850;
-        }
-        body.dark .menu-sub {
-            background: #383850;
-        }
-        body.dark .sub-item:hover {
-            background: #454560;
-        }
-        body.dark .search-input {
-            background: #2d2d3f;
-            color: #f5f5f5;
-            box-shadow: 0 3px 15px rgba(0, 0, 0, 0.3);
-        }
-        body.dark .search-input::placeholder {
-            color: #b0b0b8;
-        }
-        body.dark .search-input:focus {
-            box-shadow: 0 5px 20px rgba(22, 93, 255, 0.2);
-        }
-        body.dark .shortcut-item {
-            background: #2d2d3f;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-        }
-        body.dark .shortcut-item:hover {
-            box-shadow: 0 8px 20px rgba(22, 93, 255, 0.25);
-        }
-        body.dark .icon-douyin { color: #f5f5f5; }
-        body.dark .icon-ai { color: #4080ff; }
-        /* 深色模式-关于弹窗 */
-        body.dark .about-mask {
-            background: rgba(0, 0, 0, 0.5);
-        }
-        body.dark .about-box {
-            background: #2d2d3f;
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
-        }
-        body.dark .about-version {
-            color: #4080ff;
-        }
-        body.dark .about-text {
-            color: #f5f5f5;
-        }
-        body.dark .about-copyright {
-            color: #b0b0b8;
-        }
-        body.dark .about-close {
-            background: #383850;
-            color: #f5f5f5;
-        }
-        body.dark .about-close:hover {
-            background: #454560;
-        }
-
-        /* 系统深色（兼容） */
-        @media (prefers-color-scheme: dark) {
-            body:not(.light):not(.dark) {
-                background: #1a1a1d;
-            }
-            body:not(.light):not(.dark) .explore-title,
-            body:not(.light):not(.dark) .menu-btn,
-            body:not(.light):not(.dark) .menu-main,
-            body:not(.light):not(.dark) .sub-item {
-                color: #f5f5f5;
-            }
-            body:not(.light):not(.dark) .menu-btn {
-                background: #2d2d3f;
-                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-            }
-            body:not(.light):not(.dark) .menu-btn:hover {
-                background: #383850;
-            }
-            body:not(.light):not(.dark) .menu-popup {
-                background: #2d2d3f;
-                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-            }
-            body:not(.light):not(.dark) .menu-main:hover {
-                background: #383850;
-            }
-            body:not(.light):not(.dark) .menu-sub {
-                background: #383850;
-            }
-            body:not(.light):not(.dark) .sub-item:hover {
-                background: #454560;
-            }
-            body:not(.light):not(.dark) .search-input {
-                background: #2d2d3f;
-                color: #f5f5f5;
-                box-shadow: 0 3px 15px rgba(0, 0, 0, 0.3);
-            }
-            body:not(.light):not(.dark) .search-input::placeholder {
-                color: #b0b0b8;
-            }
-            body:not(.light):not(.dark) .search-input:focus {
-                box-shadow: 0 5px 20px rgba(22, 93, 255, 0.2);
-            }
-            body:not(.light):not(.dark) .shortcut-item {
-                background: #2d2d3f;
-                box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-            }
-            body:not(.light):not(.dark) .shortcut-item:hover {
-                box-shadow: 0 8px 20px rgba(22, 93, 255, 0.25);
-            }
-            body:not(.light):not(.dark) .icon-douyin { color: #f5f5f5; }
-            body:not(.light):not(.dark) .icon-ai { color: #4080ff; }
-            /* 系统深色-关于弹窗 */
-            body:not(.light):not(.dark) .about-mask {
-                background: rgba(0, 0, 0, 0.5);
-            }
-            body:not(.light):not(.dark) .about-box {
-                background: #2d2d3f;
-                box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
-            }
-            body:not(.light):not(.dark) .about-version {
-                color: #4080ff;
-            }
-            body:not(.light):not(.dark) .about-text {
-                color: #f5f5f5;
-            }
-            body:not(.light):not(.dark) .about-copyright {
-                color: #b0b0b8;
-            }
-            body:not(.light):not(.dark) .about-close {
-                background: #383850;
-                color: #f5f5f5;
-            }
-            body:not(.light):not(.dark) .about-close:hover {
-                background: #454560;
-            }
-        }
-
+        @font-face {font-family: 'Deyi Hei';src: url('https://cdn.jsdelivr.net/gh/maoken/DeyiHeiFont@latest/DeyiHei-Regular.woff2') format('woff2'),url('https://cdn.jsdelivr.net/gh/maoken/DeyiHeiFont@latest/DeyiHei-Regular.woff') format('woff');font-weight: normal;font-style: normal;font-display: swap;}
+        * {margin: 0;padding: 0;box-sizing: border-box;font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;}
+        body {min-height: 100vh;background: #f5f7fa;display: flex;flex-direction: column;align-items: center;justify-content: center;padding: 20px;gap: 20px;transition: all 0.3s ease;position: relative;overflow-x: hidden;}
+        body.dark {background: #1a1a1d;}
+        body.light {background: #f5f7fa;}
+        .menu-btn {position: absolute;top: 20px;left: 20px;width: 40px;height: 40px;border-radius: 8px;background: #fff;box-shadow: 0 2px 10px rgba(0,0,0,0.08);display: flex;align-items: center;justify-content: center;color: #333;font-size: 20px;cursor: pointer;border: none;transition: all 0.3s ease;z-index: 100;}
+        .menu-btn:hover {background: #f0f0f0;}
+        .menu-popup {position: absolute;top: 70px;left: 20px;width: 140px;background: #fff;box-shadow: 0 4px 15px rgba(0,0,0,0.1);border-radius: 8px;padding: 8px 0;display: flex;flex-direction: column;z-index: 99;opacity: 0;transform: translateY(-10px);pointer-events: none;transition: all 0.3s ease;}
+        .menu-popup.show {opacity: 1;transform: translateY(0);pointer-events: auto;}
+        .menu-main {padding: 8px 20px;color: #333;font-size: 16px;transition: all 0.2s ease;cursor: pointer;}
+        .menu-main:hover {background: #f5f7fa;}
+        .menu-sub {display: flex;flex-direction: column;padding: 4px 0;background: #f8f9fa;opacity: 0;height: 0;overflow: hidden;transition: all 0.2s ease;}
+        .menu-sub.show {opacity: 1;height: 80px;}
+        .sub-item {padding: 6px 30px;color: #333;font-size: 14px;transition: all 0.2s ease;cursor: pointer;}
+        .sub-item:hover {background: #e9ecef;}
+        .explore-title {font-family: 'Deyi Hei', sans-serif;font-size: 48px;font-weight: 500;color: #333;transition: all 0.3s ease;letter-spacing: 2px;opacity: 0;transform: translateY(20px);animation: fadeUp 0.8s ease 0.2s forwards;}
+        /* 核心修复：增加margin-bottom避免遮挡，面板z-index提至90，微调top位置 */
+        .search-box {width: 100%;max-width: 600px;position: relative;margin-top: 10px;margin-bottom: 30px;opacity: 0;transform: translateY(20px);display: flex;align-items: center;gap: 10px;animation: fadeUp 0.8s ease 0.5s forwards;}
+        .search-input {flex: 1;height: 50px;padding: 0 20px;border: none;border-radius: 25px;font-size: 16px;background: #fff;color: #333;box-shadow: 0 3px 15px rgba(0,0,0,0.08);outline: none;transition: all 0.3s ease;}
+        .search-input::placeholder {color: #999;}
+        .search-input:focus {box-shadow: 0 5px 20px rgba(99, 102, 241, 0.15);}
+        .engine-toggle {width: 90px;height: 50px;border: none;border-radius: 25px;background: #fff;color: #333;box-shadow: 0 3px 15px rgba(0,0,0,0.08);cursor: pointer;font-size: 16px;display: flex;align-items: center;justify-content: center;gap: 4px;transition: all 0.3s ease;}
+        .engine-toggle:hover {box-shadow: 0 5px 20px rgba(99, 102, 241, 0.15);}
+        .engine-panel {position: absolute;top: 55px;right: 0;width: 120px;background: #fff;border-radius: 12px;box-shadow: 0 4px 15px rgba(0,0,0,0.1);padding: 8px 0;z-index: 90;opacity: 0;transform: translateY(-10px);pointer-events: none;transition: all 0.3s ease;}
+        .engine-panel.show {opacity: 1;transform: translateY(0);pointer-events: auto;}
+        .engine-item {width: 100%;padding: 8px 16px;border: none;background: transparent;text-align: left;cursor: pointer;font-size: 14px;color: #333;transition: all 0.2s ease;}
+        .engine-item:hover {background: #f5f7fa;}
+        .shortcut-box {display: flex;gap: 30px;flex-wrap: wrap;justify-content: center;align-items: center;}
+        .shortcut-item {width: 80px;height: 80px;border-radius: 50%;background: #fff;box-shadow: 0 4px 10px rgba(0,0,0,0.1);display: flex;align-items: center;justify-content: center;text-decoration: none;position: relative;opacity: 0;transform: scale(0.8) translateY(30px);transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);}
+        .shortcut-item:nth-child(1) {animation: popIn 0.6s ease 0.7s forwards;}
+        .shortcut-item:nth-child(2) {animation: popIn 0.6s ease 0.9s forwards;}
+        .shortcut-item:nth-child(3) {animation: popIn 0.6s ease 1.1s forwards;}
+        .shortcut-item:nth-child(4) {animation: popIn 0.6s ease 1.3s forwards;}
+        .shortcut-item:hover {transform: scale(1.08) translateY(-5px) rotate(5deg);box-shadow: 0 8px 20px rgba(0,0,0,0.15);}
+        .icon-bilibili {color: #fb7299;font-size: 32px;}
+        .icon-douyin {color: #000;font-size: 32px;}
+        .icon-baidu {color: #2980ef;font-size: 32px;}
+        .icon-ai {color: #165DFF;font-size: 28px;font-weight: 700;letter-spacing: 2px;}
+        .about-mask {position: fixed;top: 0;left: 0;width: 100vw;height: 100vh;background: rgba(0,0,0,0.3);display: flex;align-items: center;justify-content: center;z-index: 999;opacity: 0;pointer-events: none;transition: all 0.3s ease;}
+        .about-mask.show {opacity: 1;pointer-events: auto;}
+        .about-box {width: 300px;padding: 30px 20px;background: #fff;border-radius: 12px;box-shadow: 0 6px 20px rgba(0,0,0,0.15);text-align: center;transition: all 0.3s ease;transform: scale(0.9) translateY(20px);}
+        .about-mask.show .about-box {transform: scale(1) translateY(0);}
+        .about-version {font-size: 18px;font-weight: 600;color: #165DFF;margin-bottom: 20px;transition: all 0.3s ease;}
+        .about-text {font-size: 16px;color: #333;line-height: 1.8;margin-bottom: 15px;}
+        .about-copyright {font-size: 14px;color: #666;}
+        .about-close {margin-top: 20px;padding: 6px 20px;background: #f5f7fa;border: none;border-radius: 6px;color: #333;cursor: pointer;transition: all 0.2s ease;}
+        .about-close:hover {background: #e9ecef;}
+        @keyframes fadeUp {to {opacity: 1;transform: translateY(0);}}
+        @keyframes popIn {to {opacity: 1;transform: scale(1) translateY(0);}}
+        /* 深色模式 */
+        body.dark .explore-title,body.dark .menu-btn,body.dark .menu-main,body.dark .sub-item,body.dark .search-input,body.dark .engine-toggle,body.dark .engine-item {color: #f5f5f5;}
+        body.dark .menu-btn {background: #2d2d3f;box-shadow: 0 2px 10px rgba(0,0,0,0.3);}
+        body.dark .menu-btn:hover {background: #383850;}
+        body.dark .menu-popup {background: #2d2d3f;box-shadow: 0 4px 15px rgba(0,0,0,0.3);}
+        body.dark .menu-main:hover {background: #383850;}
+        body.dark .menu-sub {background: #383850;}
+        body.dark .sub-item:hover {background: #454560;}
+        body.dark .search-input,body.dark .engine-toggle {background: #2d2d3f;box-shadow: 0 3px 15px rgba(0,0,0,0.3);}
+        body.dark .search-input::placeholder {color: #b0b0b8;}
+        body.dark .search-input:focus,body.dark .engine-toggle:hover {box-shadow: 0 5px 20px rgba(22, 93, 255, 0.2);}
+        body.dark .engine-panel {background: #2d2d3f;box-shadow: 0 4px 15px rgba(0,0,0,0.3);}
+        body.dark .engine-item:hover {background: #383850;}
+        body.dark .shortcut-item {background: #2d2d3f;box-shadow: 0 4px 10px rgba(0,0,0,0.3);}
+        body.dark .shortcut-item:hover {box-shadow: 0 8px 20px rgba(22, 93, 255, 0.25);}
+        body.dark .icon-douyin {color: #f5f5f5;}
+        body.dark .icon-ai {color: #4080ff;}
+        body.dark .about-mask {background: rgba(0,0,0,0.5);}
+        body.dark .about-box {background: #2d2d3f;box-shadow: 0 6px 20px rgba(0,0,0,0.4);}
+        body.dark .about-version {color: #4080ff;}
+        body.dark .about-text {color: #f5f5f5;}
+        body.dark .about-copyright {color: #b0b0b8;}
+        body.dark .about-close {background: #383850;color: #f5f5f5;}
+        body.dark .about-close:hover {background: #454560;}
+        /* 系统深色兼容 */
+        @media (prefers-color-scheme: dark) {body:not(.light):not(.dark) {background: #1a1a1d;}body:not(.light):not(.dark) .explore-title,body:not(.light):not(.dark) .menu-btn,body:not(.light):not(.dark) .menu-main,body:not(.light):not(.dark) .sub-item,body:not(.light):not(.dark) .search-input,body:not(.light):not(.dark) .engine-toggle,body:not(.light):not(.dark) .engine-item {color: #f5f5f5;}body:not(.light):not(.dark) .menu-btn {background: #2d2d3f;box-shadow: 0 2px 10px rgba(0,0,0,0.3);}body:not(.light):not(.dark) .menu-btn:hover {background: #383850;}body:not(.light):not(.dark) .menu-popup {background: #2d2d3f;box-shadow: 0 4px 15px rgba(0,0,0,0.3);}body:not(.light):not(.dark) .menu-main:hover {background: #383850;}body:not(.light):not(.dark) .menu-sub {background: #383850;}body:not(.light):not(.dark) .sub-item:hover {background: #454560;}body:not(.light):not(.dark) .search-input,body:not(.light):not(.dark) .engine-toggle {background: #2d2d3f;box-shadow: 0 3px 15px rgba(0,0,0,0.3);}body:not(.light):not(.dark) .search-input::placeholder {color: #b0b0b8;}body:not(.light):not(.dark) .search-input:focus,body:not(.light):not(.dark) .engine-toggle:hover {box-shadow: 0 5px 20px rgba(22, 93, 255, 0.2);}body:not(.light):not(.dark) .engine-panel {background: #2d2d3f;box-shadow: 0 4px 15px rgba(0,0,0,0.3);}body:not(.light):not(.dark) .engine-item:hover {background: #383850;}body:not(.light):not(.dark) .shortcut-item {background: #2d2d3f;box-shadow: 0 4px 10px rgba(0,0,0,0.3);}body:not(.light):not(.dark) .shortcut-item:hover {box-shadow: 0 8px 20px rgba(22, 93, 255, 0.25);}body:not(.light):not(.dark) .icon-douyin {color: #f5f5f5;}body:not(.light):not(.dark) .icon-ai {color: #4080ff;}body:not(.light):not(.dark) .about-mask {background: rgba(0,0,0,0.5);}body:not(.light):not(.dark) .about-box {background: #2d2d3f;box-shadow: 0 6px 20px rgba(0,0,0,0.4);}body:not(.light):not(.dark) .about-version {color: #4080ff;}body:not(.light):not(.dark) .about-text {color: #f5f5f5;}body:not(.light):not(.dark) .about-copyright {color: #b0b0b8;}body:not(.light):not(.dark) .about-close {background: #383850;color: #f5f5f5;}body:not(.light):not(.dark) .about-close:hover {background: #454560;}}
         /* 移动端适配 */
-        @media (max-width: 400px) {
-            .explore-title {
-                font-size: 36px;
-            }
-            .menu-btn {
-                width: 36px;
-                height: 36px;
-                font-size: 18px;
-            }
-            .menu-popup {
-                width: 120px;
-                top: 65px;
-            }
-            .about-box {
-                width: 260px;
-                padding: 25px 15px;
-            }
-            .shortcut-item {
-                width: 70px;
-                height: 70px;
-            }
-            .shortcut-box {
-                gap: 20px;
-            }
-            .icon-bilibili, .icon-douyin, .icon-baidu { font-size: 28px; }
-            .icon-ai { font-size: 24px; }
-        }
+        @media (max-width: 400px) {.explore-title {font-size: 36px;}.menu-btn {width: 36px;height: 36px;font-size: 18px;}.menu-popup {width: 120px;top: 65px;}.about-box {width: 260px;padding: 25px 15px;}.shortcut-item {width: 70px;height: 70px;}.shortcut-box {gap: 20px;}.icon-bilibili, .icon-douyin, .icon-baidu {font-size: 28px;}.icon-ai {font-size: 24px;}.engine-toggle {width: 80px;font-size: 14px;}.engine-panel {width: 100px;top: 52px;}}
     </style>
 </head>
 <body>
-    <!-- 左上角菜单按钮 -->
-    <button class="menu-btn" id="menuBtn">
-        <i class="fas fa-bars"></i>
-    </button>
-    <!-- 菜单弹窗：移除跟随系统 -->
+    <button class="menu-btn" id="menuBtn"><i class="fas fa-bars"></i></button>
     <div class="menu-popup" id="menuPopup">
         <div class="menu-main" id="settingBtn">设置</div>
         <div class="menu-sub" id="settingSub">
@@ -481,7 +96,6 @@
         <div class="menu-main" id="aboutBtn">关于</div>
     </div>
 
-    <!-- 关于弹窗 -->
     <div class="about-mask" id="aboutMask">
         <div class="about-box">
             <div class="about-version">版本号：v1.2.0</div>
@@ -491,109 +105,72 @@
         </div>
     </div>
 
-    <!-- Explore标题 -->
     <h1 class="explore-title">Explore</h1>
-
-    <!-- 搜索框 -->
     <div class="search-box">
-        <input type="text" class="search-input" placeholder="搜索或输入网址...">
+        <input type="text" class="search-input" id="searchInput" placeholder="搜索或输入网址...">
+        <button class="engine-toggle" id="engineToggle">百度 <span style="font-size:12px;">▼</span></button>
+        <div class="engine-panel" id="enginePanel">
+            <button class="engine-item" data-engine="baidu">百度</button>
+            <button class="engine-item" data-engine="bing">必应</button>
+            <button class="engine-item" data-engine="sogou">搜狗</button>
+            <button class="engine-item" data-engine="google">Google</button>
+            <button class="engine-item" data-engine="360">360</button>
+        </div>
     </div>
 
-    <!-- 快捷入口 -->
     <div class="shortcut-box">
-        <a href="https://www.bilibili.com" class="shortcut-item" target="_blank">
-            <i class="fab fa-bilibili icon-bilibili"></i>
-        </a>
-        <a href="https://www.douyin.com" class="shortcut-item" target="_blank">
-            <i class="fab fa-tiktok icon-douyin"></i>
-        </a>
-        <a href="https://www.baidu.com" class="shortcut-item" target="_blank">
-            <i class="fas fa-search icon-baidu"></i>
-        </a>
-        <a href="https://www.doubao.com" class="shortcut-item" target="_blank">
-            <span class="icon-ai">AI</span>
-        </a>
+        <a href="https://www.bilibili.com" class="shortcut-item" target="_blank"><i class="fab fa-bilibili icon-bilibili"></i></a>
+        <a href="https://www.douyin.com" class="shortcut-item" target="_blank"><i class="fab fa-tiktok icon-douyin"></i></a>
+        <a href="https://www.baidu.com" class="shortcut-item" target="_blank"><i class="fas fa-search icon-baidu"></i></a>
+        <a href="https://www.doubao.com" class="shortcut-item" target="_blank"><span class="icon-ai">AI</span></a>
     </div>
 
     <script>
-        // ********** 菜单展开/收起逻辑 **********
-        const menuBtn = document.getElementById('menuBtn');
-        const menuPopup = document.getElementById('menuPopup');
-        const settingBtn = document.getElementById('settingBtn');
-        const settingSub = document.getElementById('settingSub');
-        const aboutBtn = document.getElementById('aboutBtn');
+        const [menuBtn, menuPopup, settingBtn, settingSub, aboutBtn, aboutMask, aboutClose, darkMode, lightMode, engineToggle, enginePanel, engineItems, searchInput] = [
+            document.getElementById('menuBtn'), document.getElementById('menuPopup'), document.getElementById('settingBtn'), document.getElementById('settingSub'),
+            document.getElementById('aboutBtn'), document.getElementById('aboutMask'), document.getElementById('aboutClose'),
+            document.getElementById('darkMode'), document.getElementById('lightMode'), document.getElementById('engineToggle'),
+            document.getElementById('enginePanel'), document.querySelectorAll('.engine-item'), document.getElementById('searchInput')
+        ];
+        const body = document.body, engineMap = {baidu: 'https://www.baidu.com/s?wd=', bing: 'https://cn.bing.com/search?q=', sogou: 'https://www.sogou.com/web?query=', google: 'https://www.google.com/search?q=', 360: 'https://www.so.com/s?q='};
+        const engineName = {baidu: '百度', bing: '必应', sogou: '搜狗', google: 'Google', 360: '360'};
+        let currentEngine = 'baidu';
 
-        // 主菜单开关
-        menuBtn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            menuPopup.classList.toggle('show');
-        });
-        // 设置子菜单开关
-        settingBtn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            settingSub.classList.toggle('show');
-        });
-        // 点击外部关闭所有菜单
-        document.addEventListener('click', () => {
-            menuPopup.classList.remove('show');
-            settingSub.classList.remove('show');
-        });
-        // 菜单内部点击不关闭
-        menuPopup.addEventListener('click', (e) => {
-            e.stopPropagation();
-        });
+        menuBtn.addEventListener('click', (e) => {e.stopPropagation();menuPopup.classList.toggle('show');});
+        settingBtn.addEventListener('click', (e) => {e.stopPropagation();settingSub.classList.toggle('show');});
+        document.addEventListener('click', () => {menuPopup.classList.remove('show');settingSub.classList.remove('show');enginePanel.classList.remove('show');});
+        [menuPopup, enginePanel].forEach(el => el.addEventListener('click', (e) => e.stopPropagation()));
 
-        // ********** 关于弹窗逻辑 **********
-        const aboutMask = document.getElementById('aboutMask');
-        const aboutClose = document.getElementById('aboutClose');
-        // 打开关于弹窗
-        aboutBtn.addEventListener('click', () => {
-            aboutMask.classList.add('show');
-            menuPopup.classList.remove('show');
-            settingSub.classList.remove('show');
-        });
-        // 关闭关于弹窗（按钮）
-        aboutClose.addEventListener('click', () => {
-            aboutMask.classList.remove('show');
-        });
-        // 点击遮罩关闭弹窗
-        aboutMask.addEventListener('click', (e) => {
-            if (e.target === aboutMask) {
-                aboutMask.classList.remove('show');
-            }
-        });
+        aboutBtn.addEventListener('click', () => {aboutMask.classList.add('show');menuPopup.classList.remove('show');settingSub.classList.remove('show');});
+        aboutClose.addEventListener('click', () => aboutMask.classList.remove('show'));
+        aboutMask.addEventListener('click', (e) => e.target === aboutMask && aboutMask.classList.remove('show'));
 
-        // ********** 深色/浅色模式切换（移除跟随系统）**********
-        const darkMode = document.getElementById('darkMode');
-        const lightMode = document.getElementById('lightMode');
-        const body = document.body;
-
-        // 从本地存储读取模式（刷新页面保留设置）
         const savedMode = localStorage.getItem('colorMode');
-        if (savedMode) {
-            body.classList.add(savedMode);
-        }
+        savedMode && body.classList.add(savedMode);
+        darkMode.addEventListener('click', () => {body.classList.remove('light');body.classList.add('dark');localStorage.setItem('colorMode', 'dark');});
+        lightMode.addEventListener('click', () => {body.classList.remove('dark');body.classList.add('light');localStorage.setItem('colorMode', 'light');});
 
-        // 手动深色
-        darkMode.addEventListener('click', () => {
-            body.classList.remove('light');
-            body.classList.add('dark');
-            localStorage.setItem('colorMode', 'dark');
-        });
-        // 手动浅色
-        lightMode.addEventListener('click', () => {
-            body.classList.remove('dark');
-            body.classList.add('light');
-            localStorage.setItem('colorMode', 'light');
-        });
+        engineToggle.addEventListener('click', (e) => {e.stopPropagation();enginePanel.classList.toggle('show');searchInput.focus();});
+        engineItems.forEach(item => item.addEventListener('click', () => {
+            currentEngine = item.dataset.engine;
+            engineToggle.innerHTML = `${engineName[currentEngine]} <span style="font-size:12px;">▼</span>`;
+            enginePanel.classList.remove('show');
+        }));
 
-        // ********** 搜索/网址跳转功能 **********
-        const searchInput = document.querySelector('.search-input');
         searchInput.addEventListener('keydown', (e) => {
             if (e.key === 'Enter' && searchInput.value.trim()) {
                 const content = searchInput.value.trim();
                 const isUrl = /^(https?:\/\/)|(\.\w{2,})$/.test(content);
-                let jumpUrl = isUrl ? (content.startsWith('http') ? content : `https://${content}`) : `https://www.baidu.com/s?wd=${encodeURIComponent(content)}`;
+                const jumpUrl = isUrl ? (content.startsWith('http') ? content : `https://${content}`) : engineMap[currentEngine] + encodeURIComponent(content);
+                window.open(jumpUrl, '_blank');
+                searchInput.value = '';
+            }
+        });
+        engineToggle.addEventListener('click', () => {
+            if (!enginePanel.classList.contains('show') && searchInput.value.trim()) {
+                const content = searchInput.value.trim();
+                const isUrl = /^(https?:\/\/)|(\.\w{2,})$/.test(content);
+                const jumpUrl = isUrl ? (content.startsWith('http') ? content : `https://${content}`) : engineMap[currentEngine] + encodeURIComponent(content);
                 window.open(jumpUrl, '_blank');
                 searchInput.value = '';
             }
