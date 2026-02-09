@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>国家安全局网络信息中心</title>
+    <style>
+        body {
+            background: #000;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            font-family: monospace;
+        }
+        .box {
+            text-align: center;
+        }
+        .title {
+            color: #b3d9ff;
+            font-size: 24px;
+            margin-bottom: 12px;
+        }
+        input {
+            width: 280px;
+            height: 36px;
+            background: #000;
+            border: 2px solid #3399ff;
+            color: #b3d9ff;
+            font-size: 20px;
+            text-align: center;
+            outline: none;
+            letter-spacing: 2px;
+        }
+        .error {
+            color: #ff3333;
+            font-size: 18px;
+            margin-top: 10px;
+            height: 22px;
+        }
+    </style>
+</head>
+<body>
+    <div class="box">
+        <div class="title">ENTER PASSWORD:</div>
+        <input type="password" id="pw" autocomplete="off">
+        <div class="error" id="err"></div>
+    </div>
+
+<script>
+const input = document.getElementById('pw');
+const err = document.getElementById('err');
+
+input.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') {
+        const val = input.value.trim();
+        if (val === '114514') {
+            err.textContent = '';
+            window.open('https://b23.tv/So9fh0C', '_blank');
+        } else {
+            err.textContent = 'PASSWORD ERROR';
+        }
+    }
+});
+</script>
+</body>
+</html>
