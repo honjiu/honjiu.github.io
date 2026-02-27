@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>弘九honjiu的个人网站|新春快乐！</title>
+    <title>弘九honjiu的个人网站</title>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     <style>
@@ -15,7 +15,7 @@
         }
 
         body {
-            background: linear-gradient(135deg, #fef8f5 0%, #ffe9e0 100%);
+            background: #f5f7fa;
             color: #333;
             line-height: 1.6;
             min-height: 100vh;
@@ -24,39 +24,6 @@
             align-items: center;
             padding: 20px;
             position: relative;
-        }
-        /* 新年装饰小元素 */
-        body::before, body::after {
-            content: "";
-            font-size: 24px;
-            position: fixed;
-            z-index: 99;
-            opacity: 0.8;
-        }
-        body::before {
-            top: 20px;
-            left: 20px;
-        }
-        body::after {
-            top: 20px;
-            right: 20px;
-        }
-        /* 新年横幅 */
-        .newyear-banner {
-            width: 100%;
-            max-width: 800px;
-            background: linear-gradient(90deg, #d42929, #ff9500);
-            color: white;
-            text-align: center;
-            padding: 12px 0;
-            border-radius: 12px;
-            margin-bottom: 20px;
-            box-shadow: 0 4px 8px rgba(212, 41, 41, 0.3);
-        }
-        .newyear-banner p {
-            font-size: 1.1rem;
-            font-weight: 500;
-            letter-spacing: 2px;
         }
 
         .container {
@@ -75,20 +42,20 @@
             font-size: 2.5rem;
             font-weight: 500;
             margin-bottom: 5px;
-            color: #d42929;
+            color: #1976D2;
             letter-spacing: 2px;
         }
 
         .username {
             font-size: 1.4rem;
-            color: #d42929;
+            color: #1976D2;
             font-weight: 400;
             margin-bottom: 10px;
-            background: #fff1e8;
+            background: #e3f2fd;
             padding: 6px 16px;
             border-radius: 20px;
             display: inline-block;
-            border: 1px solid #ff9500;
+            border: 1px solid #bbdefb;
         }
 
         .subtitle {
@@ -97,33 +64,27 @@
             font-weight: 300;
             margin-top: 10px;
         }
-        /* 新春祝福点缀 */
-        .subtitle::before {
-            content: "新春快乐 | ";
-            color: #d42929;
-            font-weight: 500;
-        }
 
         .card {
             background: white;
             border-radius: 16px;
-            box-shadow: 0 4px 12px rgba(212, 41, 41, 0.08);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
             padding: 24px;
             margin-bottom: 24px;
             transition: transform 0.3s ease, box-shadow 0.3s ease;
-            border-top: 4px solid #ff9500;
+            border-top: 4px solid #1976D2;
         }
 
         .card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 8px 25px rgba(212, 41, 41, 0.15);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
         }
 
         .card-title {
             display: flex;
             align-items: center;
             margin-bottom: 16px;
-            color: #d42929;
+            color: #1976D2;
             font-size: 1.2rem;
         }
 
@@ -146,7 +107,7 @@
         .social-title {
             text-align: center;
             margin-bottom: 24px;
-            color: #d42929;
+            color: #1976D2;
             font-size: 1.3rem;
             font-weight: 500;
             letter-spacing: 1px;
@@ -171,7 +132,7 @@
 
         .social-button:hover {
             transform: scale(1.05);
-            color: #d42929;
+            color: #1976D2;
         }
 
         .social-icon {
@@ -185,10 +146,6 @@
             box-shadow: 0 4px 10px rgba(0,0,0,0.1);
             background: white;
             transition: all 0.3s ease;
-        }
-
-        .social-button:hover .social-icon {
-            box-shadow: 0 6px 15px rgba(212, 41, 41, 0.15);
         }
 
         .social-icon i {
@@ -207,27 +164,18 @@
         }
 
         .github .social-icon {
-            background: linear-gradient(135deg, #333, #555);
+            background: #333;
             color: white;
-        }
-        .github:hover .social-icon {
-            box-shadow: 0 0 10px rgba(255,149,0,0.5);
         }
 
         .bilibili .social-icon {
-            background: linear-gradient(135deg, #FB7299, #FF85A5);
+            background: #FB7299;
             color: white;
-        }
-        .bilibili:hover .social-icon {
-            box-shadow: 0 0 10px rgba(255,149,0,0.5);
         }
 
         .douyin .social-icon {
-            background: linear-gradient(135deg, #000, #333);
+            background: #000;
             color: white;
-        }
-        .douyin:hover .social-icon {
-            box-shadow: 0 0 10px rgba(255,149,0,0.5);
         }
 
         footer {
@@ -237,7 +185,7 @@
             color: #888;
             font-size: 0.85rem;
             width: 100%;
-            border-top: 1px solid #ffd8bf;
+            border-top: 1px solid #e0e0e0;
         }
 
         .footer-content {
@@ -245,24 +193,22 @@
             margin: 0 auto;
             line-height: 1.8;
         }
-        /* 页脚新年祝福 */
-        .footer-content::after {
-            content: "🧨 马年行大运，万事皆顺意！ 🧨";
-            display: block;
-            margin-top: 10px;
-            color: #d42929;
-            font-size: 0.95rem;
-            letter-spacing: 1px;
+
+        a {
+            color: #1976D2;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        /* 单独设置 ICP 粉色 */
+        .icp-pink {
+            color: #ff69b4 !important;
         }
 
         @media (max-width: 600px) {
-            body::before, body::after {
-                font-size: 20px;
-            }
-            .newyear-banner p {
-                font-size: 1rem;
-                letter-spacing: 1px;
-            }
             .social-buttons {
                 flex-direction: column;
                 align-items: center;
@@ -284,7 +230,7 @@
                 padding: 12px 20px;
                 border-radius: 12px;
                 background: white;
-                box-shadow: 0 2px 8px rgba(212, 41, 41, 0.08);
+                box-shadow: 0 2px 8px rgba(0,0,0,0.06);
             }
 
             .social-icon {
@@ -301,141 +247,111 @@
             .social-text {
                 text-align: left;
             }
-            .footer-content::after {
-                font-size: 0.85rem;
-            }
         }
     </style>
 </head>
 <body>
-    <!-- 新年横幅 -->
-    <div class="newyear-banner">
-        <p>丙午马年 新春快乐 阖家幸福</p>
-    </div>
 
-    <div class="container">
-        <header>
-            <h1>弘九honjiu</h1>
-            <div class="username">开发者</div>
-            <p class="subtitle">欢迎来到我的个人网站</p>
-        </header>
+<div class="container">
+    <header>
+        <h1>弘九honjiu</h1>
+        <div class="username">开发者</div>
+        <p class="subtitle">欢迎来到我的个人网站</p>
+    </header>
 
-        <main>
-            <div class="card">
-                <div class="card-title">
-                    <i class="material-icons">cake</i>
-                    <h2>生日</h2>
-                </div>
-                <div class="card-content">
-                    <p>7月31日</p>
-                </div>
-            </div>
-
-            <div class="card">
-                <div class="card-title">
-                    <i class="material-icons">favorite</i>
-                    <h2>爱好</h2>
-                </div>
-                <div class="card-content">
-                    <p>Minecraft<br>网页开发</p>
-                </div>
-            </div>
-
-            <div class="card">
-                <div class="card-title">
-                    <i class="material-icons">email</i>
-                    <h2>电子邮箱</h2>
-                </div>
-                <div class="card-content">
-                    <p>1637202196@qq.com</p>
-                </div>
-            </div>
-
-            <div class="social-section">
-                <h2 class="social-title">我的链接</h2>
-                <div class="social-buttons">
-                    <a href="https://github.com/honjiu/honjiu.github.io" class="social-button github" target="_blank">
-                        <div class="social-icon">
-                            <i class="material-icons">code</i>
-                        </div>
-                        <div class="social-text">
-                            <div class="social-name">GitHub</div>
-                            <div class="social-desc">项目</div>
-                        </div>
-                    </a>
-
-                    <a href="https://b23.tv/z45t226" class="social-button bilibili" target="_blank">
-                        <div class="social-icon">
-                            <i class="material-icons">play_circle_filled</i>
-                        </div>
-                        <div class="social-text">
-                            <div class="social-name">Bilibili</div>
-                            <div class="social-desc">主页</div>
-                        </div>
-                    </a>
-
-                    <a href="https://www.douyin.com/user/MS4wLjABAAAAzRBgUB2qUC69MebTYiGhauhxDYIXhGlJdFz3Cv5lArH3luzXtmqpzxWEJzaZmSCh?from_tab_name=main" class="social-button douyin" target="_blank">
-                        <div class="social-icon">
-                            <i class="material-icons">music_note</i>
-                        </div>
-                        <div class="social-text">
-                            <div class="social-name">抖音</div>
-                            <div class="social-desc">主页</div>
-                        </div>
-                    </a>
-                </div>
-            </div>
-        </main>
-
-        <!-- 友情链接二级菜单 - 仅新增，不修改原有代码 -->
+    <main>
         <div class="card">
             <div class="card-title">
-                <i class="material-icons">link</i>
-                友情链接
+                <i class="material-icons">cake</i>
+                <h2>生日</h2>
             </div>
-            <div class="card-content" style="padding-left: 0; margin-left: 36px;">
-                <ul style="list-style: none; line-height: 2;">
-                    <li>
-                        <a href="https://github.com/milkCTL/CraftTechLauncher-CTL" target="_blank" 
-                           style="color: #555; text-decoration: none; transition: all 0.3s ease;">
-                            CTL启动器
-                        </a>
-                    </li>
-                    <li>
-                        <a href="https://ri3bz6x.cn/stariver.html" target="_blank" 
-                           style="color: #555; text-decoration: none; transition: all 0.3s ease;">
-                            Stariver起始页
-                        </a>
-                    <li>
-                        <a href="https://templeovo.github.io/" target="_blank" 
-                           style="color: #555; text-decoration: none; transition: all 0.3s ease;">
-                            Temple的个人网站
-                        </a>
-                    </li>
-                    <li>
-                        <a href="https://ri3bz6x.cn/" target="_blank" 
-                           style="color: #555; text-decoration: none; transition: all 0.3s ease;">
-                            纯〇科技
-                        </a>
-                    </li>
-                    </li>
-                </ul>
+            <div class="card-content">
+                <p>7月31日</p>
             </div>
         </div>
 
-        <footer>
-            <div class="footer-content">
-                <p>最后更新：2026年2月 | 版本号：v2.4</p>
-                <p>本网站采用MD2设计语言制作</p>
-                <p>© 2026 弘九honjiu All rights reserved.</p>
-                <p style="margin-top:6px;">
-                    <a href="https://icp.gov.moe/?keyword=20260880" target="_blank" 
-                       style="color:#ff69b4; text-decoration:none;">
-                        萌ICP备20260880号
-                    </a>
-                </p>
+        <div class="card">
+            <div class="card-title">
+                <i class="material-icons">favorite</i>
+                <h2>爱好</h2>
             </div>
-        </footer>
+            <div class="card-content">
+                <p>Minecraft<br>网页开发</p>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-title">
+                <i class="material-icons">email</i>
+                <h2>电子邮箱</h2>
+            </div>
+            <div class="card-content">
+                <p>1637202196@qq.com</p>
+            </div>
+        </div>
+
+        <div class="social-section">
+            <h2 class="social-title">我的链接</h2>
+            <div class="social-buttons">
+                <a href="https://github.com/honjiu/honjiu.github.io" class="social-button github" target="_blank">
+                    <div class="social-icon">
+                        <i class="material-icons">code</i>
+                    </div>
+                    <div class="social-text">
+                        <div class="social-name">GitHub</div>
+                        <div class="social-desc">项目</div>
+                    </div>
+                </a>
+
+                <a href="https://b23.tv/z45t226" class="social-button bilibili" target="_blank">
+                    <div class="social-icon">
+                        <i class="material-icons">play_circle_filled</i>
+                    </div>
+                    <div class="social-text">
+                        <div class="social-name">Bilibili</div>
+                        <div class="social-desc">主页</div>
+                    </div>
+                </a>
+
+                <a href="https://www.douyin.com/user/MS4wLjABAAAAzRBgUB2qUC69MebTYiGhauhxDYIXhGlJdFz3Cv5lArH3luzXtmqpzxWEJzaZmSCh" class="social-button douyin" target="_blank">
+                    <div class="social-icon">
+                        <i class="material-icons">music_note</i>
+                    </div>
+                    <div class="social-text">
+                        <div class="social-name">抖音</div>
+                        <div class="social-desc">主页</div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <div class="card">
+        <div class="card-title">
+            <i class="material-icons">link</i>
+            友情链接
+        </div>
+        <div class="card-content" style="padding-left: 0; margin-left: 36px;">
+            <ul style="list-style: none; line-height: 2;">
+                <li><a href="https://github.com/milkCTL/CraftTechLauncher-CTL" target="_blank">CTL启动器</a></li>
+                <li><a href="https://ri3bz6x.cn/stariver.html" target="_blank">Stariver起始页</a></li>
+                <li><a href="https://templeovo.github.io/" target="_blank">Temple的个人网站</a></li>
+                <li><a href="https://ri3bz6x.cn/" target="_blank">纯〇科技</a></li>
+            </ul>
+        </div>
     </div>
+
+    <footer>
+        <div class="footer-content">
+            <p>最后更新：2026年2月 | 版本号：v2.4</p>
+            <p>本网站采用MD2设计语言制作</p>
+            <p>© 2026 弘九honjiu All rights reserved.</p>
+            <p style="margin-top:6px;">
+                <a href="https://icp.gov.moe/?keyword=20260880" target="_blank" class="icp-pink">萌ICP备20260880号</a>
+            </p>
+        </div>
+    </footer>
+</div>
+
 </body>
 </html>
