@@ -11,8 +11,6 @@
             padding: 0;
             box-sizing: border-box;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-            transform: translateZ(0);
-            -webkit-transform: translateZ(0);
             outline: none;
             -webkit-tap-highlight-color: transparent;
         }
@@ -25,7 +23,7 @@
             justify-content: center;
             padding: 20px;
             gap: 20px;
-            transition: all 0.3s ease;
+            transition: background 0.3s ease;
             position: relative;
             overflow-x: hidden;
         }
@@ -48,9 +46,10 @@
             font-size: 22px;
             cursor: pointer;
             border: none;
-            transition: all 0.2s ease-in-out;
+            transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
             z-index: 1000;
             touch-action: manipulation;
+            will-change: transform;
         }
         .menu-btn:hover {
             background: #f0f0f0;
@@ -76,8 +75,9 @@
             opacity: 0;
             transform: translateY(-15px) scale(0.95);
             pointer-events: none;
-            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            transition: opacity 0.3s, transform 0.3s;
             touch-action: manipulation;
+            will-change: opacity, transform;
         }
         .menu-popup.show {
             opacity: 1;
@@ -92,7 +92,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            transition: all 0.2s ease;
+            transition: background 0.2s, transform 0.2s;
             touch-action: manipulation;
             position: relative;
             user-select: none;
@@ -108,13 +108,13 @@
         .menu-main i {
             font-size: 16px;
             color: #999;
-            transition: all 0.2s ease;
+            transition: transform 0.2s;
         }
         .menu-sub, .time-sub {
             display: flex;
             flex-direction: column;
             overflow: hidden;
-            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            transition: height 0.3s, opacity 0.3s;
             touch-action: manipulation;
         }
         .menu-sub {
@@ -123,7 +123,7 @@
             opacity: 0;
         }
         .menu-sub.show {
-            height: 180px;
+            height: 220px;
             opacity: 1;
         }
         .time-sub {
@@ -144,7 +144,7 @@
             justify-content: space-between;
             align-items: center;
             position: relative;
-            transition: all 0.2s ease;
+            transition: background 0.2s, transform 0.2s;
             touch-action: manipulation;
             user-select: none;
         }
@@ -177,7 +177,7 @@
             border-radius: 15px;
             background: #e5e7eb;
             cursor: pointer;
-            transition: background 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            transition: background 0.3s;
             touch-action: manipulation;
             border: none;
             z-index: 2;
@@ -192,24 +192,15 @@
             border-radius: 50%;
             background: #fff;
             box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            transition: transform 0.3s;
             pointer-events: none;
+            transform: translateZ(0);
         }
         .switch.checked {
             background: #165DFF;
         }
         .switch.checked::after {
             transform: translateX(22px);
-            box-shadow: 0 2px 8px rgba(22, 93, 255, 0.4);
-        }
-        .switch:hover {
-            opacity: 0.95;
-        }
-        .switch:active::after {
-            transform: translateX(var(--x, 0px)) scale(1.1);
-        }
-        .switch.checked:active::after {
-            transform: translateX(22px) scale(1.1);
         }
         .switch-hit-area {
             position: absolute;
@@ -260,7 +251,7 @@
             background: #fff;
             color: #333;
             box-shadow: 0 3px 15px rgba(0,0,0,0.08);
-            transition: all 0.2s ease-in-out;
+            transition: box-shadow 0.2s, transform 0.2s;
             touch-action: manipulation;
         }
         .search-input::placeholder {
@@ -287,7 +278,7 @@
             align-items: center;
             justify-content: center;
             gap: 4px;
-            transition: all 0.2s ease-in-out;
+            transition: box-shadow 0.2s, transform 0.2s;
             touch-action: manipulation;
             flex-shrink: 0;
         }
@@ -311,9 +302,9 @@
             opacity: 0;
             transform: translateY(-10px) scale(0.95);
             pointer-events: none;
-            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            transition: opacity 0.3s, transform 0.3s;
             touch-action: manipulation;
-            will-change: transform, opacity;
+            will-change: opacity, transform;
         }
         .engine-panel.show {
             opacity: 1;
@@ -329,7 +320,7 @@
             cursor: pointer;
             font-size: 15px;
             color: #333;
-            transition: all 0.2s ease;
+            transition: background 0.2s, transform 0.2s;
             touch-action: manipulation;
         }
         .engine-item:hover {
@@ -339,6 +330,84 @@
         .engine-item:active {
             background: #e9ecef;
             transform: translateX(3px);
+        }
+        .search-record {
+            position: absolute;
+            top: 60px;
+            left: 0;
+            width: 100%;
+            max-height: 300px;
+            overflow-y: auto;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+            padding: 10px 0;
+            z-index: 999;
+            opacity: 0;
+            transform: translateY(-10px) scale(0.95);
+            pointer-events: none;
+            transition: opacity 0.3s, transform 0.3s;
+            will-change: opacity, transform;
+        }
+        .search-record.show {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+            pointer-events: auto;
+        }
+        .record-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px 8px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .record-title {
+            font-size: 14px;
+            color: #999;
+        }
+        .clear-all {
+            font-size: 14px;
+            color: #165DFF;
+            cursor: pointer;
+            border: none;
+            background: transparent;
+        }
+        .record-list {
+            padding: 8px 0;
+        }
+        .record-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            font-size: 15px;
+            color: #333;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .record-item:hover {
+            background: #f5f7fa;
+        }
+        .record-item i {
+            color: #999;
+            font-size: 14px;
+            display: none;
+        }
+        .record-item:hover i {
+            display: block;
+        }
+        .record-empty {
+            padding: 20px;
+            text-align: center;
+            font-size: 15px;
+            color: #999;
+        }
+        .search-record::-webkit-scrollbar {
+            width: 4px;
+        }
+        .search-record::-webkit-scrollbar-thumb {
+            background: #e0e0e0;
+            border-radius: 2px;
         }
         .shortcut-box {
             display: flex;
@@ -363,9 +432,10 @@
             position: relative;
             opacity: 0;
             transform: scale(0.8) translateY(30px);
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transition: transform 0.4s, box-shadow 0.4s;
             touch-action: manipulation;
             z-index: 1;
+            transform: translateZ(0);
         }
         .shortcut-item:nth-child(1) {
             animation: popIn 0.6s ease 0.7s forwards;
@@ -411,8 +481,7 @@
             z-index: 1999;
             opacity: 0;
             pointer-events: none;
-            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-            backdrop-filter: blur(0);
+            transition: opacity 0.3s, background 0.3s, backdrop-filter 0.3s;
             touch-action: manipulation;
         }
         .about-mask.show {
@@ -430,7 +499,7 @@
             text-align: center;
             transform: scale(0.85) translateY(30px);
             opacity: 0;
-            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            transition: opacity 0.3s, transform 0.3s;
             touch-action: manipulation;
         }
         .about-mask.show .about-box {
@@ -461,7 +530,7 @@
             border-radius: 8px;
             color: #333;
             cursor: pointer;
-            transition: all 0.2s ease-in-out;
+            transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
             touch-action: manipulation;
         }
         .about-close:hover {
@@ -503,7 +572,9 @@
         body.dark .sub-item,
         body.dark .search-input,
         body.dark .engine-toggle,
-        body.dark .engine-item {
+        body.dark .engine-item,
+        body.dark .record-item,
+        body.dark .clear-all {
             color: #f5f5f5;
         }
         body.dark .menu-btn {
@@ -603,6 +674,29 @@
         body.dark .about-close:active {
             background: #525270;
         }
+        body.dark .search-record {
+            background: #2d2d3f;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.4);
+        }
+        body.dark .record-header {
+            border-bottom-color: #454560;
+        }
+        body.dark .record-title,
+        body.dark .record-empty {
+            color: #b0b0b8;
+        }
+        body.dark .record-item:hover {
+            background: #383850;
+        }
+        body.dark .record-item i {
+            color: #b0b0b8;
+        }
+        body.dark .clear-all {
+            color: #4080ff;
+        }
+        body.dark .search-record::-webkit-scrollbar-thumb {
+            background: #454560;
+        }
         @media (prefers-color-scheme: dark) {
             body:not(.light):not(.dark) {
                 background: #1a1a1d;
@@ -613,7 +707,9 @@
             body:not(.light):not(.dark) .sub-item,
             body:not(.light):not(.dark) .search-input,
             body:not(.light):not(.dark) .engine-toggle,
-            body:not(.light):not(.dark) .engine-item {
+            body:not(.light):not(.dark) .engine-item,
+            body:not(.light):not(.dark) .record-item,
+            body:not(.light):not(.dark) .clear-all {
                 color: #f5f5f5;
             }
             body:not(.light):not(.dark) .menu-btn {
@@ -653,6 +749,20 @@
             body:not(.light):not(.dark) .about-close {
                 background: #383850;
                 color: #f5f5f5;
+            }
+            body:not(.light):not(.dark) .search-record {
+                background: #2d2d3f;
+                box-shadow: 0 6px 18px rgba(0,0,0,0.4);
+            }
+            body:not(.light):not(.dark) .record-header {
+                border-bottom-color: #454560;
+            }
+            body:not(.light):not(.dark) .record-title,
+            body:not(.light):not(.dark) .record-empty {
+                color: #b0b0b8;
+            }
+            body:not(.light):not(.dark) .record-item:hover {
+                background: #383850;
             }
         }
         @media (max-width: 400px) {
@@ -752,6 +862,13 @@
                     <div class="switch-hit-area" data-target="timeSwitch"></div>
                 </div>
             </div>
+            <div class="sub-item" id="recordToggle">
+                搜索记录
+                <div class="switch-container">
+                    <div class="switch" id="recordSwitch"></div>
+                    <div class="switch-hit-area" data-target="recordSwitch"></div>
+                </div>
+            </div>
         </div>
         <div class="time-sub" id="timeSub">
             <div class="sub-item" id="hour12Toggle">
@@ -774,9 +891,9 @@
 
     <div class="about-mask" id="aboutMask">
         <div class="about-box">
-            <div class="about-version">版本号：v1.0.0</div>
+            <div class="about-version">版本号：v1.1.2</div>
             <p class="about-text">作者：弘九honjiu | 牛奶</p>
-            <p class="about-copyright">© honjiu.github.io</p>
+            <p class="about-copyright">Copyright © 2026 纯〇科技. All rights reserved.</p>
             <button class="about-close" id="aboutClose">关闭</button>
         </div>
     </div>
@@ -794,6 +911,15 @@
             <button class="engine-item" data-engine="google">Google</button>
             <button class="engine-item" data-engine="360">360</button>
         </div>
+        <div class="search-record" id="searchRecord">
+            <div class="record-header">
+                <span class="record-title">搜索记录</span>
+                <button class="clear-all" id="clearAll">清空全部</button>
+            </div>
+            <div class="record-list" id="recordList">
+                <div class="record-empty">暂无搜索记录</div>
+            </div>
+        </div>
     </div>
 
     <div class="shortcut-box">
@@ -809,17 +935,20 @@
             aboutBtn, aboutMask, aboutClose, exploreTitle, timeDisplay,
             engineToggle, enginePanel, searchInput, themeSwitch,
             titleSwitch, timeSwitch, hour12Switch, secondSwitch,
-            themeToggle, titleToggle, timeToggle, hour12Toggle, secondToggle
+            themeToggle, titleToggle, timeToggle, hour12Toggle, secondToggle,
+            recordToggle, recordSwitch, searchRecord, recordList, clearAll
         ] = [
             el('menuBtn'), el('menuPopup'), el('settingBtn'), el('settingSub'), el('timeSub'),
             el('aboutBtn'), el('aboutMask'), el('aboutClose'), el('exploreTitle'), el('timeDisplay'),
             el('engineToggle'), el('enginePanel'), el('searchInput'), el('themeSwitch'),
             el('titleSwitch'), el('timeSwitch'), el('hour12Switch'), el('secondSwitch'),
-            el('themeToggle'), el('titleToggle'), el('timeToggle'), el('hour12Toggle'), el('secondToggle')
+            el('themeToggle'), el('titleToggle'), el('timeToggle'), el('hour12Toggle'), el('secondToggle'),
+            el('recordToggle'), el('recordSwitch'), el('searchRecord'), el('recordList'), el('clearAll')
         ];
         const engineItems = document.querySelectorAll('.engine-item');
         const switchHitAreas = document.querySelectorAll('.switch-hit-area');
         const body = document.body;
+
         const engineMap = {
             baidu: 'https://www.baidu.com/s?wd=',
             bing: 'https://cn.bing.com/search?q=',
@@ -827,11 +956,27 @@
             google: 'https://www.google.com/search?q=',
             360: 'https://www.so.com/s?q='
         };
-        const engineName = {baidu: '百度', bing: '必应', sogou: '搜狗', google: 'Google', 360: '360'};
+        const engineName = {
+            baidu: '百度',
+            bing: '必应',
+            sogou: '搜狗',
+            google: 'Google',
+            360: '360'
+        };
+
         let currentEngine = localStorage.getItem('lastSearchEngine') || 'bing';
+        const RECORD_KEY = 'searchHistoryList';
+        const MAX_RECORD = 20;
+
+        let timeTimer = null;
+        let timeConfig = {
+            is12: false,
+            isShowS: false
+        };
 
         const init = () => {
-            const savedMode = localStorage.getItem('colorMode') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            const savedMode = localStorage.getItem('colorMode') ||
+                (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
             body.className = savedMode;
             themeSwitch.classList.toggle('checked', savedMode === 'dark');
 
@@ -839,27 +984,32 @@
             exploreTitle.classList.toggle('hidden', !isTitleShow);
             titleSwitch.classList.toggle('checked', isTitleShow);
 
+            const isTimeShow = localStorage.getItem('isTimeShow') === 'true';
+            timeConfig.is12 = localStorage.getItem('isHour12') === 'true';
+            timeConfig.isShowS = localStorage.getItem('isShowSecond') === 'true';
+            const isSaveRecord = localStorage.getItem('isSaveRecord') !== 'false';
+
+            recordSwitch.classList.toggle('checked', isSaveRecord);
             engineToggle.innerHTML = `${engineName[currentEngine]} <span style="font-size:12px;">▼</span>`;
 
-            const isTimeShow = localStorage.getItem('isTimeShow') === 'true';
-            const isHour12 = localStorage.getItem('isHour12') === 'true';
-            const isShowSecond = localStorage.getItem('isShowSecond') === 'true';
-
             timeSwitch.classList.toggle('checked', isTimeShow);
-            hour12Switch.classList.toggle('checked', isHour12);
-            secondSwitch.classList.toggle('checked', isShowSecond);
+            hour12Switch.classList.toggle('checked', timeConfig.is12);
+            secondSwitch.classList.toggle('checked', timeConfig.isShowS);
 
             timeDisplay.classList.toggle('show', isTimeShow);
             timeDisplay.classList.toggle('hidden', !isTimeShow);
             exploreTitle.classList.toggle('hidden', isTimeShow);
             timeSub.classList.toggle('show', isTimeShow);
 
-            isTimeShow && renderTime();
+            if (isTimeShow) startTimer();
+            renderRecordList();
+            bindRecordEvent();
         };
 
         menuBtn.addEventListener('click', (e) => {
             e.stopPropagation();
             menuPopup.classList.toggle('show');
+            searchRecord.classList.remove('show');
         });
 
         settingBtn.addEventListener('click', (e) => {
@@ -867,24 +1017,27 @@
             settingSub.classList.toggle('show');
         });
 
-        document.addEventListener('click', () => {
+        document.addEventListener('click', (e) => {
+            if (!searchInput.contains(e.target) && !searchRecord.contains(e.target)) {
+                searchRecord.classList.remove('show');
+            }
             menuPopup.classList.remove('show');
             settingSub.classList.remove('show');
             timeSub.classList.remove('show');
             enginePanel.classList.remove('show');
         });
 
-        [menuPopup, enginePanel, settingSub, timeSub].forEach(item => {
-            item.addEventListener('click', (e) => e.stopPropagation());
+        [menuPopup, enginePanel, settingSub, timeSub, searchRecord].forEach(item => {
+            item.addEventListener('click', e => e.stopPropagation());
         });
 
         aboutBtn.addEventListener('click', () => {
             aboutMask.classList.add('show');
-            [menuPopup, settingSub, timeSub].forEach(item => item.classList.remove('show'));
+            [menuPopup, settingSub, timeSub, searchRecord].forEach(i => i.classList.remove('show'));
         });
 
         aboutClose.addEventListener('click', () => aboutMask.classList.remove('show'));
-        aboutMask.addEventListener('click', (e) => {
+        aboutMask.addEventListener('click', e => {
             if (e.target === aboutMask) aboutMask.classList.remove('show');
         });
 
@@ -909,7 +1062,7 @@
                 timeDisplay.classList.remove('show');
                 timeSub.classList.remove('show');
                 localStorage.setItem('isTimeShow', 'false');
-                clearInterval(window.timeTimer);
+                stopTimer();
             }
         };
         titleToggle.addEventListener('click', toggleTitle);
@@ -928,43 +1081,49 @@
             timeSub.classList.toggle('show', isShow);
             localStorage.setItem('isTimeShow', isShow);
 
-            isShow ? renderTime() : (timeDisplay.innerHTML = '', clearInterval(window.timeTimer));
+            isShow ? startTimer() : stopTimer();
         };
         timeToggle.addEventListener('click', toggleTimeShow);
         timeSwitch.addEventListener('click', toggleTimeShow);
 
         const toggleHour12 = () => {
             hour12Switch.classList.toggle('checked');
-            const is12 = hour12Switch.classList.contains('checked');
-            localStorage.setItem('isHour12', is12);
-            timeSwitch.classList.contains('checked') && renderTime();
+            timeConfig.is12 = hour12Switch.classList.contains('checked');
+            localStorage.setItem('isHour12', timeConfig.is12);
+            if (timeSwitch.classList.contains('checked')) updateTime();
         };
         hour12Toggle.addEventListener('click', toggleHour12);
         hour12Switch.addEventListener('click', toggleHour12);
 
         const toggleSecond = () => {
             secondSwitch.classList.toggle('checked');
-            const isShow = secondSwitch.classList.contains('checked');
-            localStorage.setItem('isShowSecond', isShow);
-            timeSwitch.classList.contains('checked') && renderTime();
+            timeConfig.isShowS = secondSwitch.classList.contains('checked');
+            localStorage.setItem('isShowSecond', timeConfig.isShowS);
+            restartTimer();
         };
         secondToggle.addEventListener('click', toggleSecond);
         secondSwitch.addEventListener('click', toggleSecond);
 
+        const toggleRecord = () => {
+            const isSave = !recordSwitch.classList.contains('checked');
+            recordSwitch.classList.toggle('checked', isSave);
+            localStorage.setItem('isSaveRecord', isSave);
+        };
+        recordToggle.addEventListener('click', toggleRecord);
+        recordSwitch.addEventListener('click', toggleRecord);
+
         switchHitAreas.forEach(area => {
-            area.addEventListener('click', (e) => {
+            area.addEventListener('click', e => {
                 e.stopPropagation();
-                const targetId = area.getAttribute('data-target');
-                const targetSwitch = el(targetId);
-                if (targetSwitch) {
-                    targetSwitch.click();
-                }
+                const target = el(area.dataset.target);
+                target?.click();
             });
         });
 
-        engineToggle.addEventListener('click', (e) => {
+        engineToggle.addEventListener('click', e => {
             e.stopPropagation();
             enginePanel.classList.toggle('show');
+            searchRecord.classList.remove('show');
         });
 
         engineItems.forEach(item => {
@@ -976,37 +1135,143 @@
             });
         });
 
-        searchInput.addEventListener('keydown', (e) => {
+        const doSearch = (content) => {
+            if (!content.trim()) return;
+            saveSearchRecord(content);
+            const isUrl = /^(https?:\/\/)|(\.\w{2,})$/.test(content);
+            const jumpUrl = isUrl
+                ? (content.startsWith('http') ? content : `https://${content}`)
+                : engineMap[currentEngine] + encodeURIComponent(content);
+            window.open(jumpUrl, '_blank');
+        };
+
+        searchInput.addEventListener('keydown', e => {
             if (e.key === 'Enter' && searchInput.value.trim()) {
-                const content = searchInput.value.trim();
-                const isUrl = /^(https?:\/\/)|(\.\w{2,})$/.test(content);
-                const jumpUrl = isUrl ? (content.startsWith('http') ? content : `https://${content}`) : engineMap[currentEngine] + encodeURIComponent(content);
-                window.open(jumpUrl, '_blank');
+                doSearch(searchInput.value.trim());
                 searchInput.value = '';
+                searchRecord.classList.remove('show');
             }
         });
 
-        const renderTime = () => {
-            clearInterval(window.timeTimer);
-            const updateTime = () => {
-                const now = new Date();
-                let h = now.getHours(), m = String(now.getMinutes()).padStart(2, '0'), s = String(now.getSeconds()).padStart(2, '0');
-                const is12 = localStorage.getItem('isHour12') === 'true';
-                const isShowS = localStorage.getItem('isShowSecond') === 'true';
-                let period = '';
+        const updateTime = () => {
+            const now = new Date();
+            let h = now.getHours();
+            const m = String(now.getMinutes()).padStart(2, '0');
+            const s = String(now.getSeconds()).padStart(2, '0');
+            let period = '';
 
-                if (is12) {
-                    period = h >= 12 ? ' PM' : ' AM';
-                    h = h % 12 || 12;
-                }
-                h = String(h).padStart(2, '0');
-                timeDisplay.innerHTML = `${h}:${m}${isShowS ? `:${s}` : ''}${period}`;
-            };
+            if (timeConfig.is12) {
+                period = h >= 12 ? ' PM' : ' AM';
+                h = h % 12 || 12;
+            }
+            h = String(h).padStart(2, '0');
+            timeDisplay.textContent = `${h}:${m}${timeConfig.isShowS ? `:${s}` : ''}${period}`;
+        };
+
+        const startTimer = () => {
+            stopTimer();
             updateTime();
-            window.timeTimer = setInterval(updateTime, localStorage.getItem('isShowSecond') === 'true' ? 1000 : 60000);
+            const interval = timeConfig.isShowS ? 1000 : 60000;
+            timeTimer = setInterval(updateTime, interval);
+        };
+
+        const stopTimer = () => {
+            if (timeTimer) {
+                clearInterval(timeTimer);
+                timeTimer = null;
+                timeDisplay.textContent = '';
+            }
+        };
+
+        const restartTimer = () => {
+            if (timeSwitch.classList.contains('checked')) startTimer();
+        };
+
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden) {
+                stopTimer();
+            } else if (timeSwitch.classList.contains('checked')) {
+                startTimer();
+            }
+        });
+
+        const saveSearchRecord = (content) => {
+            const isSave = localStorage.getItem('isSaveRecord') !== 'false';
+            if (!isSave) return;
+            let history = JSON.parse(localStorage.getItem(RECORD_KEY) || '[]');
+            history = history.filter(item => item !== content);
+            history.unshift(content);
+            if (history.length > MAX_RECORD) history.pop();
+            localStorage.setItem(RECORD_KEY, JSON.stringify(history));
+            renderRecordList();
+        };
+
+        const renderRecordList = () => {
+            let history = JSON.parse(localStorage.getItem(RECORD_KEY) || '[]');
+            recordList.innerHTML = '';
+            if (history.length === 0) {
+                const empty = document.createElement('div');
+                empty.className = 'record-empty';
+                empty.textContent = '暂无搜索记录';
+                recordList.appendChild(empty);
+                return;
+            }
+            history.forEach(item => {
+                const wrap = document.createElement('div');
+                wrap.className = 'record-item';
+                wrap.dataset.value = item;
+
+                const text = document.createElement('span');
+                text.textContent = item;
+
+                const del = document.createElement('i');
+                del.className = 'fas fa-times delete-record';
+
+                wrap.appendChild(text);
+                wrap.appendChild(del);
+                recordList.appendChild(wrap);
+            });
+        };
+
+        const clearAllRecord = () => {
+            if (confirm('确定清空所有搜索记录？')) {
+                localStorage.removeItem(RECORD_KEY);
+                renderRecordList();
+            }
+        };
+
+        const deleteSingleRecord = (e) => {
+            if (e.target.classList.contains('delete-record')) {
+                e.stopPropagation();
+                const val = e.target.closest('.record-item').dataset.value;
+                let hist = JSON.parse(localStorage.getItem(RECORD_KEY) || '[]');
+                hist = hist.filter(i => i !== val);
+                localStorage.setItem(RECORD_KEY, JSON.stringify(hist));
+                renderRecordList();
+            }
+        };
+
+        const clickRecordSearch = (e) => {
+            const item = e.target.closest('.record-item');
+            if (item) {
+                const val = item.dataset.value;
+                searchInput.value = val;
+                doSearch(val);
+                searchRecord.classList.remove('show');
+            }
+        };
+
+        const bindRecordEvent = () => {
+            searchInput.addEventListener('focus', () => {
+                const has = JSON.parse(localStorage.getItem(RECORD_KEY) || '[]').length > 0;
+                if (has) searchRecord.classList.add('show');
+            });
+            clearAll.addEventListener('click', clearAllRecord);
+            recordList.addEventListener('click', deleteSingleRecord);
+            recordList.addEventListener('click', clickRecordSearch);
         };
 
         init();
     </script>
 </body>
-</html>+
+</html>
