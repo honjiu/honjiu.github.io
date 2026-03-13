@@ -279,6 +279,15 @@ body {
 .wait {
   color: #888;
 }
+/* 无搜索结果提示 */
+.no-result {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 40px 0;
+  color: #888;
+  font-size: 16px;
+  animation: fadeIn 0.5s ease;
+}
 @keyframes fadeIn {
   from { opacity: 0; }
   to { opacity: 1; }
@@ -296,9 +305,9 @@ body {
 <div class="header">
   <!-- 点击 logo 返回当前首页 -->
   <div class="logo" id="goHome">GameBox</div>
-  
+
   <div class="search">
-    <input type="text" placeholder="搜索游戏..." />
+    <input type="text" placeholder="搜索游戏或制作方" id="searchInput" />
   </div>
   <button class="menu-btn" id="menuBtn">≡</button>
   <div class="menu-popup" id="menuPopup">
@@ -325,7 +334,7 @@ body {
     <div style="line-height:1.6">
       GameBox——新一代小游戏集合站<br>
       作者：<a href="https://ri3bz6x.cn/" target="_blank">弘九honjiu</a><br>
-      
+
     </div>
     <div class="close" id="closeAbout">关闭</div>
   </div>
@@ -384,19 +393,19 @@ document.getElementById('devBtn').onclick = async () => {
     if (inputPwdHash === ADMIN_PWD_HASH) {
       alert('验证成功！');
     } else {
-      alert('账号或密码错误');
+      alert('账户或密码错误');
     }
   } else {
-    alert('账号或密码错误');
+    alert('账户或密码错误');
   }
 };
 // ********** 哈希验证核心代码结束 **********
 
-// 游戏数据新增url字段，开发中为null，可跳转填写实际网址
+// 游戏数据
 const games = [
   { title: "像素乒乓", desc: "制作方：弘九honjiu", wait: false, url: "https://stariver26.github.io/pingpong.html" },
-  { title: "像素赛车：", desc: "制作方：AXEDEV", wait: false, url: "https://www.axe.ink/games/racer/" },
-  { title: "正在开发", desc: "敬请期待", wait: true, url: "null" },
+  { title: "像素赛车", desc: "制作方：AXEDEV", wait: false, url: "https://www.axe.ink/games/racer/" },
+  { title: "正在开发", desc: "敬请期待", wait: true, url: null },
   { title: "正在开发", desc: "敬请期待", wait: true, url: null },
   { title: "正在开发", desc: "敬请期待", wait: true, url: null },
   { title: "正在开发", desc: "敬请期待", wait: true, url: null },
@@ -404,17 +413,32 @@ const games = [
   { title: "正在开发", desc: "敬请期待", wait: true, url: null },
 ];
 const gameList = document.getElementById('gameList');
-function render() {
+const searchInput = document.getElementById('searchInput');
+
+// 渲染游戏列表（支持筛选）
+function render(filteredGames = null) {
   gameList.innerHTML = '';
-  games.forEach(g => {
+  const displayGames = filteredGames || games;
+  
+  // 无搜索结果时显示提示
+  if (displayGames.length === 0) {
+    const noResult = document.createElement('div');
+    noResult.className = 'no-result';
+    noResult.textContent = '未找到游戏';
+    gameList.appendChild(noResult);
+    return;
+  }
+
+  displayGames.forEach((g, index) => {
     const card = document.createElement('div');
-    // 开发中卡片添加wait类，控制样式和鼠标状态
     card.className = `game-card ${g.wait ? 'wait' : ''}`;
+    // 保持原有动画延迟
+    card.style.animationDelay = `${0.1 * (index + 1)}s`;
     card.innerHTML = `
       <div class="game-title ${g.wait ? 'wait' : ''}">${g.title}</div>
       <div class="game-desc">${g.desc}</div>
     `;
-    // 仅为有url的卡片添加点击跳转事件，新标签页打开
+    // 仅为有url的卡片添加点击跳转事件
     if (g.url) {
       card.onclick = () => {
         window.open(g.url, '_blank');
@@ -423,6 +447,26 @@ function render() {
     gameList.appendChild(card);
   });
 }
+
+// 搜索功能核心逻辑
+function handleSearch() {
+  const searchText = searchInput.value.trim().toLowerCase();
+  if (!searchText) {
+    render(); // 无输入时显示全部
+    return;
+  }
+  // 筛选匹配游戏：标题或制作方包含搜索关键词
+  const filtered = games.filter(game => 
+    game.title.toLowerCase().includes(searchText) || 
+    game.desc.toLowerCase().includes(searchText)
+  );
+  render(filtered);
+}
+
+// 绑定搜索事件（实时输入触发）
+searchInput.addEventListener('input', handleSearch);
+
+// 初始化渲染
 render();
 </script>
 </body>
