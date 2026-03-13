@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>GameBox</title>
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Segoe UI", Roboto, sans-serif;
+  scroll-behavior: smooth;
+}
+:root.light {
+  --bg: #f5f5f5;
+  --card: #ffffff;
+  --text: #222;
+  --subtext: #666;
+  --header: #ffffff;
+  --search: #eeeeee;
+}
+:root {
+  --bg: #121212;
+  --card: #1e1e1e;
+  --text: #fff;
+  --subtext: #aaa;
+  --header: #1e1e1e;
+  --search: #2a2a2a;
+}
+body {
+  background: var(--bg);
+  color: var(--text);
+  padding-bottom: 60px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.header {
+  position: sticky;
+  top: 0;
+  background: var(--header);
+  padding: 14px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+  z-index: 99;
+  transition: all 0.3s ease;
+}
+.logo {
+  font-size: 24px;
+  font-weight: bold;
+  color: #42b983;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+.logo:hover {
+  transform: scale(1.05);
+}
+.search {
+  flex: 1;
+  max-width: 600px;
+  margin: 0 20px;
+}
+.search input {
+  width: 100%;
+  padding: 10px 16px;
+  border-radius: 50px;
+  border: none;
+  outline: none;
+  background: var(--search);
+  color: var(--text);
+  font-size: 15px;
+  transition: all 0.2s ease;
+}
+.search input:focus {
+  background: #333;
+  transform: scale(1.02);
+}
+.menu-btn {
+  width: 36px;
+  height: 36px;
+  background: var(--search);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 18px;
+  border: none;
+  color: var(--text);
+  transition: all 0.2s ease;
+}
+.menu-btn:hover {
+  transform: rotate(90deg);
+  background: #42b983;
+  color: #000;
+}
+.menu-popup {
+  position: absolute;
+  top: 60px;
+  right: 20px;
+  width: 200px;
+  background: var(--card);
+  border-radius: 12px;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+  padding: 10px 0;
+  display: none;
+  z-index: 100;
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: all 0.25s ease;
+}
+.menu-popup.show {
+  display: block;
+  opacity: 1;
+  transform: translateY(0);
+}
+.menu-item {
+  padding: 12px 18px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.menu-item:hover {
+  background: rgba(66, 185, 131, 0.2);
+  padding-left: 22px;
+}
+/* 弹窗动画 */
+.modal {
+  position: fixed;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background: rgba(0,0,0,0.5);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 200;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.modal.show {
+  display: flex;
+  opacity: 1;
+}
+.modal-box {
+  background: var(--card);
+  width: 90%;
+  max-width: 380px;
+  border-radius: 14px;
+  padding: 24px;
+  transform: scale(0.8);
+  opacity: 0;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.25s ease;
+}
+.modal.show .modal-box {
+  transform: scale(1);
+  opacity: 1;
+}
+.modal-title {
+  font-size: 18px;
+  margin-bottom: 16px;
+}
+.modal-line {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+}
+.switch {
+  width: 40px;
+  height: 22px;
+  background: #666;
+  border-radius: 20px;
+  position: relative;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.switch::after {
+  content: '';
+  position: absolute;
+  width: 18px; height: 18px;
+  background: #fff;
+  border-radius: 50%;
+  top: 2px; left: 2px;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.switch.on {
+  background: #42b983;
+}
+.switch.on::after {
+  left: 20px;
+}
+.dev-btn {
+  width: 100%;
+  padding: 10px;
+  background: #42b983;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: all 0.2s ease;
+}
+.dev-btn:hover {
+  transform: scale(1.03);
+  background: #36a875;
+}
+.close {
+  margin-top: 20px;
+  padding: 10px;
+  text-align: center;
+  background: #42b983;
+  color: #fff;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.close:hover {
+  transform: scale(1.03);
+}
+.container {
+  max-width: 1400px;
+  margin: 20px auto;
+  padding: 0 20px;
+}
+.section-title {
+  font-size: 20px;
+  margin: 30px 0 15px;
+  animation: fadeIn 0.6s ease;
+}
+.game-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 16px;
+}
+.game-card {
+  background: var(--card);
+  border-radius: 12px;
+  padding: 20px 12px;
+  text-align: center;
+  min-height: 100px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  opacity: 0;
+  animation: cardFadeIn 0.5s forwards;
+}
+/* 开发中卡片鼠标样式改为默认，取消点击反馈 */
+.game-card.wait {
+  cursor: default;
+}
+.game-card.wait:hover {
+  transform: none;
+  box-shadow: none;
+}
+.game-card:nth-child(1) { animation-delay: 0.1s; }
+.game-card:nth-child(2) { animation-delay: 0.2s; }
+.game-card:nth-child(3) { animation-delay: 0.3s; }
+.game-card:nth-child(4) { animation-delay: 0.4s; }
+.game-card:nth-child(5) { animation-delay: 0.5s; }
+.game-card:nth-child(6) { animation-delay: 0.6s; }
+@keyframes cardFadeIn {
+  to { opacity: 1; transform: translateY(0); }
+  from { opacity: 0; transform: translateY(10px); }
+}
+.game-card:hover {
+  transform: translateY(-6px) scale(1.03);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+}
+.game-title {
+  font-size: 16px;
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+.game-desc {
+  font-size: 12px;
+  color: var(--subtext);
+}
+.wait {
+  color: #888;
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+.footer {
+  text-align: center;
+  padding: 20px;
+  color: #888;
+  font-size: 13px;
+  animation: fadeIn 0.8s ease;
+}
+</style>
+</head>
+<body>
+<div class="header">
+  <!-- 点击 logo 返回当前首页 -->
+  <div class="logo" id="goHome">GameBox</div>
+  
+  <div class="search">
+    <input type="text" placeholder="搜索游戏..." />
+  </div>
+  <button class="menu-btn" id="menuBtn">≡</button>
+  <div class="menu-popup" id="menuPopup">
+    <div class="menu-item" id="openSetting">设置</div>
+    <div class="menu-item" id="openAbout">关于</div>
+  </div>
+</div>
+<!-- 设置弹窗 -->
+<div class="modal" id="settingModal">
+  <div class="modal-box">
+    <div class="modal-title">设置</div>
+    <div class="modal-line">
+      <span>深色模式</span>
+      <div class="switch on" id="darkSwitch"></div>
+    </div>
+    <button class="dev-btn" id="devBtn">开发者选项</button>
+    <div class="close" id="closeSetting">关闭</div>
+  </div>
+</div>
+<!-- 关于弹窗 -->
+<div class="modal" id="aboutModal">
+  <div class="modal-box">
+    <div class="modal-title">关于</div>
+    <div style="line-height:1.6">
+      GameBox——新一代小游戏集合站<br>
+      作者：<a href="https://ri3bz6x.cn/" target="_blank">弘九honjiu</a><br>
+      
+    </div>
+    <div class="close" id="closeAbout">关闭</div>
+  </div>
+</div>
+<div class="container">
+  <h2 class="section-title">游戏中心</h2>
+  <div class="game-grid" id="gameList"></div>
+</div>
+<div class="footer">
+  © 2026 弘九honjiu All rights reserved.
+</div>
+<script>
+// 点击 GameBox 刷新回到首页（当前界面）
+document.getElementById('goHome').onclick = function () {
+  window.location.href = window.location.origin + window.location.pathname;
+};
+const menuBtn = document.getElementById('menuBtn');
+const menuPopup = document.getElementById('menuPopup');
+menuBtn.onclick = () => menuPopup.classList.toggle('show');
+const settingModal = document.getElementById('settingModal');
+const aboutModal = document.getElementById('aboutModal');
+document.getElementById('openSetting').onclick = () => {
+  settingModal.classList.add('show');
+  menuPopup.classList.remove('show');
+};
+document.getElementById('openAbout').onclick = () => {
+  aboutModal.classList.add('show');
+  menuPopup.classList.remove('show');
+};
+document.getElementById('closeSetting').onclick = () => settingModal.classList.remove('show');
+document.getElementById('closeAbout').onclick = () => aboutModal.classList.remove('show');
+const darkSwitch = document.getElementById('darkSwitch');
+darkSwitch.onclick = () => {
+  darkSwitch.classList.toggle('on');
+  document.documentElement.classList.toggle('light');
+};
+
+// ********** 哈希验证核心代码 **********
+async function sha256Hash(str) {
+  const encoder = new TextEncoder();
+  const data = encoder.encode(str);
+  const hash = await crypto.subtle.digest('SHA-256', data);
+  return Array.from(new Uint8Array(hash))
+    .map(b => b.toString(16).padStart(2, '0'))
+    .join('');
+}
+const ADMIN_USER = 'honjiu';
+const ADMIN_PWD_HASH = 'f9e6b5197952d0f6672f27a70e9268c2195309e090325c3094385f3d9031c76a';
+document.getElementById('devBtn').onclick = async () => {
+  const user = prompt('请输入账户名称：');
+  if (!user) return;
+  const pwd = prompt('请输入账户密码：');
+  if (!pwd) return;
+  if (user === ADMIN_USER) {
+    const inputPwdHash = await sha256Hash(pwd);
+    if (inputPwdHash === ADMIN_PWD_HASH) {
+      alert('验证成功！');
+    } else {
+      alert('账号或密码错误');
+    }
+  } else {
+    alert('账号或密码错误');
+  }
+};
+// ********** 哈希验证核心代码结束 **********
+
+// 游戏数据新增url字段，开发中为null，可跳转填写实际网址
+const games = [
+  { title: "像素乒乓", desc: "制作方：弘九honjiu", wait: false, url: "https://www.axe.ink/games/pong/" },
+  { title: "像素赛车：", desc: "制作方：AXEDEV", wait: false, url: "https://www.axe.ink/games/racer/" },
+  { title: "贪吃蛇", desc: "制作方：null", wait: false, url: "" },
+  { title: "正在开发", desc: "敬请期待", wait: true, url: null },
+  { title: "正在开发", desc: "敬请期待", wait: true, url: null },
+  { title: "正在开发", desc: "敬请期待", wait: true, url: null },
+  { title: "正在开发", desc: "敬请期待", wait: true, url: null },
+  { title: "正在开发", desc: "敬请期待", wait: true, url: null },
+];
+const gameList = document.getElementById('gameList');
+function render() {
+  gameList.innerHTML = '';
+  games.forEach(g => {
+    const card = document.createElement('div');
+    // 开发中卡片添加wait类，控制样式和鼠标状态
+    card.className = `game-card ${g.wait ? 'wait' : ''}`;
+    card.innerHTML = `
+      <div class="game-title ${g.wait ? 'wait' : ''}">${g.title}</div>
+      <div class="game-desc">${g.desc}</div>
+    `;
+    // 仅为有url的卡片添加点击跳转事件，新标签页打开
+    if (g.url) {
+      card.onclick = () => {
+        window.open(g.url, '_blank');
+      };
+    }
+    gameList.appendChild(card);
+  });
+}
+render();
+</script>
+</body>
+</html>
