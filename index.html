@@ -35,7 +35,33 @@
         header {
             text-align: center;
             margin-bottom: 30px;
-            padding: 20px;
+            padding: 20px 20px 10px 20px; /* 微调下边距，头像增加了一点空间 */
+        }
+
+        /* 头像容器 */
+        .avatar-link {
+            display: inline-block;
+            margin-bottom: 12px;          /* 与名字的距离 */
+            border-radius: 50%;
+            overflow: hidden;
+            width: 100px;
+            height: 100px;
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 3px solid white;
+            background: #fff;               /* 备用背景 */
+        }
+
+        .avatar-link:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 25px rgba(25, 118, 210, 0.3);
+        }
+
+        .avatar-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;              /* 保证图片填充且不变形 */
+            display: block;
         }
 
         h1 {
@@ -247,6 +273,12 @@
             .social-text {
                 text-align: left;
             }
+
+            /* 移动端稍微缩小头像保持比例 */
+            .avatar-link {
+                width: 80px;
+                height: 80px;
+            }
         }
     </style>
 </head>
@@ -254,6 +286,10 @@
 
 <div class="container">
     <header>
+        <!-- 在弘九honjiu的上方添加头像链接（图片地址已按要求放置） -->
+        <a href="https://wj.xo.je/uploads/69b6ad98030f8_file.png" class="avatar-link" target="_blank" title="点击查看头像原图">
+            <img class="avatar-img" src="https://wj.xo.je/uploads/69b6ad98030f8_file.png" alt="弘九honjiu 头像">
+        </a>
         <h1>弘九honjiu</h1>
         <div class="username">开发者</div>
         <p class="subtitle">欢迎来到我的个人网站</p>
@@ -326,7 +362,7 @@
         </div>
     </main>
 
-    <!-- 👇 新增：我的项目 分区 -->
+    <!-- 我的项目 分区 -->
     <div class="card">
         <div class="card-title">
             <i class="material-icons">folder</i>
@@ -336,12 +372,12 @@
             <ul style="list-style: none; line-height: 2;">
                 <li><a href="https://ri3bz6x.cn/index.html" target="_blank">弘九honjiu的个人网站</a></li>
                 <li><a href="https://ri3bz6x.cn/stariver.html" target="_blank">Stariver起始页</a></li>
-                <li><a href="https://ri3bz6x.cn/gamebox.html" target="_blank">GameBox游戏网</a></li>
+                <li><a href="https://ri3bz6x.cn/gamebox.html" target="_blank">GameBox小游戏</a></li>
             </ul>
         </div>
     </div>
 
-    <!-- 友情链接（在我的项目下面） -->
+    <!-- 友情链接 -->
     <div class="card">
         <div class="card-title">
             <i class="material-icons">link</i>
@@ -350,7 +386,7 @@
         <div class="card-content" style="padding-left: 0; margin-left: 36px;">
             <ul style="list-style: none; line-height: 2;">
                 <li><a href="https://github.com/milkCTL/CraftTechLauncher-CTL" target="_blank">CTL启动器</a></li>
-                <li><a href="" target="_blank"></a></li>
+                <li><a href="" target="_blank"></a></li>   <!-- 保留原空链接，可根据需要填充 -->
                 <li><a href="https://templeovo.github.io/" target="_blank">Temple的个人网站</a></li>
                 <li><a href="http://www.axe.ink" target="_blank">生存斧服务器</a></li>
             </ul>
@@ -359,7 +395,7 @@
 
     <footer>
         <div class="footer-content">
-            <p>最后更新：2026年3月 | 版本号：v2.6</p>
+            <p>最后更新：2026年3月 | 版本号：v2.8</p>
             <p>本网站采用MD2设计语言制作</p>
             <p>© 2025-2026 弘九honjiu All rights reserved.</p>
             <p style="margin-top:6px;">
