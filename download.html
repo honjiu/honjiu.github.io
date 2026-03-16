@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>弘九honjiu的下载站</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Roboto', sans-serif;
+            scroll-behavior: smooth;
+        }
+        body {
+            background: #fafafa;
+            color: #1d1d1f;
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 24px;
+            position: relative;
+            opacity: 0;
+            animation: pageFadeIn 0.8s cubic-bezier(0.25, 0.8, 0.25, 1) forwards 0.2s;
+        }
+        /* 页面整体载入淡入动画 */
+        @keyframes pageFadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        /* 滚动渐显动画基础类 */
+        .fade-in-element {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.6s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+        .fade-in-element.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        /* 左上角菜单+头像容器 - 横向排列，同尺寸 */
+        .header-fix {
+            position: fixed;
+            top: 24px;
+            left: 24px;
+            z-index: 999;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        /* MD3菜单按钮 - 圆形悬浮按钮+旋转动画 */
+        .menu-btn {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: #ffffff;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.12), 0 4px 16px rgba(25,118,210,0.08);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: none;
+            color: #1976D2;
+            font-size: 28px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            transform-origin: center;
+        }
+        .menu-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15), 0 6px 20px rgba(25,118,210,0.12);
+            background: #f5f5f5;
+        }
+        /* 菜单按钮旋转动画 */
+        .menu-btn.rotate {
+            transform: rotate(90deg);
+        }
+        /* 同尺寸头像 - 和菜单按钮一致，MD3风格 */
+        .fix-avatar {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.12), 0 4px 16px rgba(25,118,210,0.08);
+            border: 3px solid white;
+            background: #fff;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            cursor: pointer;
+        }
+        .fix-avatar:hover {
+            transform: scale(1.05) rotate(2deg);
+            box-shadow: 0 4px 12px rgba(25, 118, 210, 0.25);
+        }
+        .fix-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+        /* MD3下拉菜单 - 大圆角+柔和阴影+淡入滑入动画 */
+        .dropdown-menu {
+            position: absolute;
+            top: 72px;
+            left: 0;
+            background: #ffffff;
+            border-radius: 20px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.1), 0 8px 24px rgba(0,0,0,0.08);
+            padding: 8px 0;
+            min-width: 160px;
+            display: none;
+            opacity: 0;
+            transform: translateY(-10px) scale(0.95);
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            transform-origin: top left;
+            z-index: 999;
+        }
+        .dropdown-menu.show {
+            display: block;
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+        /* 菜单选项 - MD3样式+hover动画 */
+        .menu-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 24px;
+            color: #3c4043;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            font-size: 1rem;
+            font-weight: 400;
+            position: relative;
+            overflow: hidden;
+        }
+        .menu-item i {
+            margin-right: 12px;
+            font-size: 20px;
+            color: #1976D2;
+            width: 20px;
+            text-align: center;
+            transition: transform 0.2s ease;
+        }
+        .menu-item:hover {
+            background: rgba(25, 118, 210, 0.08);
+            color: #1976D2;
+        }
+        .menu-item:hover i {
+            transform: translateX(2px);
+        }
+        /* 菜单选项右侧小箭头滑入 */
+        .menu-item::after {
+            content: 'chevron_right';
+            font-family: 'Material Icons';
+            font-size: 16px;
+            position: absolute;
+            right: 16px;
+            opacity: 0;
+            transform: translateX(5px);
+            transition: all 0.2s ease;
+        }
+        .menu-item:hover::after {
+            opacity: 1;
+            transform: translateX(0);
+        }
+        /* 遮罩 - 淡入淡出动画 */
+        .menu-mask {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0,0,0,0.1);
+            z-index: 998;
+            display: none;
+            opacity: 0;
+            backdrop-filter: blur(2px);
+            transition: opacity 0.25s ease;
+        }
+        .menu-mask.show {
+            display: block;
+            opacity: 1;
+        }
+        /* 下载站主容器 */
+        .container {
+            max-width: 800px;
+            width: 100%;
+            margin: 0 auto;
+            margin-top: 100px;
+            padding: 0 16px;
+        }
+        /* 下载站标题 */
+        .download-title {
+            text-align: center;
+            margin-bottom: 48px;
+            .fade-in-element;
+        }
+        .download-title h1 {
+            font-size: 2.5rem;
+            font-weight: 500;
+            color: #1976D2;
+            letter-spacing: 1.5px;
+            margin-bottom: 12px;
+        }
+        .download-title p {
+            font-size: 1.15rem;
+            color: #5f6368;
+            font-weight: 300;
+        }
+        /* 下载卡片容器 - 网格布局，适配多端 */
+        .download-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 24px;
+            margin-bottom: 60px;
+        }
+        /* 下载卡片 - MD3风格，和原站统一，强化交互 */
+        .download-card {
+            background: white;
+            border-radius: 24px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05), 0 4px 8px rgba(0, 0, 0, 0.08);
+            padding: 32px 24px;
+            text-align: center;
+            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+            border-top: 5px solid #1976D2;
+            position: relative;
+            overflow: hidden;
+            .fade-in-element;
+            text-decoration: none;
+            color: #1d1d1f;
+        }
+        /* 卡片悬浮动效 - 和原站一致 */
+        .download-card:hover {
+            transform: translateY(-6px) scale(1.01);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1), 0 12px 24px rgba(25, 118, 210, 0.08);
+        }
+        /* 卡片顶部渐变动画 */
+        .download-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, #1976D2, #2196F3, #1976D2);
+            background-size: 200% 100%;
+            animation: cardGradient 3s linear infinite;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .download-card:hover::before {
+            opacity: 1;
+        }
+        @keyframes cardGradient {
+            0% { background-position: 0 0; }
+            100% { background-position: 200% 0; }
+        }
+        /* 下载卡片图标 - 统一为file_download */
+        .card-icon {
+            font-size: 48px;
+            color: #1976D2;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+        .download-card:hover .card-icon {
+            transform: scale(1.1) rotate(5deg);
+        }
+        /* 下载卡片文字 */
+        .card-name {
+            font-size: 1.35rem;
+            font-weight: 500;
+            margin-bottom: 12px;
+            color: #1d1d1f;
+        }
+        .card-desc {
+            font-size: 1rem;
+            color: #5f6368;
+            line-height: 1.6;
+        }
+        /* 精简版页脚 - 仅保留版权 */
+        footer {
+            margin-top: auto;
+            text-align: center;
+            padding: 24px;
+            color: #757575;
+            font-size: 0.9rem;
+            width: 100%;
+            border-top: 1px solid #e8e8e8;
+            border-radius: 24px 24px 0 0;
+            background: rgba(255,255,255,0.8);
+            backdrop-filter: blur(8px);
+            transition: all 0.3s ease;
+            .fade-in-element;
+        }
+        footer:hover {
+            background: rgba(255,255,255,1);
+            box-shadow: 0 -2px 8px rgba(0,0,0,0.05);
+        }
+        .footer-content {
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 2;
+        }
+        a {
+            color: #1976D2;
+            text-decoration: none;
+            position: relative;
+        }
+        /* MD3链接下划线 - 平滑渐显 */
+        a::after {
+            content: '';
+            width: 0;
+            height: 2px;
+            background: #1976D2;
+            border-radius: 2px;
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            transition: width 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+        a:hover::after {
+            width: 100%;
+        }
+        /* 菜单/头像/卡片内链接取消下划线 */
+        .menu-item a::after, .fix-avatar a::after, .download-card::after {
+            display: none;
+        }
+        /* 移动端适配 */
+        @media (max-width: 600px) {
+            body {
+                padding: 16px;
+                padding-top: 96px;
+            }
+            .header-fix {
+                top: 16px;
+                left: 16px;
+                gap: 12px;
+            }
+            .menu-btn, .fix-avatar {
+                width: 48px;
+                height: 48px;
+            }
+            .menu-btn {
+                font-size: 24px;
+            }
+            .dropdown-menu {
+                top: 64px;
+                min-width: 140px;
+            }
+            .menu-item {
+                padding: 10px 20px;
+                font-size: 0.95rem;
+            }
+            .container {
+                margin-top: 24px;
+            }
+            .download-title h1 {
+                font-size: 2rem;
+            }
+            .download-cards {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            .download-card {
+                padding: 28px 20px;
+            }
+            .download-card:hover {
+                transform: translateY(-6px) scale(1.005);
+            }
+            .card-icon {
+                font-size: 40px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 左上角固定：菜单按钮 + 同尺寸头像 -->
+    <div class="header-fix">
+        <button class="menu-btn" id="menuBtn">
+            <i class="material-icons">menu</i>
+        </button>
+        <!-- 头像链接和原站一致 -->
+        <a href="https://wj.xo.je/uploads/69b6ad98030f8_file.png" target="_blank" title="点击查看头像原图" class="fix-avatar">
+            <img src="https://wj.xo.je/uploads/69b6ad98030f8_file.png" alt="弘九honjiu 头像">
+        </a>
+        <!-- 下拉菜单 -->
+        <div class="dropdown-menu" id="dropdownMenu">
+            <a href="https://ri3bz6x.cn/index.html" class="menu-item">
+                <i class="material-icons">home</i>
+                主页
+            </a>
+            <a href="https://ri3bz6x.cn/download.html" class="menu-item">
+                <i class="material-icons">download</i>
+                下载
+            </a>
+        </div>
+    </div>
+    <!-- 菜单遮罩 -->
+    <div class="menu-mask" id="menuMask"></div>
+
+    <!-- 下载站主内容 -->
+    <div class="container">
+        <div class="download-title fade-in-element">
+            <h1>下载站</h1>
+            <p>弘九honjiu的各种项目成品</p>
+        </div>
+
+        <!-- 3个下载卡片【图标统一为file_download】 -->
+        <div class="download-cards">
+            <!-- 卡片1 -->
+            <a href="https://wwp.lanzoup.com/i9B003j6qonc" class="download-card fade-in-element" target="_blank">
+                <i class="material-icons card-icon">file_download</i>
+                <h3 class="card-name">Stariver APK安装包</h3>
+                <p class="card-desc">使用FusionApp打包，提取码：hksi</p>
+            </a>
+            <!-- 卡片2 -->
+            <a href="https://wwr.lanzoui.com/b00yazcvaj" class="download-card fade-in-element" target="_blank">
+                <i class="material-icons card-icon">file_download</i>
+                <h3 class="card-name">各种网页源码</h3>
+                <p class="card-desc">html源码，提取码：7o5a</p>
+            </a>
+            <!-- 卡片3 -->
+            <a href="https://ri3bz6x.cn/" class="download-card fade-in-element" target="_blank">
+                <i class="material-icons card-icon">file_download</i>
+                <h3 class="card-name"＞null</h3>
+                <p class="card-desc">null</p>
+            </a>
+        </div>
+    </div>
+
+    <!-- 精简版页脚 - 仅保留版权信息 -->
+    <footer class="fade-in-element">
+        <div class="footer-content">
+            <p>© 2025-2026 弘九honjiu All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // 菜单交互逻辑
+        const menuBtn = document.getElementById('menuBtn');
+        const dropdownMenu = document.getElementById('dropdownMenu');
+        const menuMask = document.getElementById('menuMask');
+
+        // 点击菜单按钮展开/收起+旋转动画
+        menuBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            dropdownMenu.classList.toggle('show');
+            menuMask.classList.toggle('show');
+            menuBtn.classList.toggle('rotate');
+            // 切换菜单图标（菜单/关闭）
+            const icon = menuBtn.querySelector('i');
+            icon.textContent = dropdownMenu.classList.contains('show') ? 'close' : 'menu';
+        });
+
+        // 点击遮罩关闭菜单
+        menuMask.addEventListener('click', () => {
+            dropdownMenu.classList.remove('show');
+            menuMask.classList.remove('show');
+            menuBtn.classList.remove('rotate');
+            menuBtn.querySelector('i').textContent = 'menu';
+        });
+
+        // 点击菜单选项后关闭菜单
+        const menuItems = document.querySelectorAll('.menu-item');
+        menuItems.forEach(item => {
+            item.addEventListener('click', () => {
+                dropdownMenu.classList.remove('show');
+                menuMask.classList.remove('show');
+                menuBtn.classList.remove('rotate');
+                menuBtn.querySelector('i').textContent = 'menu';
+            });
+        });
+
+        // 点击页面空白处关闭菜单
+        document.addEventListener('click', (e) => {
+            const headerFix = document.querySelector('.header-fix');
+            if (!headerFix.contains(e.target) && dropdownMenu.classList.contains('show')) {
+                dropdownMenu.classList.remove('show');
+                menuMask.classList.remove('show');
+                menuBtn.classList.remove('rotate');
+                menuBtn.querySelector('i').textContent = 'menu';
+            }
+        });
+
+        // 阻止菜单内部点击冒泡
+        dropdownMenu.addEventListener('click', (e) => {
+            e.stopPropagation();
+        });
+
+        // 滚动渐显动画逻辑
+        const fadeInElements = document.querySelectorAll('.fade-in-element');
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.1
+        };
+
+        const fadeInObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        fadeInElements.forEach(element => {
+            fadeInObserver.observe(element);
+        });
+    </script>
+</body>
+</html>
