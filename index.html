@@ -13,397 +13,591 @@
             box-sizing: border-box;
             font-family: 'Roboto', sans-serif;
         }
-
         body {
-            background: #f5f7fa;
-            color: #333;
+            background: #fafafa; /* MD3基础浅灰 */
+            color: #1d1d1f; /* MD3主文本色 */
             line-height: 1.6;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 20px;
+            padding: 24px;
             position: relative;
         }
-
+        /* 左上角MD3菜单容器 - 固定定位 */
+        .menu-container {
+            position: fixed;
+            top: 24px;
+            left: 24px;
+            z-index: 999;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+        /* MD3菜单按钮 - 圆形悬浮按钮 */
+        .menu-btn {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: #ffffff;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.12), 0 4px 16px rgba(25,118,210,0.08);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: none;
+            color: #1976D2;
+            font-size: 28px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+        .menu-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15), 0 6px 20px rgba(25,118,210,0.12);
+            background: #f5f5f5;
+        }
+        /* MD3下拉菜单 - 大圆角+柔和阴影 */
+        .dropdown-menu {
+            margin-top: 12px;
+            background: #ffffff;
+            border-radius: 20px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.1), 0 8px 24px rgba(0,0,0,0.08);
+            padding: 8px 0;
+            min-width: 160px;
+            display: none;
+            animation: fadeIn 0.2s ease forwards;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .dropdown-menu.show {
+            display: block;
+        }
+        /* 菜单选项 - MD3样式 */
+        .menu-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 24px;
+            color: #3c4043;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            font-size: 1rem;
+            font-weight: 400;
+        }
+        .menu-item i {
+            margin-right: 12px;
+            font-size: 20px;
+            color: #1976D2;
+            width: 20px;
+            text-align: center;
+        }
+        .menu-item:hover {
+            background: rgba(25, 118, 210, 0.08);
+            color: #1976D2;
+        }
+        /* 遮罩 - 点击空白处关闭菜单 */
+        .menu-mask {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0,0,0,0.1);
+            z-index: 998;
+            display: none;
+            backdrop-filter: blur(2px);
+        }
+        .menu-mask.show {
+            display: block;
+        }
         .container {
             max-width: 800px;
             width: 100%;
             margin: 0 auto;
         }
-
         header {
             text-align: center;
-            margin-bottom: 30px;
-            padding: 20px 20px 10px 20px; /* 微调下边距，头像增加了一点空间 */
+            margin-bottom: 36px;
+            padding: 24px 24px 12px 24px;
         }
-
-        /* 头像容器 */
+        /* 头像容器 - MD3圆角+光影 */
         .avatar-link {
             display: inline-block;
-            margin-bottom: 12px;          /* 与名字的距离 */
-            border-radius: 50%;
+            margin-bottom: 16px;
+            border-radius: 50%; /* MD3圆形组件标准 */
             overflow: hidden;
-            width: 100px;
-            height: 100px;
-            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            border: 3px solid white;
-            background: #fff;               /* 备用背景 */
+            width: 104px;
+            height: 104px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08); /* MD3柔和阴影 */
+            transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            border: 4px solid white;
+            background: #ffffff;
+            position: relative;
+            z-index: 1;
         }
-
         .avatar-link:hover {
-            transform: scale(1.05);
-            box-shadow: 0 10px 25px rgba(25, 118, 210, 0.3);
+            transform: scale(1.06);
+            box-shadow: 0 12px 32px rgba(25, 118, 210, 0.25); /* MD3hover光影增强 */
         }
-
         .avatar-img {
             width: 100%;
             height: 100%;
-            object-fit: cover;              /* 保证图片填充且不变形 */
+            object-fit: cover;
             display: block;
         }
-
         h1 {
-            font-size: 2.5rem;
+            font-size: 2.75rem;
             font-weight: 500;
-            margin-bottom: 5px;
-            color: #1976D2;
-            letter-spacing: 2px;
+            margin-bottom: 8px;
+            color: #1976D2; /* 保留原主色，MD3蓝调 */
+            letter-spacing: 1.5px;
         }
-
         .username {
-            font-size: 1.4rem;
+            font-size: 1.45rem;
             color: #1976D2;
             font-weight: 400;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
             background: #e3f2fd;
-            padding: 6px 16px;
-            border-radius: 20px;
+            padding: 8px 20px;
+            border-radius: 28px; /* MD3大圆角按钮/标签 */
             display: inline-block;
             border: 1px solid #bbdefb;
+            box-shadow: 0 2px 4px rgba(25, 118, 210, 0.08);
+            transition: background 0.2s ease;
         }
-
+        .username:hover {
+            background: #d1e7dd;
+        }
         .subtitle {
-            font-size: 1.1rem;
-            color: #666;
+            font-size: 1.15rem;
+            color: #5f6368; /* MD3次要文本色 */
             font-weight: 300;
-            margin-top: 10px;
+            margin-top: 12px;
+            letter-spacing: 0.5px;
         }
-
+        /* MD3卡片 - 大圆角+柔和阴影+顶部渐变边+悬浮动效 */
         .card {
             background: white;
-            border-radius: 16px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
-            padding: 24px;
-            margin-bottom: 24px;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            border-top: 4px solid #1976D2;
+            border-radius: 24px; /* MD3核心大圆角 */
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05), 0 4px 8px rgba(0, 0, 0, 0.08); /* MD3双层柔和阴影 */
+            padding: 28px;
+            margin-bottom: 28px;
+            transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            border-top: 5px solid #1976D2;
+            position: relative;
+            overflow: hidden;
         }
-
+        /* MD3卡片悬浮 - 轻微上浮+阴影增强 */
         .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            transform: translateY(-6px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1), 0 12px 24px rgba(25, 118, 210, 0.08);
         }
-
         .card-title {
             display: flex;
             align-items: center;
-            margin-bottom: 16px;
+            margin-bottom: 20px;
             color: #1976D2;
-            font-size: 1.2rem;
+            font-size: 1.35rem;
+            font-weight: 500;
         }
-
         .card-title i {
-            margin-right: 12px;
-            font-size: 24px;
+            margin-right: 16px;
+            font-size: 28px;
+            width: 28px;
+            text-align: center;
         }
-
         .card-content {
-            color: #555;
-            font-size: 1.1rem;
-            line-height: 1.7;
-            padding-left: 36px;
+            color: #3c4043; /* MD3正文文本色 */
+            font-size: 1.15rem;
+            line-height: 1.8;
+            padding-left: 44px;
         }
-
         .social-section {
-            margin: 40px 0;
+            margin: 48px 0;
         }
-
         .social-title {
             text-align: center;
-            margin-bottom: 24px;
+            margin-bottom: 32px;
             color: #1976D2;
-            font-size: 1.3rem;
+            font-size: 1.45rem;
             font-weight: 500;
-            letter-spacing: 1px;
+            letter-spacing: 1.2px;
+            position: relative;
         }
-
+        /* MD3标题底部小装饰 */
+        .social-title::after {
+            content: '';
+            width: 48px;
+            height: 3px;
+            background: #1976D2;
+            border-radius: 3px;
+            position: absolute;
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
         .social-buttons {
             display: flex;
             justify-content: center;
-            gap: 30px;
+            gap: 36px;
             flex-wrap: wrap;
         }
-
+        /* MD3社交按钮 - 大圆角+柔和阴影+细腻交互 */
         .social-button {
             display: flex;
             flex-direction: column;
             align-items: center;
             text-decoration: none;
-            color: #555;
-            transition: transform 0.3s ease, color 0.3s ease;
-            width: 120px;
+            color: #3c4043;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            width: 128px;
+            padding: 8px;
+            border-radius: 20px;
         }
-
         .social-button:hover {
-            transform: scale(1.05);
+            transform: scale(1.07);
             color: #1976D2;
+            background: rgba(25, 118, 210, 0.05); /* MD3hover浅背景 */
         }
-
+        /* MD3圆形图标 - 大圆角+内层阴影 */
         .social-icon {
-            width: 80px;
-            height: 80px;
+            width: 88px;
+            height: 88px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-bottom: 12px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            margin-bottom: 16px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08), inset 0 1px 2px rgba(255,255,255,0.8); /* MD3内外阴影 */
             background: white;
             transition: all 0.3s ease;
+            position: relative;
+            z-index: 1;
         }
-
         .social-icon i {
-            font-size: 32px;
+            font-size: 36px;
+            transition: transform 0.2s ease;
         }
-
+        .social-button:hover .social-icon i {
+            transform: scale(1.1);
+        }
         .social-name {
-            font-size: 1.1rem;
+            font-size: 1.15rem;
             font-weight: 500;
-            margin-bottom: 4px;
+            margin-bottom: 6px;
         }
-
         .social-desc {
-            font-size: 0.9rem;
-            color: #888;
+            font-size: 0.95rem;
+            color: #5f6368; /* MD3次要文本色 */
         }
-
+        /* 社交平台配色 - MD3饱和度微调 */
         .github .social-icon {
-            background: #333;
+            background: #2d2d2d;
             color: white;
+            box-shadow: 0 4px 12px rgba(45,45,45,0.2), inset 0 1px 2px rgba(255,255,255,0.2);
         }
-
         .bilibili .social-icon {
             background: #FB7299;
             color: white;
+            box-shadow: 0 4px 12px rgba(251,114,153,0.2), inset 0 1px 2px rgba(255,255,255,0.2);
         }
-
         .douyin .social-icon {
-            background: #000;
+            background: #000000;
             color: white;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2), inset 0 1px 2px rgba(255,255,255,0.2);
         }
-
+        /* MD3页脚 - 浅分隔+柔和文本 */
         footer {
-            margin-top: 40px;
+            margin-top: 48px;
             text-align: center;
-            padding: 20px;
-            color: #888;
-            font-size: 0.85rem;
+            padding: 24px;
+            color: #757575; /* MD3辅助文本色 */
+            font-size: 0.9rem;
             width: 100%;
-            border-top: 1px solid #e0e0e0;
+            border-top: 1px solid #e8e8e8; /* MD3浅分隔线 */
+            border-radius: 24px 24px 0 0;
+            background: rgba(255,255,255,0.8);
+            backdrop-filter: blur(8px); /* MD3毛玻璃效果 */
         }
-
         .footer-content {
             max-width: 600px;
             margin: 0 auto;
-            line-height: 1.8;
+            line-height: 2;
         }
-
         a {
             color: #1976D2;
             text-decoration: none;
+            position: relative;
         }
-
-        a:hover {
-            text-decoration: underline;
+        /* MD3链接下划线 - 悬浮渐显 */
+        a::after {
+            content: '';
+            width: 0;
+            height: 2px;
+            background: #1976D2;
+            border-radius: 2px;
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            transition: width 0.3s ease;
         }
-
+        a:hover::after {
+            width: 100%;
+        }
+        /* 菜单内链接取消下划线（单独样式） */
+        .menu-item a::after {
+            display: none;
+        }
         /* 单独设置 ICP 粉色 */
         .icp-pink {
             color: #ff69b4 !important;
         }
-
+        .icp-pink::after {
+            background: #ff69b4 !important;
+        }
+        /* 移动端适配 - 菜单按钮缩小，位置微调 */
         @media (max-width: 600px) {
+            body {
+                padding: 16px;
+                padding-top: 80px; /* 给移动端菜单留空间 */
+            }
+            .menu-container {
+                top: 16px;
+                left: 16px;
+            }
+            .menu-btn {
+                width: 48px;
+                height: 48px;
+                font-size: 24px;
+            }
+            .dropdown-menu {
+                min-width: 140px;
+            }
+            .menu-item {
+                padding: 10px 20px;
+                font-size: 0.95rem;
+            }
             .social-buttons {
                 flex-direction: column;
                 align-items: center;
-                gap: 20px;
+                gap: 24px;
             }
-
             .card {
-                padding: 20px;
+                padding: 24px;
+                margin-bottom: 24px;
             }
-
             h1 {
-                font-size: 2rem;
+                font-size: 2.25rem;
             }
-
+            .avatar-link {
+                width: 88px;
+                height: 88px;
+            }
             .social-button {
                 width: 100%;
                 flex-direction: row;
                 justify-content: flex-start;
-                padding: 12px 20px;
-                border-radius: 12px;
+                padding: 16px 24px;
+                border-radius: 24px; /* MD3移动端大圆角 */
                 background: white;
                 box-shadow: 0 2px 8px rgba(0,0,0,0.06);
             }
-
             .social-icon {
-                width: 50px;
-                height: 50px;
+                width: 56px;
+                height: 56px;
                 margin-bottom: 0;
-                margin-right: 15px;
+                margin-right: 20px;
             }
-
             .social-icon i {
-                font-size: 24px;
+                font-size: 28px;
             }
-
             .social-text {
                 text-align: left;
             }
-
-            /* 移动端稍微缩小头像保持比例 */
-            .avatar-link {
-                width: 80px;
-                height: 80px;
+            .card-content {
+                padding-left: 36px;
+                font-size: 1.1rem;
             }
         }
     </style>
 </head>
 <body>
-
-<div class="container">
-    <header>
-        <!-- 在弘九honjiu的上方添加头像链接（图片地址已按要求放置） -->
-        <a href="https://wj.xo.je/uploads/69b6ad98030f8_file.png" class="avatar-link" target="_blank" title="点击查看头像原图">
-            <img class="avatar-img" src="https://wj.xo.je/uploads/69b6ad98030f8_file.png" alt="弘九honjiu 头像">
-        </a>
-        <h1>弘九honjiu</h1>
-        <div class="username">开发者</div>
-        <p class="subtitle">欢迎来到我的个人网站</p>
-    </header>
-
-    <main>
-        <div class="card">
-            <div class="card-title">
-                <i class="material-icons">cake</i>
-                <h2>生日</h2>
-            </div>
-            <div class="card-content">
-                <p>7月31日</p>
-            </div>
-        </div>
-
-        <div class="card">
-            <div class="card-title">
-                <i class="material-icons">favorite</i>
-                <h2>爱好</h2>
-            </div>
-            <div class="card-content">
-                <p>Minecraft<br>网页开发</p>
-            </div>
-        </div>
-
-        <div class="card">
-            <div class="card-title">
-                <i class="material-icons">email</i>
-                <h2>电子邮箱</h2>
-            </div>
-            <div class="card-content">
-                <p>1637202196@qq.com</p>
-            </div>
-        </div>
-
-        <div class="social-section">
-            <h2 class="social-title">我的链接</h2>
-            <div class="social-buttons">
-                <a href="https://github.com/honjiu/honjiu.github.io" class="social-button github" target="_blank">
-                    <div class="social-icon">
-                        <i class="material-icons">code</i>
-                    </div>
-                    <div class="social-text">
-                        <div class="social-name">GitHub</div>
-                        <div class="social-desc">项目</div>
-                    </div>
-                </a>
-
-                <a href="https://b23.tv/z45t226" class="social-button bilibili" target="_blank">
-                    <div class="social-icon">
-                        <i class="material-icons">play_circle_filled</i>
-                    </div>
-                    <div class="social-text">
-                        <div class="social-name">Bilibili</div>
-                        <div class="social-desc">主页</div>
-                    </div>
-                </a>
-
-                <a href="https://www.douyin.com/user/MS4wLjABAAAAzRBgUB2qUC69MebTYiGhauhxDYIXhGlJdFz3Cv5lArH3luzXtmqpzxWEJzaZmSCh" class="social-button douyin" target="_blank">
-                    <div class="social-icon">
-                        <i class="material-icons">music_note</i>
-                    </div>
-                    <div class="social-text">
-                        <div class="social-name">抖音</div>
-                        <div class="social-desc">主页</div>
-                    </div>
-                </a>
-            </div>
-        </div>
-    </main>
-
-    <!-- 我的项目 分区 -->
-    <div class="card">
-        <div class="card-title">
-            <i class="material-icons">folder</i>
-            我的项目
-        </div>
-        <div class="card-content" style="padding-left: 0; margin-left: 36px;">
-            <ul style="list-style: none; line-height: 2;">
-                <li><a href="https://ri3bz6x.cn/index.html" target="_blank">弘九honjiu的个人网站</a></li>
-                <li><a href="https://ri3bz6x.cn/stariver.html" target="_blank">Stariver起始页</a></li>
-                <li><a href="https://ri3bz6x.cn/gamebox.html" target="_blank">GameBox小游戏</a></li>
-            </ul>
+    <!-- 左上角MD3菜单 -->
+    <div class="menu-container">
+        <button class="menu-btn" id="menuBtn">
+            <i class="material-icons">menu</i>
+        </button>
+        <div class="dropdown-menu" id="dropdownMenu">
+            <a href="https://ri3bz6x.cn/index.html" class="menu-item">
+                <i class="material-icons">home</i>
+                主页
+            </a>
+            <a href="https://ri3bz6x.cn/download.html" class="menu-item">
+                <i class="material-icons">download</i>
+                下载
+            </a>
         </div>
     </div>
+    <!-- 菜单遮罩 -->
+    <div class="menu-mask" id="menuMask"></div>
 
-    <!-- 友情链接 -->
-    <div class="card">
-        <div class="card-title">
-            <i class="material-icons">link</i>
-            友情链接
+    <div class="container">
+        <header>
+            <a href="https://wj.xo.je/uploads/69b6ad98030f8_file.png" class="avatar-link" target="_blank" title="点击查看头像原图">
+                <img class="avatar-img" src="https://wj.xo.je/uploads/69b6ad98030f8_file.png" alt="弘九honjiu 头像">
+            </a>
+            <h1>弘九honjiu</h1>
+            <div class="username">开发者</div>
+            <p class="subtitle">欢迎来到我的个人网站</p>
+        </header>
+        <main>
+            <div class="card">
+                <div class="card-title">
+                    <i class="material-icons">cake</i>
+                    <h2>生日</h2>
+                </div>
+                <div class="card-content">
+                    <p>7月31日</p>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-title">
+                    <i class="material-icons">favorite</i>
+                    <h2>爱好</h2>
+                </div>
+                <div class="card-content">
+                    <p>Minecraft<br>网页开发</p>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-title">
+                    <i class="material-icons">email</i>
+                    <h2>电子邮箱</h2>
+                </div>
+                <div class="card-content">
+                    <p>1637202196@qq.com</p>
+                </div>
+            </div>
+            <div class="social-section">
+                <h2 class="social-title">我的链接</h2>
+                <div class="social-buttons">
+                    <a href="https://github.com/honjiu/honjiu.github.io" class="social-button github" target="_blank">
+                        <div class="social-icon">
+                            <i class="material-icons">code</i>
+                        </div>
+                        <div class="social-text">
+                            <div class="social-name">GitHub</div>
+                            <div class="social-desc">项目</div>
+                        </div>
+                    </a>
+                    <a href="https://b23.tv/z45t226" class="social-button bilibili" target="_blank">
+                        <div class="social-icon">
+                            <i class="material-icons">play_circle_filled</i>
+                        </div>
+                        <div class="social-text">
+                            <div class="social-name">Bilibili</div>
+                            <div class="social-desc">主页</div>
+                        </div>
+                    </a>
+                    <a href="https://www.douyin.com/user/MS4wLjABAAAAzRBgUB2qUC69MebTYiGhauhxDYIXhGlJdFz3Cv5lArH3luzXtmqpzxWEJzaZmSCh" class="social-button douyin" target="_blank">
+                        <div class="social-icon">
+                            <i class="material-icons">music_note</i>
+                        </div>
+                        <div class="social-text">
+                            <div class="social-name">抖音</div>
+                            <div class="social-desc">主页</div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </main>
+        <!-- 我的项目 分区 -->
+        <div class="card">
+            <div class="card-title">
+                <i class="material-icons">folder</i>
+                我的项目
+            </div>
+            <div class="card-content" style="padding-left: 0; margin-left: 44px;">
+                <ul style="list-style: none; line-height: 2.2;">
+                    <li><a href="https://ri3bz6x.cn/index.html" target="_blank">弘九honjiu的个人网站</a></li>
+                    <li><a href="https://ri3bz6x.cn/stariver.html" target="_blank">Stariver起始页</a></li>
+                    <li><a href="https://ri3bz6x.cn/gamebox.html" target="_blank">GameBox小游戏</a></li>
+                </ul>
+            </div>
         </div>
-        <div class="card-content" style="padding-left: 0; margin-left: 36px;">
-            <ul style="list-style: none; line-height: 2;">
-                <li><a href="https://github.com/milkCTL/CraftTechLauncher-CTL" target="_blank">CTL启动器</a></li>
-                <li><a href="" target="_blank"></a></li>   <!-- 保留原空链接，可根据需要填充 -->
-                <li><a href="https://templeovo.github.io/" target="_blank">Temple的个人网站</a></li>
-                <li><a href="http://www.axe.ink" target="_blank">生存斧服务器</a></li>
-            </ul>
+        <!-- 友情链接 -->
+        <div class="card">
+            <div class="card-title">
+                <i class="material-icons">link</i>
+                友情链接
+            </div>
+            <div class="card-content" style="padding-left: 0; margin-left: 44px;">
+                <ul style="list-style: none; line-height: 2.2;">
+                    <li><a href="https://github.com/milkCTL/CraftTechLauncher-CTL" target="_blank">CTL启动器</a></li>
+                    <li><a href="" target="_blank"></a></li>
+                    <li><a href="https://templeovo.github.io/" target="_blank">Temple的个人网站</a></li>
+                    <li><a href="http://www.axe.ink" target="_blank">生存斧服务器</a></li>
+                </ul>
+            </div>
         </div>
+        <footer>
+            <div class="footer-content">
+                <p>最后更新：2026年3月 | 版本号：v3.0</p>
+                <p>本网站采用MD3设计语言制作</p>
+                <p>© 2025-2026 弘九honjiu All rights reserved.</p>
+                <p style="margin-top:8px;">
+                    <a href="https://icp.gov.moe/?keyword=20260880" target="_blank" class="icp-pink">萌ICP备20260880号</a>
+                </p>
+            </div>
+        </footer>
     </div>
 
-    <footer>
-        <div class="footer-content">
-            <p>最后更新：2026年3月 | 版本号：v2.8</p>
-            <p>本网站采用MD2设计语言制作</p>
-            <p>© 2025-2026 弘九honjiu All rights reserved.</p>
-            <p style="margin-top:6px;">
-                <a href="https://icp.gov.moe/?keyword=20260880" target="_blank" class="icp-pink">萌ICP备20260880号</a>
-            </p>
-        </div>
-    </footer>
-</div>
+    <script>
+        // 菜单交互逻辑
+        const menuBtn = document.getElementById('menuBtn');
+        const dropdownMenu = document.getElementById('dropdownMenu');
+        const menuMask = document.getElementById('menuMask');
 
+        // 点击菜单按钮展开/收起
+        menuBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            dropdownMenu.classList.toggle('show');
+            menuMask.classList.toggle('show');
+            // 切换菜单图标（菜单/关闭）
+            const icon = menuBtn.querySelector('i');
+            icon.textContent = dropdownMenu.classList.contains('show') ? 'close' : 'menu';
+        });
+
+        // 点击遮罩关闭菜单
+        menuMask.addEventListener('click', () => {
+            dropdownMenu.classList.remove('show');
+            menuMask.classList.remove('show');
+            menuBtn.querySelector('i').textContent = 'menu';
+        });
+
+        // 点击菜单选项后关闭菜单
+        const menuItems = document.querySelectorAll('.menu-item');
+        menuItems.forEach(item => {
+            item.addEventListener('click', () => {
+                dropdownMenu.classList.remove('show');
+                menuMask.classList.remove('show');
+                menuBtn.querySelector('i').textContent = 'menu';
+            });
+        });
+
+        // 点击页面空白处关闭菜单
+        document.addEventListener('click', (e) => {
+            if (!menuContainer.contains(e.target) && dropdownMenu.classList.contains('show')) {
+                dropdownMenu.classList.remove('show');
+                menuMask.classList.remove('show');
+                menuBtn.querySelector('i').textContent = 'menu';
+            }
+        });
+
+        // 阻止菜单内部点击冒泡
+        dropdownMenu.addEventListener('click', (e) => {
+            e.stopPropagation();
+        });
+    </script>
 </body>
 </html>
