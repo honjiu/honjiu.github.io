@@ -12,14 +12,7 @@
   font-family: "Segoe UI", Roboto, sans-serif;
   scroll-behavior: smooth;
 }
-:root.light {
-  --bg: #f5f5f5;
-  --card: #ffffff;
-  --text: #222;
-  --subtext: #666;
-  --header: #ffffff;
-  --search: #eeeeee;
-}
+/* 修复：调整主题变量顺序，默认在前，覆盖在后，符合CSS规范 */
 :root {
   --bg: #121212;
   --card: #1e1e1e;
@@ -28,10 +21,20 @@
   --header: #1e1e1e;
   --search: #2a2a2a;
 }
+:root.light {
+  --bg: #f5f5f5;
+  --card: #ffffff;
+  --text: #222;
+  --subtext: #666;
+  --header: #ffffff;
+  --search: #eeeeee;
+}
 body {
   background: var(--bg);
   color: var(--text);
-  padding-bottom: 60px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 .header {
@@ -220,6 +223,8 @@ body {
   max-width: 1400px;
   margin: 20px auto;
   padding: 0 20px;
+  flex: 1;
+  width: 100%;
 }
 .section-title {
   font-size: 20px;
@@ -253,12 +258,6 @@ body {
   transform: none;
   box-shadow: none;
 }
-.game-card:nth-child(1) { animation-delay: 0.1s; }
-.game-card:nth-child(2) { animation-delay: 0.2s; }
-.game-card:nth-child(3) { animation-delay: 0.3s; }
-.game-card:nth-child(4) { animation-delay: 0.4s; }
-.game-card:nth-child(5) { animation-delay: 0.5s; }
-.game-card:nth-child(6) { animation-delay: 0.6s; }
 @keyframes cardFadeIn {
   to { opacity: 1; transform: translateY(0); }
   from { opacity: 0; transform: translateY(10px); }
@@ -298,45 +297,46 @@ body {
   color: #888;
   font-size: 13px;
   animation: fadeIn 0.8s ease;
+  margin-top: auto;
 }
 </style>
 </head>
 <body>
 <div class="header">
-  <!-- 点击 logo 返回当前首页 -->
+  <!-- 点击 logo 刷新回到首页 -->
   <div class="logo" id="goHome">GameBox</div>
-
   <div class="search">
     <input type="text" placeholder="搜索游戏或制作方" id="searchInput" />
   </div>
-  <button class="menu-btn" id="menuBtn">≡</button>
-  <div class="menu-popup" id="menuPopup">
-    <div class="menu-item" id="openSetting">设置</div>
-    <div class="menu-item" id="openAbout">关于</div>
+  <button class="menu-btn" id="menuBtn" aria-label="菜单">≡</button>
+  <div class="menu-popup" id="menuPopup" role="menu">
+    <!-- 修复：添加无障碍属性 -->
+    <div class="menu-item" id="openSetting" role="menuitem" tabindex="0">设置</div>
+    <div class="menu-item" id="openAbout" role="menuitem" tabindex="0">关于</div>
   </div>
 </div>
 <!-- 设置弹窗 -->
-<div class="modal" id="settingModal">
+<div class="modal" id="settingModal" role="dialog" aria-modal="true" aria-labelledby="settingTitle">
   <div class="modal-box">
-    <div class="modal-title">设置</div>
+    <div class="modal-title" id="settingTitle">设置</div>
     <div class="modal-line">
       <span>深色模式</span>
-      <div class="switch on" id="darkSwitch"></div>
+      <!-- 修复：添加无障碍属性 -->
+      <div class="switch on" id="darkSwitch" tabindex="0" role="switch" aria-checked="true" aria-label="深色模式开关"></div>
     </div>
     <button class="dev-btn" id="devBtn">开发者选项</button>
-    <div class="close" id="closeSetting">关闭</div>
+    <div class="close" id="closeSetting" tabindex="0">关闭</div>
   </div>
 </div>
 <!-- 关于弹窗 -->
-<div class="modal" id="aboutModal">
+<div class="modal" id="aboutModal" role="dialog" aria-modal="true" aria-labelledby="aboutTitle">
   <div class="modal-box">
-    <div class="modal-title">关于</div>
+    <div class="modal-title" id="aboutTitle">关于</div>
     <div style="line-height:1.6">
       GameBox——新一代小游戏集合站<br>
-      作者：<a href="https://ri3bz6x.cn/" target="_blank">弘九honjiu</a><br>
-
+      作者：<a href="https://ri3bz6x.cn/" target="_blank" rel="noopener noreferrer">弘九honjiu</a><br>
     </div>
-    <div class="close" id="closeAbout">关闭</div>
+    <div class="close" id="closeAbout" tabindex="0">关闭</div>
   </div>
 </div>
 <div class="container">
@@ -347,60 +347,214 @@ body {
   © 2026 弘九honjiu All rights reserved.
 </div>
 <script>
-// 点击 GameBox 刷新回到首页（当前界面）
-document.getElementById('goHome').onclick = function () {
-  window.location.href = window.location.origin + window.location.pathname;
-};
-const menuBtn = document.getElementById('menuBtn');
-const menuPopup = document.getElementById('menuPopup');
-menuBtn.onclick = () => menuPopup.classList.toggle('show');
-const settingModal = document.getElementById('settingModal');
-const aboutModal = document.getElementById('aboutModal');
-document.getElementById('openSetting').onclick = () => {
-  settingModal.classList.add('show');
-  menuPopup.classList.remove('show');
-};
-document.getElementById('openAbout').onclick = () => {
-  aboutModal.classList.add('show');
-  menuPopup.classList.remove('show');
-};
-document.getElementById('closeSetting').onclick = () => settingModal.classList.remove('show');
-document.getElementById('closeAbout').onclick = () => aboutModal.classList.remove('show');
-const darkSwitch = document.getElementById('darkSwitch');
-darkSwitch.onclick = () => {
-  darkSwitch.classList.toggle('on');
-  document.documentElement.classList.toggle('light');
-};
+// 全局容错：元素不存在时不报错
+const $ = (id) => document.getElementById(id);
 
-// ********** 哈希验证核心代码 **********
-async function sha256Hash(str) {
-  const encoder = new TextEncoder();
-  const data = encoder.encode(str);
-  const hash = await crypto.subtle.digest('SHA-256', data);
-  return Array.from(new Uint8Array(hash))
-    .map(b => b.toString(16).padStart(2, '0'))
-    .join('');
+// 核心元素获取
+const goHome = $('goHome');
+const menuBtn = $('menuBtn');
+const menuPopup = $('menuPopup');
+const openSetting = $('openSetting');
+const openAbout = $('openAbout');
+const settingModal = $('settingModal');
+const aboutModal = $('aboutModal');
+const closeSetting = $('closeSetting');
+const closeAbout = $('closeAbout');
+const darkSwitch = $('darkSwitch');
+const devBtn = $('devBtn');
+const gameList = $('gameList');
+const searchInput = $('searchInput');
+
+// 全局变量
+let originalBodyOverflow = '';
+let searchTimer = null;
+
+// ********** 核心bug修复 **********
+// 修复：logo跳转兼容file协议，避免origin为null导致跳转失败
+if (goHome) {
+  goHome.onclick = () => window.location.reload();
 }
-const ADMIN_USER = 'honjiu';
-const ADMIN_PWD_HASH = 'f9e6b5197952d0f6672f27a70e9268c2195309e090325c3094385f3d9031c76a';
-document.getElementById('devBtn').onclick = async () => {
-  const user = prompt('请输入账户名称：');
-  if (!user) return;
-  const pwd = prompt('请输入账户密码：');
-  if (!pwd) return;
-  if (user === ADMIN_USER) {
+
+// 修复：菜单弹窗点击外部关闭
+if (menuBtn && menuPopup) {
+  menuBtn.onclick = (e) => {
+    e.stopPropagation();
+    menuPopup.classList.toggle('show');
+  };
+  // 点击外部关闭菜单
+  document.addEventListener('click', (e) => {
+    if (!menuBtn.contains(e.target) && !menuPopup.contains(e.target)) {
+      menuPopup.classList.remove('show');
+    }
+  });
+}
+
+// ********** 弹窗逻辑修复 **********
+// 关闭所有弹窗
+function closeAllPopups() {
+  menuPopup?.classList.remove('show');
+  settingModal?.classList.remove('show');
+  aboutModal?.classList.remove('show');
+  document.body.style.overflow = originalBodyOverflow;
+}
+
+// 打开弹窗通用函数
+function openModal(modal) {
+  if (!modal) return;
+  closeAllPopups();
+  originalBodyOverflow = document.body.style.overflow;
+  document.body.style.overflow = 'hidden'; // 禁止背景滚动
+  modal.classList.add('show');
+  // 焦点锁定到关闭按钮
+  modal.querySelector('.close')?.focus();
+}
+
+// 关闭弹窗通用函数
+function closeModal(modal) {
+  if (!modal) return;
+  modal.classList.remove('show');
+  document.body.style.overflow = originalBodyOverflow; // 恢复背景滚动
+  // 焦点回到触发元素
+  if (modal === settingModal) openSetting?.focus();
+  if (modal === aboutModal) openAbout?.focus();
+}
+
+// 绑定弹窗事件
+if (openSetting && settingModal) {
+  openSetting.onclick = () => openModal(settingModal);
+}
+if (openAbout && aboutModal) {
+  openAbout.onclick = () => openModal(aboutModal);
+}
+if (closeSetting) {
+  closeSetting.onclick = () => closeModal(settingModal);
+}
+if (closeAbout) {
+  closeAbout.onclick = () => closeModal(aboutModal);
+}
+
+// 修复：点击弹窗背景关闭
+document.querySelectorAll('.modal').forEach(modal => {
+  modal.addEventListener('click', (e) => {
+    if (e.target === modal) closeModal(modal);
+  });
+});
+// 阻止弹窗内容区域点击冒泡
+document.querySelectorAll('.modal-box').forEach(box => {
+  box.addEventListener('click', (e) => e.stopPropagation());
+});
+
+// 修复：ESC键关闭弹窗
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') {
+    // 优先级：菜单 > 弹窗
+    if (menuPopup?.classList.contains('show')) {
+      menuPopup.classList.remove('show');
+      return;
+    }
+    if (settingModal?.classList.contains('show')) {
+      closeModal(settingModal);
+      return;
+    }
+    if (aboutModal?.classList.contains('show')) {
+      closeModal(aboutModal);
+      return;
+    }
+  }
+});
+
+// ********** 深色模式修复：持久化+无障碍 **********
+if (darkSwitch) {
+  // 初始化：从localStorage读取配置
+  const savedMode = localStorage.getItem('darkMode');
+  const isDarkDefault = savedMode !== 'light';
+  if (!isDarkDefault) {
+    document.documentElement.classList.add('light');
+    darkSwitch.classList.remove('on');
+    darkSwitch.setAttribute('aria-checked', 'false');
+  }
+
+  // 切换逻辑
+  darkSwitch.onclick = () => {
+    const isDark = !darkSwitch.classList.contains('on');
+    darkSwitch.classList.toggle('on');
+    document.documentElement.classList.toggle('light');
+    // 更新无障碍属性
+    darkSwitch.setAttribute('aria-checked', isDark);
+    // 持久化到localStorage
+    localStorage.setItem('darkMode', isDark ? 'dark' : 'light');
+  };
+
+  // 键盘操作支持
+  darkSwitch.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      darkSwitch.click();
+    }
+  });
+}
+
+// 菜单项键盘操作支持
+document.querySelectorAll('.menu-item').forEach(item => {
+  item.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      item.click();
+    }
+  });
+});
+
+// ********** 安全漏洞修复 **********
+// 修复：加密函数增加环境判断+错误捕获，避免HTTP/file环境崩溃
+async function sha256Hash(str) {
+  try {
+    if (!window.crypto || !window.crypto.subtle) {
+      throw new Error('当前环境不支持加密API，请使用HTTPS协议访问');
+    }
+    const encoder = new TextEncoder();
+    const data = encoder.encode(str);
+    const hash = await crypto.subtle.digest('SHA-256', data);
+    return Array.from(new Uint8Array(hash))
+      .map(b => b.toString(16).padStart(2, '0'))
+      .join('');
+  } catch (err) {
+    console.error('哈希计算失败：', err);
+    alert(err.message || '加密功能不可用，请更换浏览器或使用HTTPS访问');
+    return null;
+  }
+}
+
+// 修复：管理员验证逻辑优化，增加逆向难度+输入容错
+if (devBtn) {
+  devBtn.onclick = async () => {
+    const user = prompt('请输入账户名称：')?.trim();
+    if (!user) return;
+    const pwd = prompt('请输入账户密码：')?.trim();
+    if (!pwd) return;
+
+    // 拆分敏感字符串，增加逆向难度
+    const validUser = 'hon' + 'jiu';
+    const validHash = 'f9e6b5197952d0f6672f27a70e9268c2195309e090325c3094385f3d9031c76a';
+    
+    // 分层验证，避免直接暴露判断逻辑
+    if (user !== validUser) {
+      alert('账户或密码错误');
+      return;
+    }
+
     const inputPwdHash = await sha256Hash(pwd);
-    if (inputPwdHash === ADMIN_PWD_HASH) {
+    if (!inputPwdHash) return;
+
+    if (inputPwdHash === validHash) {
       alert('验证成功！');
+      // 验证成功后的逻辑请放在此处，纯前端无法实现绝对安全，建议配合后端接口验证
     } else {
       alert('账户或密码错误');
     }
-  } else {
-    alert('账户或密码错误');
-  }
-};
-// ********** 哈希验证核心代码结束 **********
+  };
+}
 
+// ********** 游戏数据与渲染逻辑修复 **********
 // 游戏数据
 const games = [
   { title: "像素乒乓", desc: "制作方：弘九honjiu", wait: false, url: "https://stariver26.github.io/pingpong.html" },
@@ -412,15 +566,14 @@ const games = [
   { title: "正在开发", desc: "敬请期待", wait: true, url: null },
   { title: "正在开发", desc: "敬请期待", wait: true, url: null },
 ];
-const gameList = document.getElementById('gameList');
-const searchInput = document.getElementById('searchInput');
 
-// 渲染游戏列表（支持筛选）
+// 修复：渲染逻辑消除XSS漏洞，使用textContent替代innerHTML
 function render(filteredGames = null) {
+  if (!gameList) return;
   gameList.innerHTML = '';
   const displayGames = filteredGames || games;
-  
-  // 无搜索结果时显示提示
+
+  // 无搜索结果提示
   if (displayGames.length === 0) {
     const noResult = document.createElement('div');
     noResult.className = 'no-result';
@@ -432,39 +585,54 @@ function render(filteredGames = null) {
   displayGames.forEach((g, index) => {
     const card = document.createElement('div');
     card.className = `game-card ${g.wait ? 'wait' : ''}`;
-    // 保持原有动画延迟
+    // 动态设置动画延迟，替代CSS冗余代码
     card.style.animationDelay = `${0.1 * (index + 1)}s`;
-    card.innerHTML = `
-      <div class="game-title ${g.wait ? 'wait' : ''}">${g.title}</div>
-      <div class="game-desc">${g.desc}</div>
-    `;
-    // 仅为有url的卡片添加点击跳转事件
+
+    // 修复：使用textContent完全避免XSS注入
+    const titleDiv = document.createElement('div');
+    titleDiv.className = `game-title ${g.wait ? 'wait' : ''}`;
+    titleDiv.textContent = g.title;
+
+    const descDiv = document.createElement('div');
+    descDiv.className = 'game-desc';
+    descDiv.textContent = g.desc;
+
+    card.appendChild(titleDiv);
+    card.appendChild(descDiv);
+
+    // 修复：外部链接添加安全属性，防止opener钓鱼
     if (g.url) {
       card.onclick = () => {
-        window.open(g.url, '_blank');
+        window.open(g.url, '_blank', 'noopener noreferrer');
       };
     }
     gameList.appendChild(card);
   });
 }
 
-// 搜索功能核心逻辑
+// 修复：搜索添加防抖，优化性能
 function handleSearch() {
-  const searchText = searchInput.value.trim().toLowerCase();
-  if (!searchText) {
-    render(); // 无输入时显示全部
-    return;
-  }
-  // 筛选匹配游戏：标题或制作方包含搜索关键词
-  const filtered = games.filter(game => 
-    game.title.toLowerCase().includes(searchText) || 
-    game.desc.toLowerCase().includes(searchText)
-  );
-  render(filtered);
+  clearTimeout(searchTimer);
+  searchTimer = setTimeout(() => {
+    if (!searchInput) return;
+    const searchText = searchInput.value.trim().toLowerCase();
+    if (!searchText) {
+      render();
+      return;
+    }
+    // 筛选匹配游戏
+    const filtered = games.filter(game => 
+      game.title.toLowerCase().includes(searchText) || 
+      game.desc.toLowerCase().includes(searchText)
+    );
+    render(filtered);
+  }, 300); // 300ms防抖延迟
 }
 
-// 绑定搜索事件（实时输入触发）
-searchInput.addEventListener('input', handleSearch);
+// 绑定搜索事件
+if (searchInput) {
+  searchInput.addEventListener('input', handleSearch);
+}
 
 // 初始化渲染
 render();
