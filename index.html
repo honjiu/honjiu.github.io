@@ -7,12 +7,12 @@
     <meta name="referrer" content="strict-origin-when-cross-origin">
     <meta http-equiv="X-Frame-Options" content="DENY">
     <meta http-equiv="X-Content-Type-Options" content="nosniff">
-    <!-- 内容安全策略CSP（核心防XSS），适配国内稳定字体源 -->
+    <!-- 适配谷歌官方源的内容安全策略CSP -->
     <meta http-equiv="Content-Security-Policy" content="
         default-src 'self';
         script-src 'nonce-honjiu-static-2026-safe';
-        style-src 'self' 'unsafe-inline' https://fonts.loli.net;
-        font-src 'self' https://fonts.loli.net;
+        style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
+        font-src 'self' https://fonts.gstatic.com;
         img-src 'self' data: https://wj.xo.je;
         connect-src 'self';
         frame-src 'none';
@@ -22,9 +22,13 @@
         form-action 'self';
     ">
     <title>弘九honjiu的个人网站</title>
-    <!-- 国内稳定可用的Material Icons源，和Google原版100%兼容，无样式差异 -->
-    <link href="https://fonts.loli.net/icon?family=Material+Icons" rel="stylesheet">
-    <link href="https://fonts.loli.net/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <!-- 谷歌官方源预连接 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!-- 谷歌官方Material Icons图标源 -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!-- 谷歌官方Roboto字体 -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -164,8 +168,6 @@
             object-fit: cover;
             display: block;
             crossorigin="anonymous";
-            /* 图片加载失败占位处理 */
-            onerror="this.onerror=null; this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTA0IiBoZWlnaHQ9IjEwNCIgdmlld0JveD0iMCAwIDEwNCAxMDQiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iNTIiIGN5PSI1MiIgcj0iNTIiIGZpbGw9IiNlM2YyZmQiLz48cGF0aCBkPSJNNTIgNTJDNjAuODM2NiA1MiA2OCA0NC44MzY2IDY4IDM2QzY4IDI3LjE2MzQgNjAuODM2NiAyMCA1MiAyMEM0My4xNjM0IDIwIDM2IDI3LjE2MzQgMzYgMzZDMzYgNDQuODM2NiA0My4xNjM0IDUyIDUyIDUyWiIgZmlsbD0iIzE5NzZEMiIvPjxwYXRoIGQ9Ik01MiA1NkMzMi4zMiA1NiAxNiA3Mi4zMiAxNiA5MlY5Mkg4OFY5MkM4OCA3Mi4zMiA3MS42OCA1NiA1MiA1NloiIGZpbGw9IiMxOTc2RDIiLz48L3N2Zz4=';"
         }
         h1 {
             font-size: 2.75rem;
@@ -465,7 +467,7 @@
     <div class="container">
         <header>
             <a href="https://wj.xo.je/uploads/69b6ad98030f8_file.png" class="avatar-link" target="_blank" title="点击查看头像原图" rel="noopener noreferrer">
-                <img class="avatar-img" src="https://wj.xo.je/uploads/69b6ad98030f8_file.png" alt="弘九honjiu 头像">
+                <img class="avatar-img" src="https://wj.xo.je/uploads/69b6ad98030f8_file.png" alt="弘九honjiu 头像" crossorigin="anonymous" onerror="this.onerror=null; this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTA0IiBoZWlnaHQ9IjEwNCIgdmlld0JveD0iMCAwIDEwNCAxMDQiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iNTIiIGN5PSI1MiIgcj0iNTIiIGZpbGw9IiNlM2YyZmQiLz48cGF0aCBkPSJNNTIgNTJDNjAuODM2NiA1MiA2OCA0NC44MzY2IDY4IDM2QzY4IDI3LjE2MzQgNjAuODM2NiAyMCA1MiAyMEM0My4xNjM0IDIwIDM2IDI3LjE2MzQgMzYgMzZDMzYgNDQuODM2NiA0My4xNjM0IDUyIDUyIDUyWiIgZmlsbD0iIzE5NzZEMiIvPjxwYXRoIGQ9Ik01MiA1NkMzMi4zMiA1NiAxNiA3Mi4zMiAxNiA5MlY5Mkg4OFY5MkM4OCA3Mi4zMiA3MS42OCA1NiA1MiA1NloiIGZpbGw9IiMxOTc2RDIiLz48L3N2Zz4=';">
             </a>
             <h1>弘九honjiu</h1>
             <div class="username">开发者</div>
@@ -581,14 +583,12 @@
             const dropdownMenu = document.getElementById('dropdownMenu');
             const menuMask = document.getElementById('menuMask');
             const menuItems = document.querySelectorAll('.menu-item');
-
             // 邮箱反爬：动态拼接生成，避免明文被爬虫抓取
             const emailBox = document.getElementById('email-box');
             const emailPrefix = '1637202196';
             const emailDomain = 'qq.com';
             const fullEmail = `${emailPrefix}@${emailDomain}`;
             emailBox.innerHTML = `<a href="mailto:${fullEmail}">${fullEmail}</a>`;
-
             // 菜单交互逻辑
             menuBtn.addEventListener('click', (e) => {
                 e.stopPropagation();
@@ -597,13 +597,11 @@
                 const icon = menuBtn.querySelector('i');
                 icon.textContent = dropdownMenu.classList.contains('show') ? 'close' : 'menu';
             });
-
             menuMask.addEventListener('click', () => {
                 dropdownMenu.classList.remove('show');
                 menuMask.classList.remove('show');
                 menuBtn.querySelector('i').textContent = 'menu';
             });
-
             menuItems.forEach(item => {
                 item.addEventListener('click', () => {
                     dropdownMenu.classList.remove('show');
@@ -611,7 +609,6 @@
                     menuBtn.querySelector('i').textContent = 'menu';
                 });
             });
-
             document.addEventListener('click', (e) => {
                 if (!menuContainer.contains(e.target) && dropdownMenu.classList.contains('show')) {
                     dropdownMenu.classList.remove('show');
@@ -619,7 +616,6 @@
                     menuBtn.querySelector('i').textContent = 'menu';
                 }
             });
-
             dropdownMenu.addEventListener('click', (e) => {
                 e.stopPropagation();
             });
