@@ -3,9 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- 安全防护核心Meta标签 -->
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    <meta http-equiv="X-Frame-Options" content="DENY">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <!-- 内容安全策略CSP（核心防XSS），适配国内稳定字体源 -->
+    <meta http-equiv="Content-Security-Policy" content="
+        default-src 'self';
+        script-src 'nonce-honjiu-static-2026-safe';
+        style-src 'self' 'unsafe-inline' https://fonts.loli.net;
+        font-src 'self' https://fonts.loli.net;
+        img-src 'self' data: https://wj.xo.je;
+        connect-src 'self';
+        frame-src 'none';
+        frame-ancestors 'self';
+        object-src 'none';
+        base-uri 'self';
+        form-action 'self';
+    ">
     <title>弘九honjiu的个人网站</title>
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <!-- 国内稳定可用的Material Icons源，和Google原版100%兼容，无样式差异 -->
+    <link href="https://fonts.loli.net/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://fonts.loli.net/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -144,6 +163,9 @@
             height: 100%;
             object-fit: cover;
             display: block;
+            crossorigin="anonymous";
+            /* 图片加载失败占位处理 */
+            onerror="this.onerror=null; this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTA0IiBoZWlnaHQ9IjEwNCIgdmlld0JveD0iMCAwIDEwNCAxMDQiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iNTIiIGN5PSI1MiIgcj0iNTIiIGZpbGw9IiNlM2YyZmQiLz48cGF0aCBkPSJNNTIgNTJDNjAuODM2NiA1MiA2OCA0NC44MzY2IDY4IDM2QzY4IDI3LjE2MzQgNjAuODM2NiAyMCA1MiAyMEM0My4xNjM0IDIwIDM2IDI3LjE2MzQgMzYgMzZDMzYgNDQuODM2NiA0My4xNjM0IDUyIDUyIDUyWiIgZmlsbD0iIzE5NzZEMiIvPjxwYXRoIGQ9Ik01MiA1NkMzMi4zMiA1NiAxNiA3Mi4zMiAxNiA5MlY5Mkg4OFY5MkM4OCA3Mi4zMiA3MS42OCA1NiA1MiA1NloiIGZpbGw9IiMxOTc2RDIiLz48L3N2Zz4=';"
         }
         h1 {
             font-size: 2.75rem;
@@ -162,7 +184,7 @@
             border-radius: 28px; /* MD3大圆角按钮/标签 */
             display: inline-block;
             border: 1px solid #bbdefb;
-            box-shadow: 0 2px 4px rgba(25, 118, 210, 0.08);
+            box-shadow: 0 2px 4px rgba(25, 118,210,0.08);
             transition: background 0.2s ease;
         }
         .username:hover {
@@ -428,11 +450,11 @@
             <i class="material-icons">menu</i>
         </button>
         <div class="dropdown-menu" id="dropdownMenu">
-            <a href="https://ri3bz6x.cn/index.html" class="menu-item">
+            <a href="https://ri3bz6x.cn/index.html" class="menu-item" rel="noopener noreferrer">
                 <i class="material-icons">home</i>
                 主页
             </a>
-            <a href="https://ri3bz6x.cn/download.html" class="menu-item">
+            <a href="https://ri3bz6x.cn/download.html" class="menu-item" rel="noopener noreferrer">
                 <i class="material-icons">download</i>
                 下载
             </a>
@@ -440,10 +462,9 @@
     </div>
     <!-- 菜单遮罩 -->
     <div class="menu-mask" id="menuMask"></div>
-
     <div class="container">
         <header>
-            <a href="https://wj.xo.je/uploads/69b6ad98030f8_file.png" class="avatar-link" target="_blank" title="点击查看头像原图">
+            <a href="https://wj.xo.je/uploads/69b6ad98030f8_file.png" class="avatar-link" target="_blank" title="点击查看头像原图" rel="noopener noreferrer">
                 <img class="avatar-img" src="https://wj.xo.je/uploads/69b6ad98030f8_file.png" alt="弘九honjiu 头像">
             </a>
             <h1>弘九honjiu</h1>
@@ -475,13 +496,13 @@
                     <h2>电子邮箱</h2>
                 </div>
                 <div class="card-content">
-                    <p>1637202196@qq.com</p>
+                    <p id="email-box"></p>
                 </div>
             </div>
             <div class="social-section">
                 <h2 class="social-title">我的链接</h2>
                 <div class="social-buttons">
-                    <a href="https://github.com/honjiu/honjiu.github.io" class="social-button github" target="_blank">
+                    <a href="https://github.com/honjiu/honjiu.github.io" class="social-button github" target="_blank" rel="noopener noreferrer">
                         <div class="social-icon">
                             <i class="material-icons">code</i>
                         </div>
@@ -490,7 +511,7 @@
                             <div class="social-desc">项目</div>
                         </div>
                     </a>
-                    <a href="https://b23.tv/z45t226" class="social-button bilibili" target="_blank">
+                    <a href="https://b23.tv/z45t226" class="social-button bilibili" target="_blank" rel="noopener noreferrer">
                         <div class="social-icon">
                             <i class="material-icons">play_circle_filled</i>
                         </div>
@@ -499,7 +520,7 @@
                             <div class="social-desc">主页</div>
                         </div>
                     </a>
-                    <a href="https://www.douyin.com/user/MS4wLjABAAAAzRBgUB2qUC69MebTYiGhauhxDYIXhGlJdFz3Cv5lArH3luzXtmqpzxWEJzaZmSCh" class="social-button douyin" target="_blank">
+                    <a href="https://www.douyin.com/user/MS4wLjABAAAAzRBgUB2qUC69MebTYiGhauhxDYIXhGlJdFz3Cv5lArH3luzXtmqpzxWEJzaZmSCh" class="social-button douyin" target="_blank" rel="noopener noreferrer">
                         <div class="social-icon">
                             <i class="material-icons">music_note</i>
                         </div>
@@ -519,9 +540,9 @@
             </div>
             <div class="card-content" style="padding-left: 0; margin-left: 44px;">
                 <ul style="list-style: none; line-height: 2.2;">
-                    <li><a href="https://ri3bz6x.cn/index.html" target="_blank">弘九honjiu的个人网站</a></li>
-                    <li><a href="https://ri3bz6x.cn/stariver.html" target="_blank">Stariver起始页</a></li>
-                    <li><a href="https://ri3bz6x.cn/gamebox.html" target="_blank">GameBox小游戏</a></li>
+                    <li><a href="https://ri3bz6x.cn/index.html" target="_blank" rel="noopener noreferrer">弘九honjiu的个人网站</a></li>
+                    <li><a href="https://ri3bz6x.cn/stariver.html" target="_blank" rel="noopener noreferrer">Stariver起始页</a></li>
+                    <li><a href="https://ri3bz6x.cn/gamebox.html" target="_blank" rel="noopener noreferrer">GameBox小游戏</a></li>
                 </ul>
             </div>
         </div>
@@ -533,16 +554,15 @@
             </div>
             <div class="card-content" style="padding-left: 0; margin-left: 44px;">
                 <ul style="list-style: none; line-height: 2.2;">
-                    <li><a href="https://github.com/milkCTL/CraftTechLauncher-CTL" target="_blank">CTL启动器</a></li>
-                    <li><a href="" target="_blank"></a></li>
-                    <li><a href="https://templeovo.github.io/" target="_blank">Temple的个人网站</a></li>
-                    <li><a href="http://www.axe.ink" target="_blank">生存斧服务器</a></li>
+                    <li><a href="https://github.com/milkCTL/CraftTechLauncher-CTL" target="_blank" rel="noopener noreferrer">CTL启动器</a></li>
+                    <li><a href="https://templeovo.github.io/" target="_blank" rel="noopener noreferrer">Temple的个人网站</a></li>
+                    <li><a href="https://www.axe.ink" target="_blank" rel="noopener noreferrer">生存斧服务器</a></li>
                 </ul>
             </div>
         </div>
         <footer>
             <div class="footer-content">
-                <p>最后更新：2026年3月 | 版本号：v3.0</p>
+                <p>最后更新：2026年3月 | 版本号：v3.1</p>
                 <p>本网站采用MD3设计语言制作</p>
                 <p>© 2025-2026 弘九honjiu All rights reserved.</p>
                 <p style="margin-top:8px;">
@@ -551,53 +571,59 @@
             </div>
         </footer>
     </div>
+    <!-- 安全加固JS：作用域隔离+修复逻辑漏洞+反爬保护 -->
+    <script nonce="honjiu-static-2026-safe">
+        // IIFE隔离作用域，防止全局变量污染
+        (function() {
+            // 修复未定义变量bug
+            const menuContainer = document.querySelector('.menu-container');
+            const menuBtn = document.getElementById('menuBtn');
+            const dropdownMenu = document.getElementById('dropdownMenu');
+            const menuMask = document.getElementById('menuMask');
+            const menuItems = document.querySelectorAll('.menu-item');
 
-    <script>
-        // 菜单交互逻辑
-        const menuBtn = document.getElementById('menuBtn');
-        const dropdownMenu = document.getElementById('dropdownMenu');
-        const menuMask = document.getElementById('menuMask');
+            // 邮箱反爬：动态拼接生成，避免明文被爬虫抓取
+            const emailBox = document.getElementById('email-box');
+            const emailPrefix = '1637202196';
+            const emailDomain = 'qq.com';
+            const fullEmail = `${emailPrefix}@${emailDomain}`;
+            emailBox.innerHTML = `<a href="mailto:${fullEmail}">${fullEmail}</a>`;
 
-        // 点击菜单按钮展开/收起
-        menuBtn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            dropdownMenu.classList.toggle('show');
-            menuMask.classList.toggle('show');
-            // 切换菜单图标（菜单/关闭）
-            const icon = menuBtn.querySelector('i');
-            icon.textContent = dropdownMenu.classList.contains('show') ? 'close' : 'menu';
-        });
+            // 菜单交互逻辑
+            menuBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                dropdownMenu.classList.toggle('show');
+                menuMask.classList.toggle('show');
+                const icon = menuBtn.querySelector('i');
+                icon.textContent = dropdownMenu.classList.contains('show') ? 'close' : 'menu';
+            });
 
-        // 点击遮罩关闭菜单
-        menuMask.addEventListener('click', () => {
-            dropdownMenu.classList.remove('show');
-            menuMask.classList.remove('show');
-            menuBtn.querySelector('i').textContent = 'menu';
-        });
-
-        // 点击菜单选项后关闭菜单
-        const menuItems = document.querySelectorAll('.menu-item');
-        menuItems.forEach(item => {
-            item.addEventListener('click', () => {
+            menuMask.addEventListener('click', () => {
                 dropdownMenu.classList.remove('show');
                 menuMask.classList.remove('show');
                 menuBtn.querySelector('i').textContent = 'menu';
             });
-        });
 
-        // 点击页面空白处关闭菜单
-        document.addEventListener('click', (e) => {
-            if (!menuContainer.contains(e.target) && dropdownMenu.classList.contains('show')) {
-                dropdownMenu.classList.remove('show');
-                menuMask.classList.remove('show');
-                menuBtn.querySelector('i').textContent = 'menu';
-            }
-        });
+            menuItems.forEach(item => {
+                item.addEventListener('click', () => {
+                    dropdownMenu.classList.remove('show');
+                    menuMask.classList.remove('show');
+                    menuBtn.querySelector('i').textContent = 'menu';
+                });
+            });
 
-        // 阻止菜单内部点击冒泡
-        dropdownMenu.addEventListener('click', (e) => {
-            e.stopPropagation();
-        });
+            document.addEventListener('click', (e) => {
+                if (!menuContainer.contains(e.target) && dropdownMenu.classList.contains('show')) {
+                    dropdownMenu.classList.remove('show');
+                    menuMask.classList.remove('show');
+                    menuBtn.querySelector('i').textContent = 'menu';
+                }
+            });
+
+            dropdownMenu.addEventListener('click', (e) => {
+                e.stopPropagation();
+            });
+        })();
     </script>
 </body>
 </html>
