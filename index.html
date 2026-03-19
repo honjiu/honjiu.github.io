@@ -7,13 +7,13 @@
     <meta name="referrer" content="strict-origin-when-cross-origin">
     <meta http-equiv="X-Frame-Options" content="DENY">
     <meta http-equiv="X-Content-Type-Options" content="nosniff">
-    <!-- 适配谷歌官方源的内容安全策略CSP -->
+    <!-- 适配谷歌官方源的内容安全策略CSP：新增QQ头像域名许可 -->
     <meta http-equiv="Content-Security-Policy" content="
         default-src 'self';
         script-src 'nonce-honjiu-static-2026-safe';
         style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
         font-src 'self' https://fonts.gstatic.com;
-        img-src 'self' data: https://wj.xo.je;
+        img-src 'self' data: https://wj.xo.je https://q.qlogo.cn;
         connect-src 'self';
         frame-src 'none';
         frame-ancestors 'self';
@@ -167,7 +167,6 @@
             height: 100%;
             object-fit: cover;
             display: block;
-            crossorigin="anonymous";
         }
         h1 {
             font-size: 2.75rem;
@@ -466,9 +465,13 @@
     <div class="menu-mask" id="menuMask"></div>
     <div class="container">
         <header>
-            <a href="http://q.qlogo.cn/headimg_dl?dst_uin=1637202196&spec=640&img_type=jpg" class="avatar-link" target="_blank" title="点击查看头像原图" rel="noopener noreferrer">
-                <img class="avatar-img" src="http://q.qlogo.cn/headimg_dl?dst_uin=1637202196&spec=640&img_type=jpg" alt="弘九honjiu 头像" crossorigin="anonymous" onerror="this.onerror=null; this.src='data:image/svg+xml;base64,aHR0cDovL3EucWxvZ28uY24vaGVhZGltZ19kbD9kc3RfdWluPTE2MzcyMDIxOTYmc3BlYz02NDAmaW1nX3R5cGU9anBn
-=';">
+            <!-- 修复头像链接：http换https -->
+            <a href="https://q.qlogo.cn/headimg_dl?dst_uin=1637202196&spec=640&img_type=jpg" class="avatar-link" target="_blank" title="点击查看头像原图" rel="noopener noreferrer">
+                <!-- 修复头像img：移除crossorigin、http换https、修复onerror备用地址 -->
+                <img class="avatar-img" 
+                     src="https://q.qlogo.cn/headimg_dl?dst_uin=1637202196&spec=640&img_type=jpg" 
+                     alt="弘九honjiu 头像" 
+                     onerror="this.onerror=null; this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDQgMTA0Ij48cmVjdCB3aWR0aD0iMTA0IiBoZWlnaHQ9IjEwNCIgcng9IjUyIiBmaWxsPSIjMTk3NkQyIi8+PHBhdGggZD0iTTUyIDUyYTE2IDE2IDAgMSAwIDAtMzIgMTYgMTYgMCAwIDAgMCAzMnptMCA4Yy0xMy4yNSAwLTI0IDEwLjc1LTI0IDI0djRoNDh2LTRjMC0xMy4yNS0xMC43NS0yNC0yNC0yNHoiIGZpbGw9IndoaXRlIi8+PC9zdmc+';">
             </a>
             <h1>弘九honjiu</h1>
             <div class="username">开发者</div>
