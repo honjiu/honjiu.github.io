@@ -7,13 +7,13 @@
     <meta name="referrer" content="strict-origin-when-cross-origin">
     <meta http-equiv="X-Frame-Options" content="DENY">
     <meta http-equiv="X-Content-Type-Options" content="nosniff">
-    <!-- 适配谷歌官方源的内容安全策略CSP：新增QQ头像域名许可 -->
+    <!-- 适配谷歌官方源的内容安全策略CSP：新增QQ头像域名许可 + 统计域名许可 -->
     <meta http-equiv="Content-Security-Policy" content="
         default-src 'self';
         script-src 'nonce-honjiu-static-2026-safe';
         style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
         font-src 'self' https://fonts.gstatic.com;
-        img-src 'self' data: https://wj.xo.je https://q.qlogo.cn;
+        img-src 'self' data: https://wj.xo.je https://q.qlogo.cn http://wapmz.com;
         connect-src 'self';
         frame-src 'none';
         frame-ancestors 'self';
@@ -378,6 +378,13 @@
         .icp-pink::after {
             background: #ff69b4 !important;
         }
+        /* 统计图片样式重置，避免布局错乱 */
+        .stats-img {
+            border: none;
+            max-width: 100%;
+            height: auto;
+            margin-top: 8px;
+        }
         /* 移动端适配 - 菜单按钮缩小，位置微调 */
         @media (max-width: 600px) {
             body {
@@ -568,13 +575,18 @@
         </div>
         <footer>
             <div class="footer-content">
-                <p>最后更新：2026年3月 | 版本号：v3.1</p>
+                <p>最后更新：2026年3月 | 版本号：v3.2</p>
                 <p>本网站采用MD3设计语言制作</p>
                 <p>© 2025-2026 弘九honjiu All rights reserved.</p>
                 <p style="margin-top:8px;">
                     <a href="https://icp.gov.moe/?keyword=20260180" target="_blank" class="icp-pink" rel="noopener noreferrer">萌ICP备20260180号</a>
                 </p>
-                <a href="http://wapmz.com/in/280"><img src="http://wapmz.com/cn/big/280" alt="wapmz.com"></a>
+                <!-- 新增访问统计代码 -->
+                <p>
+                    <a href="http://wapmz.com/in/280" target="_blank" rel="noopener noreferrer">
+                        <img class="stats-img" src="http://wapmz.com/cn/big/280" alt="wapmz.com">
+                    </a>
+                </p>
             </div>
         </footer>
     </div>
