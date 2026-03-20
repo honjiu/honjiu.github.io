@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>弘九honjiu的下载站</title>
+    <!-- 新增网页favicon图标，替换为指定QQ头像 -->
+    <link rel="shortcut icon" href="http://q.qlogo.cn/headimg_dl?dst_uin=1637202196&spec=640&img_type=jpg" type="image/jpg">
+    <link rel="icon" href="http://q.qlogo.cn/headimg_dl?dst_uin=1637202196&spec=640&img_type=jpg" type="image/jpg">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     <style>
@@ -277,6 +280,13 @@
             color: #5f6368;
             line-height: 1.6;
         }
+        /* 统计图片样式重置，避免布局错乱 */
+        .stats-img {
+            border: none;
+            max-width: 100%;
+            height: auto;
+            margin-top: 8px;
+        }
         /* 精简版页脚 - 仅保留版权 */
         footer {
             margin-top: auto;
@@ -386,22 +396,22 @@
     </style>
 </head>
 <body>
-    <!-- 左上角固定：菜单按钮 + 同尺寸头像 -->
+    <!-- 左上角固定：菜单按钮 + 同尺寸头像（修复原403无法加载问题） -->
     <div class="header-fix">
         <button class="menu-btn" id="menuBtn">
             <i class="material-icons">menu</i>
         </button>
-        <!-- 头像链接和原站一致 - 补全安全属性 -->
+        <!-- 头像链接和原站一致 - 补全安全属性，替换失效地址 -->
         <a href="http://q.qlogo.cn/headimg_dl?dst_uin=1637202196&spec=640&img_type=jpg" target="_blank" title="点击查看头像原图" class="fix-avatar" rel="noopener noreferrer">
-            <img src="https://wj.xo.je/uploads/69b6ad98030f8_file.png" alt="弘九honjiu 头像" loading="lazy">
+            <img src="http://q.qlogo.cn/headimg_dl?dst_uin=1637202196&spec=640&img_type=jpg" alt="弘九honjiu 头像" loading="lazy">
         </a>
         <!-- 下拉菜单 -->
         <div class="dropdown-menu" id="dropdownMenu">
-            <a href="https://ri3bz6x.cn/index.html" class="menu-item">
+            <a href="https://ri3bz6x.cn/index.html" class="menu-item" rel="noopener noreferrer">
                 <i class="material-icons">home</i>
                 主页
             </a>
-            <a href="https://ri3bz6x.cn/download.html" class="menu-item">
+            <a href="https://ri3bz6x.cn/download.html" class="menu-item" rel="noopener noreferrer">
                 <i class="material-icons">download</i>
                 下载
             </a>
@@ -437,12 +447,18 @@
             </a>
         </div>
     </div>
-    <!-- 精简版页脚 - 仅保留版权信息 -->
+    <!-- 精简版页脚 - 新增访问统计代码 -->
     <footer class="fade-in-element">
         <div class="footer-content">
             <p>© 2025-2026 弘九honjiu All rights reserved.</p>
             <p style="margin-top:8px;">
                 <a href="https://icp.gov.moe/?keyword=20260180" target="_blank" class="icp-pink" rel="noopener noreferrer">萌ICP备20260180号</a>
+            </p>
+            <!-- 新增访问统计代码，补全安全属性 -->
+            <p>
+                <a href="http://wapmz.com/in/280" target="_blank" rel="noopener noreferrer">
+                    <img class="stats-img" src="http://wapmz.com/cn/big/280" alt="wapmz.com">
+                </a>
             </p>
         </div>
     </footer>
