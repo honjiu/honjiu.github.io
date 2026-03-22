@@ -22,23 +22,21 @@
             --md-sys-elevation-level2: 0px 2px 6px 0px rgba(0, 0, 0, 0.12), 0px 1px 2px 0px rgba(0, 0, 0, 0.24);
             --md-sys-elevation-level1: 0px 1px 3px 0px rgba(0, 0, 0, 0.12), 0px 1px 2px 0px rgba(0, 0, 0, 0.24);
         }
-
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
             font-family: 'Noto Sans SC', -apple-system, BlinkMacSystemFont, 'Microsoft YaHei', sans-serif;
         }
-
         body {
             background-color: var(--md-sys-color-surface);
             min-height: 100vh;
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
             padding: 20px;
         }
-
         /* MD3 标准卡片容器 */
         .nick-card {
             background-color: var(--md-sys-color-surface-container-highest);
@@ -47,22 +45,20 @@
             border-radius: var(--md-sys-shape-corner-extra-large);
             padding: 36px 28px;
             box-shadow: var(--md-sys-elevation-level2);
+            margin-bottom: 20px;
         }
-
         .card-title {
             font-size: 24px;
             font-weight: 700;
             color: var(--md-sys-color-on-surface);
             margin-bottom: 8px;
         }
-
         .card-desc {
             font-size: 14px;
             color: var(--md-sys-color-on-surface-variant);
             margin-bottom: 32px;
             line-height: 1.5;
         }
-
         /* 昵称展示框 */
         .nick-display {
             background-color: var(--md-sys-color-primary-container);
@@ -80,18 +76,15 @@
             word-break: keep-all;
             transition: opacity 0.2s ease;
         }
-
         .nick-display.fade {
             opacity: 0.4;
         }
-
         /* 按钮组 */
         .btn-group {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 12px;
         }
-
         .btn {
             height: 52px;
             border: none;
@@ -102,35 +95,35 @@
             transition: all 0.2s ease;
             box-shadow: var(--md-sys-elevation-level1);
         }
-
         .btn-primary {
             background-color: var(--md-sys-color-primary);
             color: var(--md-sys-color-on-primary);
         }
-
         .btn-primary:hover {
             filter: brightness(1.08);
             box-shadow: var(--md-sys-elevation-level2);
         }
-
         .btn-primary:active {
             transform: scale(0.98);
         }
-
         .btn-secondary {
             background-color: var(--md-sys-color-surface);
             color: var(--md-sys-color-primary);
             border: 1px solid var(--md-sys-color-outline);
         }
-
         .btn-secondary:hover {
             background-color: rgba(64, 150, 255, 0.08);
         }
-
         .btn-secondary:active {
             transform: scale(0.98);
         }
-
+        /* 版权信息样式 */
+        .copyright {
+            font-size: 12px;
+            color: var(--md-sys-color-on-surface-variant);
+            margin-top: 10px;
+            text-align: center;
+        }
         /* 移动端适配 */
         @media (max-width: 360px) {
             .btn-group {
@@ -156,6 +149,8 @@
             <button class="btn btn-secondary" id="copyBtn">📋 复制昵称 📋</button>
         </div>
     </div>
+    <!-- 底部版权信息 -->
+    <div class="copyright">© 2026 <a href="ri3bz6x.cn" target="_blank">弘九honjiu</a> All rights reserved.</div>
 
     <script>
         // 1. 前置状态/动词库（正常有质感，适配拟人风格）
@@ -164,12 +159,10 @@
             '仰望','俯瞰','收藏','等候','书写','弹奏','守护','追逐','告别','遇见',
             '狂笑','温柔','慵懒','倔强','浪漫','自由','清醒','勇敢','奔赴','默念'
         ];
-
         // 2. 正常介词库（通顺合规，符合现代汉语用法）
         const preposition = [
             '于','在','与','向','以','为','随','伴','同','共','赴','对','和','临','渡'
         ];
-
         // 3. MC专属名词库（生物+物品，100%来自原版MC）
         const mcNouns = [
             // 生物类
@@ -181,7 +174,6 @@
             '矿车','TNT','荧石','金苹果','附魔书','盾牌','附魔台','传送门','龙蛋','鞘翅',
             '烟花','地图','木桶','箱子','末影箱','指南针','钓鱼竿','剑','弓','盔甲'
         ];
-
         // 4. 拟人化结尾动作库（人的行为，贴合示例风格，有画面感）
         const endAction = [
             '写诗篇','唱情歌','等日落','赴山海','说晚安','讲故事','画春秋','守星河',
@@ -189,29 +181,24 @@
             '等春来','写春秋','唱民谣','赴远方','守故里','听海声','落笔','写诗',
             '吟唱','低语','守望','奔赴','等候','书写','弹奏','守护','追逐','告别'
         ];
-
         // 5. 称号库（适配“世界霸主凯哥”风格）
         const titleWord = [
             '下界霸主','末地之王','红石大师','附魔宗师','炼药圣手','建筑之神',
             '探险之王','挖矿达人','农场主','驯兽师','守夜人','摆渡人','旅行者',
             '冒险家','守护者','潜行大师','格斗之王','园艺大师','炼金术士'
         ];
-
         // DOM元素获取
         const nickDisplay = document.getElementById('nickDisplay');
         const generateBtn = document.getElementById('generateBtn');
         const copyBtn = document.getElementById('copyBtn');
-
         // 随机取数组元素
         function getRandom(arr) {
             return arr[Math.floor(Math.random() * arr.length)];
         }
-
         // 核心生成逻辑，3种格式随机切换，完全贴合需求
         function generateNickname() {
             let nickname = '';
             const formatType = Math.floor(Math.random() * 3); // 随机选3种格式之一
-
             // 循环生成，严格控制6-8字，确保通顺合规
             while (nickname.length < 6 || nickname.length > 8) {
                 switch(formatType) {
@@ -240,7 +227,6 @@
                         break;
                 }
             }
-
             // 生成淡入动效
             nickDisplay.classList.add('fade');
             setTimeout(() => {
@@ -249,7 +235,6 @@
             }, 100);
             return nickname;
         }
-
         // 一键复制功能，支持初始内容复制
         async function copyNickname() {
             const currentNick = nickDisplay.textContent;
@@ -258,7 +243,7 @@
             try {
                 await navigator.clipboard.writeText(currentNick);
                 const originalText = copyBtn.textContent;
-                copyBtn.textContent = '✅ 复制成功';
+                copyBtn.textContent = '✅ 复制成功 ✅';
                 setTimeout(() => {
                     copyBtn.textContent = originalText;
                 }, 1500);
@@ -271,13 +256,12 @@
                 document.execCommand('copy');
                 document.body.removeChild(textarea);
                 const originalText = copyBtn.textContent;
-                copyBtn.textContent = '✅ 复制成功';
+                copyBtn.textContent = '✅ 复制成功 ✅';
                 setTimeout(() => {
                     copyBtn.textContent = originalText;
                 }, 1500);
             }
         }
-
         // 绑定点击事件
         generateBtn.addEventListener('click', generateNickname);
         copyBtn.addEventListener('click', copyNickname);
