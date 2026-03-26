@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>天气</title>
+  <!-- Material Icons 图标库 -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- MD3 主题配置 -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#1976D2',
+            surface: '#FFFFFF',
+            'surface-dark': '#121212',
+            'on-surface': '#121212',
+            'on-surface-dark': '#E1E1E1',
+            'on-surface-variant': '#616161',
+            'on-surface-variant-dark': '#9E9E9E',
+          },
+          animation: {
+            'slide-up': 'slideUp 0.3s ease-out forwards',
+            'fade-in': 'fadeIn 0.2s ease-out forwards',
+          },
+          keyframes: {
+            slideUp: {
+              '0%': { transform: 'translateY(100%)' },
+              '100%': { transform: 'translateY(0)' },
+            },
+            fadeIn: {
+              '0%': { opacity: '0' },
+              '100%': { opacity: '1' },
+            },
+          },
+        },
+      }
+    }
+  </script>
+  <style type="text/tailwindcss">
+    @layer utilities {
+      .scrollbar-hide::-webkit-scrollbar { display: none; }
+      .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+    }
+  </style>
+</head>
+<body class="font-sans bg-gray-100">
+  <!-- 主容器 移动端适配 -->
+  <div class="relative max-w-[430px] mx-auto min-h-screen overflow-hidden bg-gradient-to-b from-[#1565C0] to-[#0D47A1] text-white">
+    <!-- 主滚动区域 -->
+    <main class="pt-8 px-4 pb-6 h-screen overflow-y-auto scrollbar-hide">
+      <!-- 头部 城市+定位按钮 -->
+      <div class="text-center relative mb-8">
+        <h1 id="cityName" class="text-[42px] font-bold mb-1">北京</h1>
+        <p id="dateText" class="text-white/80 text-sm mb-1">--</p>
+        <p id="updateTip" class="text-white/70 text-xs">加载中...</p>
+        <!-- 城市选择按钮 -->
+        <button id="citySelectBtn" class="absolute top-0 right-0 w-10 h-10 flex items-center justify-center rounded-full hover:bg-white/10 active:bg-white/20 transition-all">
+          <span class="material-icons">location_on</span>
+        </button>
+      </div>
+
+      <!-- 实时温度区域 新增当日最高最低温度 -->
+      <div class="text-center mb-8">
+        <div id="currentTemp" class="text-[96px] font-bold leading-none mb-2">--°</div>
+        <!-- 新增：天气描述+当日温幅 同行布局 -->
+        <div class="flex items-center justify-center gap-4 mb-6">
+          <div id="weatherDesc" class="text-2xl font-medium">--</div>
+          <div id="todayTempRange" class="text-xl font-medium text-white/80">--° / --°</div>
+        </div>
+        <div class="flex items-center justify-center gap-2 text-sm text-white/80">
+          <span id="feelsLike">体感 --°</span>
+          <span>·</span>
+          <span id="windInfo">--</span>
+          <span>·</span>
+          <span id="humidity">湿度 --%</span>
+        </div>
+      </div>
+
+      <!-- AQI 卡片 自动变色 -->
+      <div class="mb-6">
+        <div id="aqiCard" class="w-full rounded-full py-3 text-center font-semibold text-white shadow-md">
+          AQI -- · --
+        </div>
+      </div>
+
+      <!-- 今日概览卡片 -->
+      <div class="bg-white/10 backdrop-blur-md rounded-[28px] p-6 mb-4 shadow-md">
+        <h2 class="text-lg font-semibold mb-6">今日概览</h2>
+        <div class="grid grid-cols-2 gap-y-8">
+          <div>
+            <p class="text-white/70 text-sm mb-1">日出</p>
+            <p id="sunrise" class="text-xl font-bold">--:--</p>
+          </div>
+          <div>
+            <p class="text-white/70 text-sm mb-1">日落</p>
+            <p id="sunset" class="text-xl font-bold">--:--</p>
+          </div>
+          <div>
+            <p class="text-white/70 text-sm mb-1">气压</p>
+            <p id="pressure" class="text-xl font-bold">-- hPa</p>
+          </div>
+          <div>
+            <p class="text-white/70 text-sm mb-1">紫外线</p>
+            <p id="uvIndex" class="text-xl font-bold">--级</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 未来7天预报 -->
+      <div class="bg-white/10 backdrop-blur-md rounded-[28px] p-6 mb-6 shadow-md">
+        <h2 class="text-lg font-semibold mb-4">未来7天</h2>
+        <div id="forecastContainer" class="space-y-4">
+          <!-- 预报内容动态渲染 -->
+          <div class="text-center text-white/60">加载中...</div>
+        </div>
+      </div>
+
+      <!-- 底部版权信息 -->
+      <div class="text-center text-white/50 text-xs pb-8 space-y-1">
+        <p>数据来源：Open-Meteo</p>
+        <p>© 2026 弘九honjiu All rights reserved.</p>
+      </div>
+    </main>
+
+    <!-- 省市选择底部抽屉 MD3规范 -->
+    <div id="citySheet" class="fixed inset-0 bg-black/50 z-50 hidden items-end justify-center animate-fade-in">
+      <div class="bg-white rounded-t-[28px] w-full max-w-[430px] p-6 pb-10 animate-slide-up">
+        <!-- 抽屉把手 -->
+        <div class="w-12 h-1 bg-gray-300 rounded-full mx-auto mb-4"></div>
+        <h2 class="text-center text-lg font-semibold text-gray-800 mb-5">请选择所在城市</h2>
+        <!-- 省份选择 -->
+        <div class="mb-4">
+          <label class="text-sm text-gray-500 block mb-1">选择省份</label>
+          <select id="provinceSelect" class="w-full border border-gray-200 rounded-xl p-3 outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary">
+            <option value="">请选择省份</option>
+          </select>
+        </div>
+        <!-- 城市选择 -->
+        <div class="mb-6">
+          <label class="text-sm text-gray-500 block mb-1">选择城市</label>
+          <select id="citySelect" class="w-full border border-gray-200 rounded-xl p-3 outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary">
+            <option value="">请先选择省份</option>
+          </select>
+        </div>
+        <!-- 按钮组 -->
+        <div class="flex flex-col gap-3">
+          <button id="confirmCityBtn" class="w-full bg-primary text-white rounded-xl py-3 font-semibold hover:bg-primary/90 active:bg-primary/80 transition-all">
+            确定
+          </button>
+          <button id="closeSheetBtn" class="w-full bg-gray-100 text-gray-700 rounded-xl py-3 font-semibold hover:bg-gray-200 active:bg-gray-300 transition-all">
+            取消
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 错误提示弹窗 -->
+    <div id="errorToast" class="fixed bottom-8 left-1/2 -translate-x-1/2 bg-black/80 text-white px-6 py-3 rounded-full z-50 hidden animate-fade-in">
+      加载失败，请检查网络后重试
+    </div>
+  </div>
+
+  <script>
+    // ===================== 全国省市数据 =====================
+    const provinceCityData = [
+      { name: '北京', cities: ['北京'] },
+      { name: '天津', cities: ['天津'] },
+      { name: '河北', cities: ['石家庄','唐山','秦皇岛','邯郸','邢台','保定','张家口','承德','沧州','廊坊','衡水'] },
+      { name: '山西', cities: ['太原','大同','阳泉','长治','晋城','朔州','晋中','运城','忻州','临汾','吕梁'] },
+      { name: '内蒙古', cities: ['呼和浩特','包头','乌海','赤峰','通辽','鄂尔多斯','呼伦贝尔','巴彦淖尔','乌兰察布','兴安盟','锡林郭勒盟','阿拉善盟'] },
+      { name: '辽宁', cities: ['沈阳','大连','鞍山','抚顺','本溪','丹东','锦州','营口','阜新','辽阳','盘锦','铁岭','朝阳','葫芦岛'] },
+      { name: '吉林', cities: ['长春','吉林','四平','辽源','通化','白山','松原','白城','延边'] },
+      { name: '黑龙江', cities: ['哈尔滨','齐齐哈尔','鸡西','鹤岗','双鸭山','大庆','伊春','佳木斯','七台河','牡丹江','黑河','绥化','大兴安岭'] },
+      { name: '上海', cities: ['上海'] },
+      { name: '江苏', cities: ['南京','无锡','徐州','常州','苏州','南通','连云港','淮安','盐城','扬州','镇江','泰州','宿迁'] },
+      { name: '浙江', cities: ['杭州','宁波','温州','嘉兴','湖州','绍兴','金华','衢州','舟山','台州','丽水'] },
+      { name: '安徽', cities: ['合肥','芜湖','蚌埠','淮南','马鞍山','淮北','铜陵','安庆','黄山','滁州','阜阳','宿州','六安','亳州','池州','宣城'] },
+      { name: '福建', cities: ['福州','厦门','莆田','三明','泉州','漳州','南平','龙岩','宁德'] },
+      { name: '江西', cities: ['南昌','景德镇','萍乡','九江','新余','鹰潭','赣州','吉安','宜春','抚州','上饶'] },
+      { name: '山东', cities: ['济南','青岛','淄博','枣庄','东营','烟台','潍坊','济宁','泰安','威海','日照','临沂','德州','聊城','滨州','菏泽'] },
+      { name: '河南', cities: ['郑州','开封','洛阳','平顶山','安阳','鹤壁','新乡','焦作','濮阳','许昌','漯河','三门峡','南阳','商丘','信阳','周口','驻马店'] },
+      { name: '湖北', cities: ['武汉','黄石','十堰','宜昌','襄阳','鄂州','荆门','孝感','荆州','黄冈','咸宁','随州','恩施'] },
+      { name: '湖南', cities: ['长沙','株洲','湘潭','衡阳','邵阳','岳阳','常德','张家界','益阳','郴州','永州','怀化','娄底','湘西'] },
+      { name: '广东', cities: ['广州','韶关','深圳','珠海','汕头','佛山','江门','湛江','茂名','肇庆','惠州','梅州','汕尾','河源','阳江','清远','东莞','中山','潮州','揭阳','云浮'] },
+      { name: '广西', cities: ['南宁','柳州','桂林','梧州','北海','防城港','钦州','贵港','玉林','百色','贺州','河池','来宾','崇左'] },
+      { name: '海南', cities: ['海口','三亚','三沙','儋州'] },
+      { name: '重庆', cities: ['重庆'] },
+      { name: '四川', cities: ['成都','自贡','攀枝花','泸州','德阳','绵阳','广元','遂宁','内江','乐山','南充','眉山','宜宾','广安','达州','雅安','巴中','资阳','阿坝','甘孜','凉山'] },
+      { name: '贵州', cities: ['贵阳','六盘水','遵义','安顺','毕节','铜仁','黔西南','黔东南','黔南'] },
+      { name: '云南', cities: ['昆明','曲靖','玉溪','保山','昭通','丽江','普洱','临沧','楚雄','红河','文山','西双版纳','大理','德宏','怒江','迪庆'] },
+      { name: '西藏', cities: ['拉萨','日喀则','昌都','林芝','山南','那曲','阿里'] },
+      { name: '陕西', cities: ['西安','铜川','宝鸡','咸阳','渭南','延安','汉中','榆林','安康','商洛'] },
+      { name: '甘肃', cities: ['兰州','嘉峪关','金昌','白银','天水','武威','张掖','平凉','酒泉','庆阳','定西','陇南','临夏','甘南'] },
+      { name: '青海', cities: ['西宁','海东','海北','黄南','海南','果洛','玉树','海西'] },
+      { name: '宁夏', cities: ['银川','石嘴山','吴忠','固原','中卫'] },
+      { name: '新疆', cities: ['乌鲁木齐','克拉玛依','吐鲁番','哈密','昌吉','博尔塔拉','巴音郭楞','阿克苏','克孜勒苏','喀什','和田','伊犁','塔城','阿勒泰'] }
+    ];
+
+    // ===================== 工具映射表 =====================
+    // WMO天气代码映射 中文+图标
+    const weatherCodeMap = {
+      0: { text: '晴', icon: 'wb_sunny', color: 'text-yellow-300' },
+      1: { text: '多云', icon: 'wb_cloudy', color: 'text-yellow-200' },
+      2: { text: '阴', icon: 'cloud', color: 'text-gray-300' },
+      3: { text: '阴', icon: 'cloud', color: 'text-gray-400' },
+      45: { text: '雾', icon: 'foggy', color: 'text-gray-300' },
+      48: { text: '雾凇', icon: 'ac_unit', color: 'text-blue-200' },
+      51: { text: '毛毛雨', icon: 'grain', color: 'text-blue-200' },
+      53: { text: '小雨', icon: 'umbrella', color: 'text-blue-300' },
+      55: { text: '中雨', icon: 'umbrella', color: 'text-blue-400' },
+      56: { text: '冻雨', icon: 'ac_unit', color: 'text-blue-300' },
+      57: { text: '冻雨', icon: 'ac_unit', color: 'text-blue-400' },
+      61: { text: '小雨', icon: 'umbrella', color: 'text-blue-400' },
+      63: { text: '中雨', icon: 'umbrella', color: 'text-blue-500' },
+      65: { text: '大雨', icon: 'umbrella', color: 'text-blue-600' },
+      66: { text: '冻雨', icon: 'ac_unit', color: 'text-blue-400' },
+      67: { text: '暴雨', icon: 'water_drop', color: 'text-blue-700' },
+      71: { text: '小雪', icon: 'ac_unit', color: 'text-blue-100' },
+      73: { text: '中雪', icon: 'ac_unit', color: 'text-blue-50' },
+      75: { text: '大雪', icon: 'ac_unit', color: 'text-white' },
+      77: { text: '雪粒', icon: 'grain', color: 'text-blue-100' },
+      80: { text: '阵雨', icon: 'umbrella', color: 'text-blue-400' },
+      81: { text: '阵雨', icon: 'umbrella', color: 'text-blue-500' },
+      82: { text: '强阵雨', icon: 'thunderstorm', color: 'text-blue-600' },
+      85: { text: '阵雪', icon: 'ac_unit', color: 'text-blue-100' },
+      86: { text: '强阵雪', icon: 'ac_unit', color: 'text-white' },
+      95: { text: '雷阵雨', icon: 'thunderstorm', color: 'text-yellow-400' },
+      96: { text: '雷暴冰雹', icon: 'thunderstorm', color: 'text-yellow-500' },
+      99: { text: '强雷暴', icon: 'thunderstorm', color: 'text-yellow-600' }
+    };
+
+    // 风向转换 度数→中文
+    function getWindDirection(degree) {
+      const directions = ['北', '东北', '东', '东南', '南', '西南', '西', '西北'];
+      return directions[Math.round(degree / 45) % 8];
+    }
+
+    // 风速转蒲福风力等级
+    function getWindScale(speed) {
+      if (speed < 1) return 0;
+      if (speed < 6) return 1;
+      if (speed < 12) return 2;
+      if (speed < 20) return 3;
+      if (speed < 29) return 4;
+      if (speed < 39) return 5;
+      if (speed < 50) return 6;
+      if (speed < 62) return 7;
+      if (speed < 75) return 8;
+      if (speed < 89) return 9;
+      if (speed < 103) return 10;
+      if (speed < 118) return 11;
+      return 12;
+    }
+
+    // AQI等级与颜色映射
+    function getAqiInfo(aqi) {
+      if (aqi <= 50) return { level: '优', className: 'bg-green-500' };
+      if (aqi <= 100) return { level: '良', className: 'bg-blue-500' };
+      if (aqi <= 150) return { level: '轻度污染', className: 'bg-orange-400' };
+      if (aqi <= 200) return { level: '中度污染', className: 'bg-orange-600' };
+      if (aqi <= 300) return { level: '重度污染', className: 'bg-red-500' };
+      return { level: '严重污染', className: 'bg-purple-600' };
+    }
+
+    // 星期映射
+    const weekMap = ['周日', '周一', '周二', '周三', '周四', '周五', '周六'];
+
+    // ===================== DOM元素 =====================
+    const citySheet = document.getElementById('citySheet');
+    const citySelectBtn = document.getElementById('citySelectBtn');
+    const closeSheetBtn = document.getElementById('closeSheetBtn');
+    const confirmCityBtn = document.getElementById('confirmCityBtn');
+    const provinceSelect = document.getElementById('provinceSelect');
+    const citySelect = document.getElementById('citySelect');
+    const errorToast = document.getElementById('errorToast');
+    const STORAGE_KEY = 'savedWeatherCity';
+
+    // ===================== 交互逻辑 =====================
+    // 打开城市选择抽屉
+    citySelectBtn.onclick = () => {
+      citySheet.style.display = 'flex';
+      document.body.style.overflow = 'hidden';
+    };
+
+    // 关闭抽屉
+    const closeCitySheet = () => {
+      citySheet.style.display = 'none';
+      document.body.style.overflow = 'auto';
+    };
+    closeSheetBtn.onclick = closeCitySheet;
+    citySheet.onclick = (e) => e.target === citySheet && closeCitySheet();
+
+    // 初始化省份下拉框
+    provinceCityData.forEach(province => {
+      const option = document.createElement('option');
+      option.value = province.name;
+      option.textContent = province.name;
+      provinceSelect.appendChild(option);
+    });
+
+    // 省份切换联动城市
+    provinceSelect.onchange = () => {
+      const selectedProvince = provinceCityData.find(p => p.name === provinceSelect.value);
+      citySelect.innerHTML = '';
+      if (selectedProvince) {
+        selectedProvince.cities.forEach(city => {
+          const option = document.createElement('option');
+          option.value = city;
+          option.textContent = city;
+          citySelect.appendChild(option);
+        });
+      } else {
+        citySelect.innerHTML = '<option value="">请先选择省份</option>';
+      }
+    };
+
+    // 错误提示
+    const showError = (text) => {
+      errorToast.textContent = text;
+      errorToast.style.display = 'block';
+      setTimeout(() => {
+        errorToast.style.display = 'none';
+      }, 3000);
+    };
+
+    // 回显城市选择器
+    function initCitySelector(cityName) {
+      let targetProvince = null;
+      let targetCity = null;
+      for (const province of provinceCityData) {
+        const foundCity = province.cities.find(c => c === cityName);
+        if (foundCity) {
+          targetProvince = province.name;
+          targetCity = foundCity;
+          break;
+        }
+      }
+      if (targetProvince && targetCity) {
+        provinceSelect.value = targetProvince;
+        provinceSelect.dispatchEvent(new Event('change'));
+        setTimeout(() => {
+          citySelect.value = targetCity;
+        }, 0);
+      }
+    }
+
+    // ===================== 天气API核心逻辑 =====================
+    // 1. 城市名转经纬度
+    async function getCityLocation(cityName) {
+      const res = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(cityName)}&language=zh&count=1`);
+      const data = await res.json();
+      if (!data.results || data.results.length === 0) throw new Error('未找到该城市');
+      return {
+        lat: data.results[0].latitude,
+        lon: data.results[0].longitude,
+        name: data.results[0].name
+      };
+    }
+
+    // 2. 获取天气数据
+    async function fetchWeatherData(lat, lon) {
+      const [weatherRes, airRes] = await Promise.all([
+        fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,relative_humidity_2m,apparent_temperature,weather_code,surface_pressure,wind_speed_10m,wind_direction_10m&daily=weather_code,temperature_2m_max,temperature_2m_min,sunrise,sunset,uv_index_max&timezone=Asia/Shanghai`),
+        fetch(`https://air-quality-api.open-meteo.com/v1/air-quality?latitude=${lat}&longitude=${lon}&current=european_aqi&timezone=Asia/Shanghai`)
+      ]);
+      const weatherData = await weatherRes.json();
+      const airData = await airRes.json();
+      return { weather: weatherData, air: airData };
+    }
+
+    // 3. 渲染天气数据
+    function renderWeather(cityName, data) {
+      const { weather, air } = data;
+      const current = weather.current;
+      const daily = weather.daily;
+
+      // 基础信息
+      document.getElementById('cityName').textContent = cityName;
+      document.getElementById('dateText').textContent = new Date().toLocaleDateString('zh-CN', { month: '2-digit', day: '2-digit' }).replace('/', '-');
+      document.getElementById('updateTip').textContent = `更新于 ${new Date().toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' })}`;
+
+      // 实时天气
+      const weatherInfo = weatherCodeMap[current.weather_code] || weatherCodeMap[3];
+      document.getElementById('currentTemp').textContent = `${Math.round(current.temperature_2m)}°`;
+      document.getElementById('weatherDesc').textContent = weatherInfo.text;
+
+      // 新增：渲染当日最高/最低温度
+      const todayMaxTemp = Math.round(daily.temperature_2m_max[0]);
+      const todayMinTemp = Math.round(daily.temperature_2m_min[0]);
+      document.getElementById('todayTempRange').textContent = `${todayMinTemp}° / ${todayMaxTemp}°`;
+
+      // 体感、风力、湿度
+      document.getElementById('feelsLike').textContent = `体感 ${Math.round(current.apparent_temperature)}°`;
+      document.getElementById('humidity').textContent = `湿度 ${current.relative_humidity_2m}%`;
+      document.getElementById('pressure').textContent = `${Math.round(current.surface_pressure)} hPa`;
+      const windDir = getWindDirection(current.wind_direction_10m);
+      const windScale = getWindScale(current.wind_speed_10m);
+      document.getElementById('windInfo').textContent = `${windDir}风 ${windScale}级`;
+
+      // 日出日落紫外线
+      document.getElementById('sunrise').textContent = daily.sunrise[0].split('T')[1];
+      document.getElementById('sunset').textContent = daily.sunset[0].split('T')[1];
+      const uvMax = Math.round(daily.uv_index_max[0]);
+      document.getElementById('uvIndex').textContent = `${uvMax}级`;
+
+      // AQI渲染
+      const aqi = Math.round(air.current.european_aqi || 0);
+      const aqiInfo = getAqiInfo(aqi);
+      const aqiCard = document.getElementById('aqiCard');
+      aqiCard.className = `w-full rounded-full py-3 text-center font-semibold text-white shadow-md ${aqiInfo.className}`;
+      aqiCard.textContent = `AQI ${aqi} · ${aqiInfo.level}`;
+
+      // 未来7天预报渲染
+      const forecastContainer = document.getElementById('forecastContainer');
+      forecastContainer.innerHTML = '';
+      daily.time.forEach((date, index) => {
+        const dayWeather = weatherCodeMap[daily.weather_code[index]] || weatherCodeMap[3];
+        const dateObj = new Date(date);
+        const weekText = index === 0 ? '今天' : weekMap[dateObj.getDay()];
+        const maxTemp = Math.round(daily.temperature_2m_max[index]);
+        const minTemp = Math.round(daily.temperature_2m_min[index]);
+        const dayItem = document.createElement('div');
+        dayItem.className = 'flex items-center justify-between py-1';
+        dayItem.innerHTML = `
+          <span class="w-16 font-medium">${weekText}</span>
+          <div class="flex items-center gap-2 flex-1">
+            <span class="material-icons ${dayWeather.color}">${dayWeather.icon}</span>
+            <span class="text-white/80">${dayWeather.text}</span>
+          </div>
+          <span class="font-medium">${minTemp}° / ${maxTemp}°</span>
+        `;
+        forecastContainer.appendChild(dayItem);
+      });
+    }
+
+    // 4. 加载天气的主函数
+    async function loadWeather(cityName) {
+      try {
+        document.getElementById('updateTip').textContent = '加载中...';
+        const location = await getCityLocation(cityName);
+        const weatherData = await fetchWeatherData(location.lat, location.lon);
+        renderWeather(location.name, weatherData);
+      } catch (error) {
+        console.error(error);
+        showError('加载失败，请检查网络或更换城市重试');
+        document.getElementById('updateTip').textContent = '加载失败';
+      }
+    }
+
+    // 确认切换城市
+    confirmCityBtn.onclick = () => {
+      const selectedCity = citySelect.value;
+      if (!selectedCity) {
+        showError('请选择城市');
+        return;
+      }
+      localStorage.setItem(STORAGE_KEY, selectedCity);
+      closeCitySheet();
+      loadWeather(selectedCity);
+    };
+
+    // 页面初始化
+    window.onload = () => {
+      const savedCity = localStorage.getItem(STORAGE_KEY);
+      if (savedCity) {
+        loadWeather(savedCity);
+        initCitySelector(savedCity);
+      } else {
+        loadWeather('北京');
+        citySheet.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+      }
+    };
+  </script>
+</body>
+</html>
