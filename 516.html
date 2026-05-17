@@ -75,7 +75,7 @@
                     </svg>
                 </div>
             </div>
-            <p id="error-message" class="text-red-500 text-sm mt-2 hidden">请输入有效的13位准考证号</p>
+            <p id="error-message" class="text-red-500 text-sm mt-2 hidden"></p>
         </div>
         
         <button id="query-btn" class="w-full py-4 px-8 bg-primary hover:bg-primary/90 text-white font-medium text-lg btn-oval transition-all duration-300 transform hover:scale-105 active:scale-95 shadow-lg hover:shadow-primary/20 hover:shadow-xl">
@@ -83,11 +83,10 @@
         </button>
         
         <div class="mt-8 text-xs text-gray-400">
-            <p>开启查询通道时间：2026-05-17 12:00<br>我们不会记录您的任何个人信息</p>
+            <p>开启查询通道时间：2026-05-17 12:00</p>
             <p class="mt-2">© ri3bz6x.cn</p>
         </div>
     </div>
-
     <!-- 进度条界面 -->
     <div id="progress-container" class="w-full max-w-md bg-white rounded-2xl shadow-xl p-8 text-center hidden transition-all duration-500">
         <div class="mb-8">
@@ -106,7 +105,6 @@
             <p id="progress-text" class="text-xs text-gray-500">0%</p>
         </div>
     </div>
-
     <!-- 查询结果界面 -->
     <div id="result-container" class="w-full max-w-md bg-white rounded-2xl shadow-xl p-8 text-center hidden transition-all duration-500">
         <div class="py-12">
@@ -117,7 +115,6 @@
             返回
         </button>
     </div>
-
     <script>
         const queryContainer = document.getElementById('query-container');
         const progressContainer = document.getElementById('progress-container');
@@ -130,7 +127,6 @@
         const progressBar = document.getElementById('progress-bar');
         const progressText = document.getElementById('progress-text');
         const statusText = document.getElementById('status-text');
-
         queryBtn.addEventListener('click', startQuery);
         backBtn.addEventListener('click', goBack);
         
@@ -140,32 +136,27 @@
                 startQuery();
             }
         });
-
         function startQuery() {
             const examNumber = examNumberInput.value.trim();
             
-            // 验证：检查是否为13位数字
+            // 第一步：验证是否为13位纯数字
             if (!/^\d{13}$/.test(examNumber)) {
-                errorMessage.classList.remove('hidden');
-                examNumberInput.classList.add('border-red-500');
-                
-                // 3秒后隐藏错误信息
-                setTimeout(() => {
-                    errorMessage.classList.add('hidden');
-                    examNumberInput.classList.remove('border-red-500');
-                }, 3000);
-                
+                showError("请输入有效的13位数字准考证号");
                 return;
             }
             
-            // 显示用户输入的考号
-            displayExamNumber.textContent = examNumber;
+            // 第二步：验证前三位是否为260
+            if (examNumber.substring(0, 3) !== '260') {
+                showError("准考证号错误，请重试");
+                return;
+            }
             
-            // 隐藏查询界面，显示进度条界面
+            // 验证通过，进入查询流程
+            displayExamNumber.textContent = examNumber;
             queryContainer.classList.add('hidden');
             progressContainer.classList.remove('hidden');
-
-            // 模拟真实的进度条加载，包含停顿和状态变化
+            
+            // 模拟真实的进度条加载
             let progress = 0;
             const stages = [
                 { progress: 25, text: "正在验证准考证号...", delay: 300 },
@@ -184,8 +175,6 @@
                 }
                 
                 const stage = stages[currentStage];
-                
-                // 快速增长到当前阶段的进度
                 const interval = setInterval(() => {
                     if (progress < stage.progress) {
                         progress += 1;
@@ -194,8 +183,6 @@
                     } else {
                         clearInterval(interval);
                         statusText.textContent = stage.text;
-                        
-                        // 停顿指定时间后进入下一阶段
                         setTimeout(() => {
                             currentStage++;
                             updateProgress();
@@ -206,15 +193,26 @@
             
             updateProgress();
         }
-
+        
+        // 统一错误提示函数
+        function showError(message) {
+            errorMessage.textContent = message;
+            errorMessage.classList.remove('hidden');
+            examNumberInput.classList.add('border-red-500');
+            
+            // 3秒后隐藏错误信息
+            setTimeout(() => {
+                errorMessage.classList.add('hidden');
+                examNumberInput.classList.remove('border-red-500');
+            }, 3000);
+        }
+        
         function showResult() {
-            // 隐藏进度条界面，显示结果界面
             progressContainer.classList.add('hidden');
             resultContainer.classList.remove('hidden');
         }
-
+        
         function goBack() {
-            // 重置所有状态
             resultContainer.classList.add('hidden');
             queryContainer.classList.remove('hidden');
             examNumberInput.value = '';
