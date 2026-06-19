@@ -25,15 +25,12 @@
         }
     </script>
     <style>
-        /* ===== 全局重置 & 基础 ===== */
         * {
             -webkit-tap-highlight-color: transparent;
         }
         body {
             font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", Arial, sans-serif;
         }
-
-        /* ===== 滚动条隐藏 ===== */
         .scrollbar-hide::-webkit-scrollbar {
             display: none;
         }
@@ -41,8 +38,6 @@
             -ms-overflow-style: none;
             scrollbar-width: none;
         }
-
-        /* ===== 增强液态玻璃 ===== */
         .glass-card {
             position: relative;
             background: linear-gradient(145deg,
@@ -81,7 +76,6 @@
             background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.15), transparent);
             pointer-events: none;
         }
-
         .glass-aqi {
             background: linear-gradient(145deg,
                     rgba(255, 255, 255, 0.18) 0%,
@@ -94,7 +88,6 @@
                 inset 0 1px 0 rgba(255, 255, 255, 0.35);
             transition: all 0.3s ease;
         }
-
         .glass-btn {
             background: rgba(255, 255, 255, 0.12);
             backdrop-filter: blur(20px) saturate(1.2);
@@ -107,7 +100,6 @@
             background: rgba(255, 255, 255, 0.25);
             transform: scale(0.94);
         }
-
         .glass-sheet {
             background: linear-gradient(170deg,
                     rgba(255, 255, 255, 0.88) 0%,
@@ -117,18 +109,12 @@
             border: 1px solid rgba(255, 255, 255, 0.50);
             box-shadow: 0 -8px 48px rgba(0, 0, 0, 0.12);
         }
-
         #tempLinePath {
             filter: drop-shadow(0 0 6px rgba(255, 206, 0, 0.30));
-        }
-
-        .hour-item {
-            transition: transform 0.2s ease;
         }
         .hour-item:active {
             transform: scale(0.94);
         }
-
         .current-dot {
             animation: dotPulse 1.8s ease-in-out infinite;
         }
@@ -141,17 +127,10 @@
                 box-shadow: 0 0 0 8px rgba(255, 206, 0, 0);
             }
         }
-
-        .forecast-row {
-            transition: background 0.2s ease, transform 0.15s ease;
-            border-radius: 12px;
-            padding: 4px 8px;
-        }
         .forecast-row:active {
             background: rgba(255, 255, 255, 0.08);
             transform: scale(0.98);
         }
-
         .glass-toast {
             background: rgba(0, 0, 0, 0.45);
             backdrop-filter: blur(20px) saturate(1.2);
@@ -159,7 +138,6 @@
             border: 1px solid rgba(255, 255, 255, 0.15);
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.20);
         }
-
         .glass-select {
             background: rgba(255, 255, 255, 0.50);
             backdrop-filter: blur(12px);
@@ -171,13 +149,9 @@
             border-color: rgba(255, 255, 255, 0.70);
             box-shadow: 0 0 0 3px rgba(25, 118, 210, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.60);
         }
-
-        /* 静态发光基础 */
         .temp-glow {
             text-shadow: 0 0 30px rgba(255, 255, 255, 0.12);
         }
-
-        /* ===== 呼吸灯动画 ===== */
         @keyframes breathe {
             0%, 100% {
                 text-shadow: 0 0 20px rgba(255, 255, 255, 0.15),
@@ -192,7 +166,6 @@
         .breathing {
             animation: breathe 3s ease-in-out infinite;
         }
-
         .bg-weather {
             background: linear-gradient(165deg, #0D47A1 0%, #1565C0 35%, #1A73E8 70%, #0D47A1 100%);
             background-attachment: fixed;
@@ -217,10 +190,8 @@
 
     <div class="relative max-w-[430px] mx-auto min-h-screen overflow-hidden bg-weather text-white">
 
-        <!-- ===== 主内容 ===== -->
         <main class="pt-8 px-4 pb-6 h-screen overflow-y-auto scrollbar-hide relative z-10">
 
-            <!-- 头部 -->
             <div class="text-center relative mb-8">
                 <h1 id="cityName" class="text-[42px] font-bold mb-1 tracking-tight temp-glow">北京</h1>
                 <p id="dateText" class="text-white/80 text-sm mb-1 font-light">--</p>
@@ -230,7 +201,6 @@
                 </button>
             </div>
 
-            <!-- 实时温度（添加呼吸灯类 breathing） -->
             <div class="text-center mb-8">
                 <div id="currentTemp" class="text-[96px] font-bold leading-none mb-2 temp-glow tracking-tight breathing">--°</div>
                 <div class="flex items-center justify-center gap-4 mb-6 flex-wrap">
@@ -249,14 +219,12 @@
                 </div>
             </div>
 
-            <!-- AQI -->
             <div class="mb-6">
                 <div id="aqiCard" class="w-full rounded-full py-3.5 text-center font-semibold text-white glass-aqi transition-all duration-300">
                     AQI -- · --
                 </div>
             </div>
 
-            <!-- 24小时预报 -->
             <div class="glass-card rounded-[28px] p-6 pt-10 pb-8 mb-4">
                 <h2 class="text-lg font-semibold mb-8 flex items-center gap-2">
                     <span class="material-icons text-xl">schedule</span>
@@ -272,7 +240,6 @@
                 </div>
             </div>
 
-            <!-- 今日概览 -->
             <div class="glass-card rounded-[28px] p-6 mb-4">
                 <h2 class="text-lg font-semibold mb-6 flex items-center gap-2">
                     <span class="material-icons text-xl">today</span>
@@ -306,7 +273,6 @@
                 </div>
             </div>
 
-            <!-- 未来7天 -->
             <div class="glass-card rounded-[28px] p-6 mb-6">
                 <h2 class="text-lg font-semibold mb-4 flex items-center gap-2">
                     <span class="material-icons text-xl">calendar_today</span>
@@ -317,14 +283,12 @@
                 </div>
             </div>
 
-            <!-- 版权 -->
             <div class="text-center text-white/40 text-xs pb-8 space-y-1 font-light">
                 <p>数据来源：Open-Meteo</p>
                 <p>Copyright © 2026 冬雪社. All rights reserved.</p>
             </div>
         </main>
 
-        <!-- ===== 城市选择抽屉 ===== -->
         <div id="citySheet" class="fixed inset-0 bg-black/25 backdrop-blur-sm z-50 hidden items-end justify-center animate-fade-in">
             <div class="glass-sheet rounded-t-[32px] w-full max-w-[430px] p-6 pb-10 animate-slide-up">
                 <div class="w-12 h-1 bg-gray-300/60 rounded-full mx-auto mb-5"></div>
@@ -352,7 +316,6 @@
             </div>
         </div>
 
-        <!-- ===== 错误提示 ===== -->
         <div id="errorToast" class="fixed bottom-8 left-1/2 -translate-x-1/2 text-white px-6 py-3.5 rounded-full z-50 hidden animate-fade-in glass-toast pointer-events-none">
             <span class="flex items-center gap-2">
                 <span class="material-icons text-[20px]">error_outline</span>
@@ -362,9 +325,6 @@
     </div>
 
     <script>
-        // ============================================================
-        //  1. 数据：全国省份 + 城市（含港澳台）
-        // ============================================================
         const provinceCityData = [
             { name: '北京', cities: ['北京'] }, { name: '天津', cities: ['天津'] },
             { name: '河北', cities: ['石家庄', '唐山', '秦皇岛', '邯郸', '邢台', '保定', '张家口', '承德', '沧州', '廊坊', '衡水'] },
@@ -427,15 +387,11 @@
             { name: '新疆', cities: ['乌鲁木齐', '克拉玛依', '吐鲁番', '哈密', '昌吉回族自治州', '博尔塔拉蒙古自治州', '巴音郭楞蒙古自治州',
                     '阿克苏地区', '克孜勒苏柯尔克孜自治州', '喀什地区', '和田地区', '伊犁哈萨克自治州', '塔城地区', '阿勒泰地区'
                 ] },
-            // ========== 新增港澳台 ==========
             { name: '香港', cities: ['香港'] },
             { name: '澳门', cities: ['澳门'] },
             { name: '台湾', cities: ['台北', '高雄', '台中', '台南', '基隆', '新竹', '嘉义', '桃园'] }
         ];
 
-        // ============================================================
-        //  2. 天气代码映射 — 完整 WMO 标准 + 合理中文名
-        // ============================================================
         const weatherCodeMap = {
             0: { text: '晴', icon: 'wb_sunny' },
             1: { text: '少云', icon: 'partly_cloudy' },
@@ -467,9 +423,6 @@
             99: { text: '强雷暴', icon: 'thunderstorm' }
         };
 
-        // ============================================================
-        //  3. 工具函数
-        // ============================================================
         const weekMap = ['周日', '周一', '周二', '周三', '周四', '周五', '周六'];
 
         function getWindDirection(deg) {
@@ -502,9 +455,6 @@
             return { level: '严重污染', bg: 'rgba(168,85,247,0.25)', border: 'rgba(168,85,247,0.35)' };
         }
 
-        // ============================================================
-        //  4. DOM 引用
-        // ============================================================
         const $ = id => document.getElementById(id);
         const citySheet = $('citySheet');
         const citySelectBtn = $('citySelectBtn');
@@ -518,9 +468,6 @@
         const tempLinePath = $('tempLinePath');
         const STORAGE_KEY = 'savedWeatherCity';
 
-        // ============================================================
-        //  5. 弹窗交互
-        // ============================================================
         function openSheet() {
             citySheet.style.display = 'flex';
             document.body.style.overflow = 'hidden';
@@ -534,9 +481,6 @@
         closeSheetBtn.onclick = closeSheet;
         citySheet.onclick = (e) => { if (e.target === citySheet) closeSheet(); };
 
-        // ============================================================
-        //  6. 省市联动
-        // ============================================================
         provinceCityData.forEach(p => {
             const o = document.createElement('option');
             o.value = p.name;
@@ -559,9 +503,6 @@
             }
         };
 
-        // ============================================================
-        //  7. Toast
-        // ============================================================
         let toastTimer = null;
 
         function showError(text) {
@@ -572,9 +513,6 @@
             toastTimer = setTimeout(() => { errorToast.style.display = 'none'; }, 3200);
         }
 
-        // ============================================================
-        //  8. 城市选择回显
-        // ============================================================
         function initCitySelector(cityName) {
             for (const p of provinceCityData) {
                 if (p.cities.includes(cityName)) {
@@ -586,9 +524,6 @@
             }
         }
 
-        // ============================================================
-        //  9. 数据请求
-        // ============================================================
         async function getCityLocation(cityName) {
             const res = await fetch(
                 `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(cityName)}&language=zh&count=1`
@@ -614,9 +549,6 @@
             return { weather: await weatherRes.json(), air: await airRes.json() };
         }
 
-        // ============================================================
-        //  10. 渲染：24小时预报
-        // ============================================================
         function render24HourForecast(hourlyData, aqiData) {
             const currentHour = new Date().getHours();
             const total = 24;
@@ -631,7 +563,6 @@
             const minT = Math.min(...temps);
             const range = maxT - minT || 1;
 
-            // 温度曲线
             let pathD = '';
             const pts = [];
             for (let i = 0; i < total; i++) {
@@ -650,7 +581,6 @@
             tempLinePath.setAttribute('d', pathD);
             tempLinePath.setAttribute('width', svgW);
 
-            // 列表
             hourlyList.innerHTML = '';
             let currentIdx = 0;
 
@@ -686,16 +616,12 @@
                 hourlyList.appendChild(el);
             }
 
-            // 滚动到当前
             setTimeout(() => {
                 const target = currentIdx * itemW - hourlyScrollContainer.clientWidth / 2 + itemW / 2;
                 hourlyScrollContainer.scrollTo({ left: Math.max(0, target), behavior: 'smooth' });
             }, 120);
         }
 
-        // ============================================================
-        //  11. 渲染：完整天气
-        // ============================================================
         function renderWeather(cityName, data) {
             const { weather, air } = data;
             const cur = weather.current;
@@ -703,7 +629,6 @@
             const hourly = weather.hourly;
             const hourlyAqi = air.hourly;
 
-            // 头部
             document.getElementById('cityName').textContent = cityName;
             const now = new Date();
             document.getElementById('dateText').textContent =
@@ -711,7 +636,6 @@
             document.getElementById('updateTip').textContent =
                 `更新 ${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
 
-            // 当前天气
             const wInfo = weatherCodeMap[cur.weather_code] || weatherCodeMap[3];
             document.getElementById('currentTemp').textContent = `${Math.round(cur.temperature_2m)}°`;
             document.getElementById('weatherDesc').innerHTML =
@@ -725,14 +649,12 @@
             document.getElementById('windInfo').textContent =
                 `${getWindDirection(cur.wind_direction_10m)}风 ${getWindScale(cur.wind_speed_10m)}级`;
 
-            // 日出日落
             const sr = daily.sunrise[0];
             const ss = daily.sunset[0];
             document.getElementById('sunrise').textContent = sr ? sr.split('T')[1] : '--:--';
             document.getElementById('sunset').textContent = ss ? ss.split('T')[1] : '--:--';
             document.getElementById('uvIndex').textContent = `${Math.round(daily.uv_index_max[0] || 0)}级`;
 
-            // AQI
             const aqiVal = Math.round(hourlyAqi.european_aqi[0] || 0);
             const aqiInfo = getAqiInfo(aqiVal);
             const aqiCard = document.getElementById('aqiCard');
@@ -740,10 +662,8 @@
             aqiCard.style.borderColor = aqiInfo.border;
             aqiCard.textContent = `AQI ${aqiVal} · ${aqiInfo.level}`;
 
-            // 24小时
             render24HourForecast(hourly, hourlyAqi);
 
-            // 7天
             const fc = document.getElementById('forecastContainer');
             fc.innerHTML = '';
             daily.time.forEach((date, idx) => {
@@ -765,9 +685,6 @@
             });
         }
 
-        // ============================================================
-        //  12. 加载主逻辑
-        // ============================================================
         async function loadWeather(cityName) {
             try {
                 document.getElementById('updateTip').textContent = '正在获取气象观测数据 ...';
@@ -783,9 +700,6 @@
             }
         }
 
-        // ============================================================
-        //  13. 确认城市
-        // ============================================================
         confirmCityBtn.onclick = () => {
             const city = citySelect.value;
             if (!city) return showError('请选择城市');
@@ -794,9 +708,6 @@
             loadWeather(city);
         };
 
-        // ============================================================
-        //  14. 初始化
-        // ============================================================
         window.onload = () => {
             const saved = localStorage.getItem(STORAGE_KEY);
             if (saved) {
