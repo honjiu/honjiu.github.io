@@ -1,1 +1,50 @@
-1
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>静态手记</title>
+<meta name="description" content="一个完全静态的博客：数据由 JSON 提供，渲染由浏览器完成。">
+<link rel="stylesheet" href="css/md1.css">
+</head>
+<body>
+
+<header class="app-bar">
+  <div class="app-bar-inner">
+    <a class="app-bar-title" href="index.html">静态手记</a>
+    <nav class="app-bar-nav">
+      <a href="index.html" class="active">文章</a>
+      <a href="posts.html" >最新</a>
+    </nav>
+  </div>
+</header>
+
+<main class="container">
+
+  <!-- 信息统计 -->
+  <section id="stats" class="stats" aria-label="信息统计"></section>
+
+  <!-- 公告 -->
+  <section id="announcement" class="announcement" hidden></section>
+
+  <!-- 搜索 -->
+  <div class="field">
+    <input id="search" type="text" placeholder="搜索标题 / 作者 / 标签" autocomplete="off">
+  </div>
+
+  <!-- 文章列表 -->
+  <section id="post-list" class="post-list"></section>
+  <div id="empty" class="empty" hidden>没有找到匹配的文章</div>
+
+</main>
+
+<footer class="site-footer">
+  <div class="container" style="padding-top:0;padding-bottom:0">
+    <p>本站为纯静态站点 · 数据来自 <code>posts/posts.json</code> · 由 JavaScript 在浏览器端渲染</p>
+  </div>
+</footer>
+
+<script src="js/app.js"></script>
+<script src="js/index.js"></script>
+</body>
+</html>
