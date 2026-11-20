@@ -2,18 +2,16 @@
   "site": {
     "title": "弘九honjiu的Blog",
     "announcement": "欢迎访问弘九honjiu的Blog！",
-    "author": "弘九honjiu"
+    "about": "test测试test测试test测试test测试test测试test测试test测试"
   },
   "posts": [
     {
-      "id": "hello-world",
-      "title": "你好，世界",
+      "id": "001",
+      "title": "001",
       "author": "弘九honjiu",
       "createdAt": "2026-11-21",
-      "tags": ["公告", "开始"],
-      "summary": "这是第一篇文章。",
-      "file": "hello-world.md"
-    },
-    
+      "summary": "test测试test测试",
+      "file": "001.md"
+    }
   ]
 }
