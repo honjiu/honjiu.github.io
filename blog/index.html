@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>静态手记</title>
-<meta name="description" content="单 HTML 完全静态博客，数据与渲染全部在浏览器端完成。">
+<title>弘九honjiu的Blog</title>
+<meta name="description" content="弘九honjiu">
 <style>
 :root{
   --md-primary:#1976d2;--md-primary-dark:#1565c0;
@@ -136,7 +136,7 @@ a:hover{text-decoration:underline}
 
 <footer class="site-footer">
   <div class="container" style="padding-top:0;padding-bottom:0">
-    <p>纯静态博客 · 单 HTML 文件 · 数据与渲染全部由浏览器完成</p>
+    <p>© 2025-2026 弘九honjiu All rights reserved.</p>
   </div>
 </footer>
 
@@ -148,7 +148,7 @@ a:hover{text-decoration:underline}
 
 /* ================= 配置 ================= */
 const CONFIG = {
-  title: '静态手记',
+  title: '弘九honjiu的Blog',
   dataMode: 'auto',            // 'auto' | 'inline' | 'remote'
   jsonPath: 'posts/posts.json',
   mdDir: 'posts/',
@@ -603,7 +603,7 @@ async function renderPost(id) {
     let html = '';
     html += prev
       ? '<a href="#/post/' + encodeURIComponent(prev.id) + '">' +
-        '<div class="nav-label">← 更新的一篇</div>' +
+        '<div class="nav-label">← 最新更新</div>' +
         '<div class="nav-title">' + escapeHtml(prev.title) + '</div></a>'
       : '<span></span>';
     html += next
