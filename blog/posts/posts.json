@@ -2,7 +2,7 @@
   "site": {
     "title": "弘九honjiu的Blog",
     "announcement": "欢迎访问弘九honjiu的Blog！",
-    "about": "test测试test测试test测试test测试test测试test测试test测试"
+    "about": "该Blog于2026年11月21日制作，纯前端实现，通过Github Pages运行。<br>网址：https://honjiu.neox.lol/blog/"
   },
   "posts": [
     {
@@ -10,7 +10,7 @@
       "title": "001",
       "author": "弘九honjiu",
       "createdAt": "2026-11-21",
-      "summary": "test测试",
+      "summary": "test测试test测试",
       "file": "001.md"
     }
   ]
