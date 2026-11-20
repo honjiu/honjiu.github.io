@@ -14,14 +14,6 @@
       "summary": "这是第一篇文章。",
       "file": "hello-world.md"
     },
-    {
-      "id": "static-blog",
-      "title": "为什么选择完全静态博客",
-      "author": "Bob",
-      "createdAt": "2025-02-01",
-      "tags": ["技术", "静态站点"],
-      "summary": "利用浏览器端的 JavaScript 完成数据拉取与渲染，无需后端。",
-      "file": "static-blog.md"
-    }
+    
   ]
 }
